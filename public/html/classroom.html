@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home Page</title>
+    <link rel="stylesheet" href="\stylesheets\homepage.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="navBar">
+            <ul>
+              <img src="\images\groupSys_icon.png" alt="brainbox logo" height="auto" id="redirectButton" @click="redirecttohomepage">
+              <p>BrainBox</p>
+              <li><a style="background-color: #eb7b34;"  onmouseover="this.style.backgroundColor='#da7434'" onmouseout="this.style.backgroundColor='#eb7b34'" 
+                href="#our product">Test 1</a></li>
+              <li><a a style="background-color: #eb7b34;"  onmouseover="this.style.backgroundColor='#da7434'" onmouseout="this.style.backgroundColor='#eb7b34'" 
+                href="#features">Test 2</a></li>
+              <li><a style="background-color: #eb7b34;"  onmouseover="this.style.backgroundColor='#da7434'" onmouseout="this.style.backgroundColor='#eb7b34'" 
+                href="aboutus.html">Test 3</a></li>
+                <img src="\images\brainy_icon.png" alt="brainy" height="auto" id="redirectButton" @click="redirecttosettings">
+            </ul>
+          </div>
+          <div id="getClassroomInfo" style="background-color:gray">
+            <div v-for="classroom in classroomInfo" :key="classroom.classroomID" style="background-color: aliceblue; margin-bottom: 10px;">
+              <h1>{{ classroom.classroomName }}</h1>
+              <p>{{ classroom.classroomDescription }}</p>
+            </div>
+            <div id="TeacherListBox" style="background-color: lightsteelblue;">
+              display list of teachers here:
+              <div v-for="teacher in junctionManagersData" :key="teacher.memberID">
+                <h2>{{teacher.name}} | ID: {{teacher.memberID}}</h2>
+              </div>
+            </div>
+
+            <div id="ChannelSidebarL">
+              <div v-for="channel in classroomChannels" :key="channel.channelID">
+                <div id="channelSegment" style="background-color: lightblue; margin-top: 10px;" @click="openChannelChat(channel)">
+                  <h1>{{ channel.channelName }}</h1>
+                  <p>{{ channel.channelDescription }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="ClassroomStudents" style="background-color: aliceblue;">
+              Students:
+              <div v-for="member in classroomMembers" :key="member.memberID" v-if="member.isManager === 0"> <!-- v-if="member.isManager[0] === 0"-->
+                {{ member.name }} {{member.isManager}}
+                {{ member.memberID }}
+              </div>
+            </div>
+
+            <div v-if="openChannelChatActive" style="background-color: aqua; position: absolute; transform: translateX(322.5px); top: 0; width: 63vw">
+              <h2>{{currentActiveChannel}}</h2>
+              <div id="channelMessages">
+                <div v-for="channelMsg in currentChannelChatLog" :key="channelMsg.message_channel_ID">
+                  MemberID: {{channelMsg.memberID}} | {{channelMsg.message_channel_content}}
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+
+          
+            
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
+    <script>
+        new Vue({
+            el: '#getClassroomInfo',
+            data: {
+                classroomInfo: [],
+                user_memberID: '',
+                isMan: false,
+                junctionData: [],
+                classroomChannels: [],
+                junctionManagersData: [],
+                openChannelChatActive: false,
+                currentActiveChannel: '',
+                currentChannelChatLog: [],
+                classroomMembers: []
+            },
+            mounted() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const classroomID = urlParams.get('classroomID');
+                user_memberID = urlParams.get('memberID');
+
+                fetch(`/getClassroomFromID?classroomID=${classroomID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.classroomInfo = data;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching classroom info:', error);
+                    });
+
+                  fetch(`/getClassroomMembersFromID?classroomID=${classroomID}`)
+                  .then(response => response.json())
+                  .then(data => {
+                      this.classroomMembers = data;
+                  })
+                  .catch(error => {
+                      console.error('Error fetching classroom info:', error);
+                  });
+
+                //check if user is a manager
+                fetch(`/getIsManagerFromIDs?classroomID=${classroomID}&memberID=${user_memberID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.junctionData = data;
+                        console.log(this.junctionData[0].isManager);
+
+                        if(this.junctionData[0].isManager = '1')
+                        {
+                          this.isMan = true;
+                        }
+                        console.log(this.openChannelChatActive);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching junction info:', error);
+                    });
+
+                //get the channels of the classroom
+                fetch(`/getChannelsFromID?classroomID=${classroomID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.classroomChannels = data;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching channel info:', error);
+                    });
+
+                //get the managers of the classroom
+                fetch(`/getManagersFromID?classroomID=${classroomID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.junctionManagersData = data;
+                        console.log(this.junctionManagersData);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching channel info:', error);
+                    });
+            },
+            methods: {
+              openChannelChat(channel) {
+                this.openChannelChatActive = true;
+                this.currentActiveChannel = channel.channelName;
+                //currentActiveChannel
+
+                //open and display chat messages from the channel
+                ///getChannelChatlog
+                fetch(`/getChannelChatlog?channelID=${channel.channelID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.currentChannelChatLog = data;
+                        console.log(this.currentChannelChatLog);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching channel logs info:', error);
+                    });
+              }
+            }
+        });
+    </script>
+
+<script>
+  new Vue ({
+      el: '#redirectButton',
+      data: {
+        userMemberID: ''
+      },
+      methods:
+      {
+          redirecttohomepage(){
+              const urlParams = new URLSearchParams(window.location.search);
+              this.userMemberID = urlParams.get('memberID');
+
+              window.location.href = `/success?username=${encodeURIComponent(this.userMemberID)}`;
+          },
+          redirecttosettings(){
+            ///html/settings.html
+            const urlParams = new URLSearchParams(window.location.search);
+              this.userMemberID = urlParams.get('memberID');
+
+              window.location.href = `/html/settings.html?username=${encodeURIComponent(this.userMemberID)}`;
+          }
+      }
+  });
+</script>
+
+</body>
+</html>

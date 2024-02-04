@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html style="background-color:#F3F3F3; margin: 0">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Brainbox - Login</title>
+        <script type="module" src="https://unpkg.com/vue@3/dist/vue.esm-browser.js"></script>
+        <link rel="stylesheet" href="\stylesheets\style.css">
+    </head>
+    <body style="margin: 0">
+
+      <div id="login_backgroundimg">
+        <img src="/images/loginsignin_background.png" width="100%" height="auto">
+      </div>
+
+        <div id="homepageBox">
+        <h1>Create Account</h1>
+
+        <div id="app">
+            <label>Email</label>
+            <br>
+            <input type="text" id="emailBox" v-model="emailBoxValue" placeholder="Enter email..."/>
+            <br>
+            <br>
+            <label>Forename</label>
+            <br>
+            <input type="text" id="forename" v-model="forenameBoxValue" placeholder="Enter forename..."/>
+            <br>
+            <br>
+            <label>Surname</label>
+            <br>
+            <input type="text" id="surname" v-model="surnameBoxValue" placeholder="Enter surname..."/>
+            <br>
+            <br>
+            <label>Phone Number</label>
+            <br>
+            <input type="text" id="phoneNum" v-model="phoneNumBoxValue" placeholder="Enter phonenumber..."/>
+            <br>
+            <br>
+            <label>Gender</label>
+            <br>
+            <div id="dpDMenu">
+                <select v-model="gender">
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Non-Binary</option>
+                    <option>Prefer Not To Say</option>
+                </select>
+            </div>
+            <br>
+            <br>
+            <label for="passWord">Create Password</label>
+            <br>
+            <input type="text" id="passwordBox" v-model="passwordBoxValue" placeholder="Enter Password..."/>
+            <br>
+            <br>
+            <div id="buttonInput">
+            <button @click="signUp" style="width: 150%">SIGN UP</button>
+          </div>
+        </div>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+        <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
+        <script>
+            new Vue({
+                el: '#app',
+                data: {
+                    emailBoxValue: '',
+                    forenameBoxValue: '',
+                    surnameBoxValue: '',
+                    phoneNumBoxValue: '',
+                    gender: '',
+                    passwordBoxValue: ''
+                },
+                mounted() {
+
+                },
+                methods: {
+                    signUp: async function() {
+                        //sign up function
+                        try {
+                        // Make a POST request to your server
+                        const response = await fetch('/addNewMember', {
+                            method: 'POST',
+                            headers: {
+                            'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                forename: this.forenameBoxValue,
+                                surname: this.surnameBoxValue,
+                                email: this.emailBoxValue,
+                                phoneNumber: this.phoneNumBoxValue,
+                                gender: this.gender,
+                                password: this.passwordBoxValue
+                            }),
+                        });
+                        if (response.ok) {
+                      // Do something on success
+                      console.log('Form submitted successfully');
+                    //   window.location.href = '/success';
+                      window.location.href = `/`;
+                    } else {
+                      // Handle errors
+                      console.error('Form submission failed');
+                    }
+                    } catch (error)
+                    {
+                        console.error('Error sending message:', error);
+                    }
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>

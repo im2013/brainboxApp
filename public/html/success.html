@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User Home Page</title>
+        <script type="module" src="https://unpkg.com/vue@3/dist/vue.esm-browser.js"></script>
+        <link rel="stylesheet" href="\stylesheets\style.css">
+    </head>
+
+    <body>
+        <h1>Welcome</h1>
+
+        <!--display username at top?-->
+        <h2 id="displayUser">Username: {{ username }}</h2>
+
+        <a href="/html/homepage.html">homepage</a>
+        <br>
+    </body>
+
+
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script type="module">
+        // Parse the query parameters from the URL
+        const queryParams = new URLSearchParams(window.location.search);
+        const username = queryParams.get('username');
+
+        const { createApp } = Vue;
+
+        const app = createApp({
+            data() {
+                return {
+                    username: username || 'No username provided',
+                };
+            },
+        });
+
+        app.mount('#displayUser');
+    </script>
+    
+</html>

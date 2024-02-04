@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home Page</title>
+    <link rel="stylesheet" href="\stylesheets\settings.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="navBar">
+            <!-- Navigation bar content -->
+            <ul>
+                <img src="\images\brainy_icon.png" alt="brainy" height="auto" id="redirectButton"
+                    @click="redirecttohomepage">
+                <p>BrainBox</p>
+                <li><a style="background-color: #423076;" onmouseover="this.style.backgroundColor='#5a4791'"
+                        onmouseout="this.style.backgroundColor='#423076'" href="#our product">Home</a></li>
+                <li><a a style="background-color: #423076;" onmouseover="this.style.backgroundColor='#5a4791'"
+                        onmouseout="this.style.backgroundColor='#423076'" href="#features">Settings</a></li>
+                <li><a style="background-color: #423076;" onmouseover="this.style.backgroundColor='#5a4791'"
+                        onmouseout="this.style.backgroundColor='#423076'" href="aboutus.html">Help</a></li>
+            </ul>
+        </div>
+
+        <div id="content">
+            <!-- Heading and settings list -->
+            <div id="stuff">
+                <div id="heading">
+                    <!-- Heading content -->
+                    <h1>Welcome to Brainy!</h1>
+                    <hr class="line">
+                </div>
+
+                <div id="settingsList">
+                    <!-- Settings list content -->
+                    <ul>
+                        <button @click="showGeneralSettings">General Settings</button>
+                        <button @click="showAccountSettings">Account Settings</button>
+                        <button @click="showPrivacySettings">Privacy Settings</button>
+                        <button @click="showNotificationSettings">Notification Settings</button>
+                    </ul>
+                </div>
+            </div>
+            <!-- Content sections go here -->
+            <div id="SettingsContent" v-if="displayGeneralSettings">
+                <h2>General Settings</h2>
+
+                <div id="SettingOptions">
+                    <h3>Theme</h3>
+                    <p>Theme [dark / light]</p>
+
+                    <h3>Accessibility</h3>
+                    <p>Language [drop down for several languages]</p>
+                    <p>Font-size [small, medium, large]</p>
+                </div>
+            </div>
+
+            <div id="SettingsContent" v-if="displayAccountSettings">
+                <h2>Account Settings</h2>
+                <div id="SettingOptions">
+                    <h3>Account Information</h3>
+                    <p>Change email [field for new email]</p>
+                    <p>Reset Password [field to send reset password]</p>
+
+                    <h4>Contact Details</h4>
+                    <p>Change forename [field for new forename]</p>
+                    <p>Change surname name [field for new surname]</p>
+                    <p>Change phone Number [field for new phone No.]</p>
+                    <p>Change pronouns [field for pronouns]</p>
+                    <p>Change gender [dropdown for genders]</p>
+
+                    <h3>Account</h3>
+                    <p>Delete Account [button]</p>
+                </div>
+            </div>
+
+            <div id="SettingsContent" v-if="displayPrivacySettings">
+                <h2>Privacy Settings</h2>
+                <div id="SettingOptions">
+                    <h3>Cookies</h3>
+                    <p>Cookies toggle [on/off]</p>
+                </div>
+            </div>
+
+            <div id="SettingsContent" v-if="displayNotifSettings">
+                <h2>Notification Settings</h2>
+                <div id="SettingOptions">
+                    <h3>Notifications</h3>
+                    <p>[toggle notifications on or off]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#content',
+            data: {
+                displayGeneralSettings: true,
+                displayAccountSettings: false,
+                displayPrivacySettings: false,
+                displayNotifSettings: false
+            },
+            methods: {
+                showGeneralSettings() {
+                    this.displayGeneralSettings = true;
+                    this.displayAccountSettings = false;
+                    this.displayPrivacySettings = false;
+                    this.displayNotifSettings = false;
+                },
+                showAccountSettings() {
+                    this.displayGeneralSettings = false;
+                    this.displayAccountSettings = true;
+                    this.displayPrivacySettings = false;
+                    this.displayNotifSettings = false;
+                },
+                showPrivacySettings() {
+                    this.displayGeneralSettings = false;
+                    this.displayAccountSettings = false;
+                    this.displayPrivacySettings = true;
+                    this.displayNotifSettings = false;
+                },
+                showNotificationSettings() {
+                    this.displayGeneralSettings = false;
+                    this.displayAccountSettings = false;
+                    this.displayPrivacySettings = false;
+                    this.displayNotifSettings = true;
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

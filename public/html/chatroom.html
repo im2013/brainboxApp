@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home Page</title>
+    <link rel="stylesheet" href="\stylesheets\homepage.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
+</head>
+
+<body style="margin: 0;">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
+    <div id="container" style="margin: 0; padding: 0;">
+        <div id="navBar" style="margin-bottom: 0; padding-bottom: 0;">
+            <ul>
+                <img src="\images\groupSys_icon.png" alt="brainbox logo" height="auto" id="redirectButton"
+                    @click="redirecttohomepage">
+                <p>BrainBox</p>
+                <li><a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
+                        onmouseout="this.style.backgroundColor='#eb7b34'" href="#our product">Test 1</a></li>
+                <li><a a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
+                        onmouseout="this.style.backgroundColor='#eb7b34'" href="#features">Test 2</a></li>
+                <li><a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
+                        onmouseout="this.style.backgroundColor='#eb7b34'" href="aboutus.html">Test 3</a></li>
+                <img src="\images\brainy_icon.png" alt="brainy" height="auto" id="redirectButton"
+                    @click="redirecttosettings">
+            </ul>
+        </div>
+        <div id="getGroupchatInfo" class="centered-container" style="margin-bottom: 0; padding-bottom: 0;">
+            <h1>{{ groupchatName }}</h1>
+            <div id="groupchatText">
+                <div v-for="msg in chatMessages" :key="chatMessages.messages_groupchat_ID">
+                    <div id="message-container">
+                        <p> user: {{msg.memberID}} text: {{msg.messages_groupchat_content }}</p>
+                        <div v-if="checkUserMsg(msg)" v-html="ifUser_buttonDeleteText"
+                            @click="toggleDeleteMenu(msg.messages_groupchat_ID)"></div>
+                        <div v-else v-html="ifNOTUser_buttonReportText" @click="toggleMenu"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="chatbox">
+                <input type="text" name="myTextField" placeholder="Enter msg here" maxlength="200" v-model="inputText"
+                    @keyup.enter="enterText">
+                <button type="submit" @click="enterText">Submit</button>
+            </div>
+
+            <div id="reportPopup" style="margin-bottom: 0; padding-bottom: 0;">
+                <div v-if="openPopup" id="menu">
+                    <!-- Menu content goes here -->
+                    <ul>
+                        Reporting this message
+                        <br>
+                        Message content:
+                        <br>
+                        [box with words of the message]
+                        <br>
+                        <div id="dpDMenu">
+                            <button id="dropbtn">Type of Offense</button>
+                            <div id="dpDMenuCon">
+                                Abuse or Harassment<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                                    value="checkboxValue">
+                                <br>
+                                Inappropriate Content<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                                    value="checkboxValue">
+                                <br>
+                                Threatening Behaviour<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                                    value="checkboxValue">
+                                <br>
+                                Spam<input type="checkbox" id="myCheckbox" name="myCheckbox" value="checkboxValue">
+                                <br>
+                                Exposing private identifying information<input type="checkbox" id="myCheckbox"
+                                    name="myCheckbox" value="checkboxValue">
+                                <br>
+                                Harmful Misinformation<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                                    value="checkboxValue">
+                            </div>
+                        </div>
+                        <br>
+                        <div id="buttonContainer">
+                            <button id="reportButton" @click="toggleReportConfirm">Report</button>
+                            <button id="cancelButton" @click="cancelPopup">Cancel</button>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="reportPopup2" style="margin-bottom: 0; padding-bottom: 0;">
+                <div v-if="openPopup2" id="menu">
+                    <p>Message Successfully Reported</p>
+                    <button @click="toggleReportConfirmOff">Close</button>
+                </div>
+            </div>
+
+            <div id="deletePopupStyle" style="margin-bottom: 0; padding-bottom: 0;">
+                <div v-if="deletePopup" id="menu">
+                    <p>Confirm delete message?</p>
+                    <div>
+                        <button @click="toggleDeleteConfirmOn">Yes</button>
+                        <button @click="toggleDeleteConfirmOff">No</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="groupChatMembers_Section">
+            <!--group chat members list-->
+            <div id="getChatMembers">
+                <h2>Members - {{ groupchat_count }} </h2>
+                <ul>
+                    <div v-for="members in groupchat_members" :key="groupchat_members.groupchatID"
+                        style="font-size: 30px">
+                        <div id="dpDMenu">
+                            <button id="dropbtn">{{ members.name }} | ID: {{members.memberID}}</button>
+                            <div v-if="checkUser(members.memberID)" style="height: 100px;"></div>
+                            <div v-else style="height: 100px;">
+                                <div id="dpDMenuCon">
+                                    <button @click="kickMenu(members.memberID)">Kick</button>
+                                    <button @click="reportUser(members.memberID)">Report</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ul>
+                <div id="BottomGroupchatSection">
+                    <div id="dpDMenu">
+                        <button id="dropbtn">Add new user</button>
+                        <div id="dpDMenuCon">
+                            Enter member ID:
+                            <br>
+                            <input type="text" v-model="searchUser" placeholder="Enter memberID...">
+                            <br>
+                            <button @click="addUserToGroupchat">Add user</button>
+                        </div>
+                        <br>
+                        <button style="margin-top: 150px;" @click="leaveGroupchat">Leave Groupchat</button>
+                        <br>
+                        <button @click="deleteGroupchat">Delete Groupchat</button>
+                    </div>
+                </div>
+                <!--Kick user / report user pop ups-->
+                <div id="reportUserPopup" style="margin-bottom: 0; padding-bottom: 0;">
+                    <div v-if="reportUserPopupVariable" id="menu">
+                        <p>Kick User?</p>
+                        <div v-html="kickedUser"></div>
+                        <button @click="kickUserFunction">Yes</button>
+                        <button @click="hideKickMenu">No</button>
+                    </div>
+                </div>
+
+                <div id="reportUserPopup">
+                    <div id="KickUserConfirmPopup" v-if="kickUserConfirmToggle">
+                        User has been kicked... Now reloading...
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+            <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
+
+            <script>
+                new Vue({
+                    el: '#getGroupchatInfo',
+                    data: {
+                        groupchatInfo: [],
+                        chatMessages: [],
+                        groupchatName: '',
+                        userMessages: [],
+                        openPopup: false,
+                        openPopup2: false,
+                        isUserMsg: [],
+                        inputText: '',
+                        newHTML: '',
+                        isUser: false,
+                        deletePopup: false,
+                        ifUser_buttonDeleteText: '<button>Delete</button>',
+                        ifNOTUser_buttonReportText: '<button @click="toggleMenu">Report</button>',
+                        getUserMessageID: '',
+                    },
+                    mounted() {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const groupchatID = urlParams.get('groupchatID');
+                        const memberID = urlParams.get('memberID');
+
+                        fetch(`/getGroupchatFromID?groupchatID=${groupchatID}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                this.groupchatInfo = data;
+                                this.groupchatName = data[0].groupchatName;
+                            })
+                            .catch(error => {
+                                console.error('Error fetching groupchat info:', error);
+                            });
+
+                        fetch(`/getGroupchatChatlog?groupchatID=${groupchatID}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                this.chatMessages = data;
+                            })
+                            .catch(error => {
+                                console.error('Error fetching groupchat messages:', error);
+                            });
+
+
+                        fetch(`/getGroupchatChatlog_userOnly?groupchatID=${groupchatID}&memberID=${memberID}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                this.isUserMsg = data;
+                            })
+                            .catch(error => {
+                                console.error('Error fetching groupchat messages:', error);
+                            });
+
+                        // setTimeout(() => {
+
+                        //     fetch(`/getGroupchatChatlog?groupchatID=${groupchatID}`)
+                        //     .then(response => response.json())
+                        //     .then(data => {
+                        //         this.chatMessages = data;
+                        //     })
+                        //     .catch(error => {
+                        //         console.error('Error fetching groupchat messages:', error);
+                        //     });
+
+
+                        //     fetch(`/getGroupchatChatlog_userOnly?groupchatID=${groupchatID}&memberID=${memberID}`)
+                        //     .then(response => response.json())
+                        //     .then(data => {
+                        //         this.isUserMsg = data;
+                        //     })
+                        //     .catch(error => {
+                        //         console.error('Error fetching groupchat messages:', error);
+                        //     });
+
+                        //     //window.location.reload();
+
+                        // }, 3000);
+
+                        var element = document.getElementById('groupchatText');
+                        element.scrollTop = element.scrollHeight - element.clientHeight;
+
+                        //if user print <delete> if not print the report button
+                        //for each message;
+                        //check if its in userMsgs
+                        //if it is; print <delete>
+                        //if not; print <report>
+                    },
+                    methods: {
+                        toggleMenu() {
+                            this.openPopup = true;
+                        },
+                        cancelPopup() {
+                            this.openPopup = false;
+                        },
+                        toggleReportConfirm() {
+                            this.openPopup2 = true;
+                            this.openPopup = false;
+                        },
+                        toggleReportConfirmOff() {
+                            this.openPopup2 = false;
+                        },
+                        toggleDeleteMenu(value) {
+                            this.getUserMessageID = value;
+                            this.deletePopup = true;
+                        },
+                        toggleDeleteConfirmOff() {
+                            this.deletePopup = false;
+                        },
+                        toggleDeleteConfirmOn: async function () {
+                            //get user's message id
+                            this.deletePopup = false;
+                            console.log(this.getUserMessageID);
+                            //connect to database
+                            try {
+                                // Make a POST request to your server
+                                const response = await fetch('/removeGroupchatMessage', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        messages_groupchat_ID: this.getUserMessageID,
+                                    }),
+                                });
+                            } catch (error) {
+                                console.error('Error sending message:', error);
+                            }
+                            window.location.reload();
+
+                            //remove selected chat message by id
+
+                        },
+                        enterText: async function () {
+                            console.log('enterText method called');
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const gcID = urlParams.get('groupchatID');
+                            console.log('groupchat id test 1: ', gcID);
+                            const mID = urlParams.get('memberID');
+                            console.log('member id test 1: ', mID);
+
+                            console.log('chat input log inputText' + this.inputText);
+
+                            try {
+                                // Make a POST request to your server
+                                const response = await fetch('/addGroupchatMessage?groupchatID=${gcID}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        text: this.inputText,
+                                        memberID: mID,
+                                        groupchatID: gcID,
+                                    }),
+                                });
+                            } catch (error) {
+                                console.error('Error sending message:', error);
+                            }
+                            window.location.reload();
+                        },
+                        checkUserMsg(msg) {
+                            //return this.isUserMsg(msg).some(userMsg => userMsg.memberID === msg.memberID);
+                            //check is msg is within usermsgs is not, return false, if true return true
+                            for (var i = 0; i < this.isUserMsg.length; i++) {
+                                console.log("going thru loop!");
+                                if (msg.memberID == this.isUserMsg[i].memberID) {
+                                    return true;
+                                    console.log("match found!");
+                                }
+                            }
+                            return false;
+                        }
+                    }
+                });
+            </script>
+
+            <script>
+                new Vue({
+                    el: '#redirectButton',
+                    data: {
+                        userMemberID: ''
+                    },
+                    methods:
+                    {
+                        redirecttohomepage() {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            this.userMemberID = urlParams.get('memberID');
+
+                            window.location.href = `/success?username=${encodeURIComponent(this.userMemberID)}`;
+                        },
+                        redirecttosettings() {
+                            ///html/settings.html
+                            const urlParams = new URLSearchParams(window.location.search);
+                            this.userMemberID = urlParams.get('memberID');
+
+                            window.location.href = `/html/settings.html?username=${encodeURIComponent(this.userMemberID)}`;
+                        }
+                    }
+                });
+            </script>
+
+            <!--Group chat multiplier based on how many users are inside the groupchat-->
+            <script>
+                Vue.use(VueCarousel.default);
+                new Vue({
+
+                    el: '#getChatMembers',
+                    data: {
+                        username: 'No username provided',
+                        groupchat_members: [],
+                        groupchat_count: 0,
+                        userMemberID: '',
+                        curGroupchatID: '',
+                        otherUserMemberID: '',
+                        reportUserPopupVariable: false,
+                        kickedUser: '',
+                        searchUser: '',
+                        kickUserConfirmToggle: false,
+                    },
+                    mounted() {
+                        const urlParams1 = new URLSearchParams(window.location.search);
+                        this.userMemberID = urlParams1.get('memberID');
+                        this.curGroupchatID = urlParams1.get('groupchatID');
+
+                        fetch('/groupchats')
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const groupchatID = urlParams.get('groupchatID');
+
+                        fetch(`/getGroupchatMembersFromID?groupchatID=${groupchatID}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                this.groupchat_members = data;
+
+                                for (let i = 0; i < this.groupchat_members.length; i++) {
+                                    this.groupchat_count++;
+                                }
+
+                            })
+                            .catch(error => {
+                                console.error('Error fetching groupchat members:', error);
+                            });
+                        //store value of user's memberID
+
+
+
+                    },
+                    methods: {
+                        checkUser(member) {
+                            if (member == this.userMemberID) {
+                                return true;
+                            }
+                            return false;
+                        },
+                        kickMenu(otherMember) {
+                            this.otherUserMemberID = otherMember;
+                            this.reportUserPopupVariable = true;
+                            this.kickedUser = this.otherUserMemberID;
+                        },
+                        hideKickMenu() {
+                            this.reportUserPopupVariable = false;
+                        },
+                        kickUserFunction: async function () {
+                            this.kickUserConfirmToggle = true;
+                            this.reportUserPopupVariable = false;
+
+                            //remove member from groupchat
+                            try {
+                                // Make a POST request to your server
+                                const response = await fetch('/removeGroupchatMember', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        memberID: this.otherUserMemberID,
+                                        groupchatID: this.curGroupchatID
+                                    }),
+                                });
+                            } catch (error) {
+                                console.error('Error sending message:', error);
+                            }
+                            //wait 3 seconds to kickUserConfirmToggle = false
+                            setTimeout(() => { this.kickUserConfirmToggle = false; window.location.reload(); }, 3000);
+                        },
+                        reportUser(otherMember) {
+
+                        },
+                        addUserToGroupchat: async function () {
+                            //<input type="text" v-model="searchUser" placeholder="Enter memberID...">
+                            //<br>
+                            //          <button @click="addUserToGroupchat(searchUser)">Add user</button>
+
+
+                            console.log(this.searchUser);
+
+                            //first, confirm user exists
+                            //second, add user to groupchat
+                            //remove member from groupchat
+                            try {
+                                // Make a POST request to your server
+                                const response = await fetch('/addGroupchatMember', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        memberID: this.searchUser,
+                                        groupchatID: this.curGroupchatID
+                                    }),
+                                });
+                            } catch (error) {
+                                console.error('Error sending message:', error);
+                            }
+                            window.location.reload();
+                        },
+                        leaveGroupchat: async function () {
+                            //this.userMemberID
+
+                            //remove user from groupchat using sql
+                            //remove member from groupchat
+                            try {
+                                // Make a POST request to your server
+                                const response = await fetch('/removeGroupchatMember', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        memberID: this.userMemberID,
+                                        groupchatID: this.curGroupchatID
+                                    }),
+                                });
+                                if (response.ok) {
+                                    // Do something on success
+                                    console.log('Form submitted successfully');
+                                    //   window.location.href = '/success';
+                                    window.location.href = `/success?username=${encodeURIComponent(this.userMemberID)}`;
+                                } else {
+                                    // Handle errors
+                                    console.error('Form submission failed');
+                                }
+                            } catch (error) {
+                                console.error('Error sending message:', error);
+                            }
+                            //wait 3 seconds to kickUserConfirmToggle = false
+                            //setTimeout(() => {this.kickUserConfirmToggle = false; window.location.reload();}, 3000);
+                        },
+                        deleteGroupchat: async function () {
+                            //this.curGroupchatID
+                            try {
+                                // Make a POST request to your server
+                                const response = await fetch('/deleteGroupchat', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        groupchatID: this.curGroupchatID
+                                    }),
+                                });
+                                if (response.ok) {
+                                    // Do something on success
+                                    console.log('Form submitted successfully');
+                                    //   window.location.href = '/success';
+                                    window.location.href = `/success?username=${encodeURIComponent(this.userMemberID)}`;
+                                } else {
+                                    // Handle errors
+                                    console.error('Form submission failed');
+                                }
+                            } catch (error) {
+                                console.error('Error sending message:', error);
+                            }
+                        }
+                    }
+                });
+
+            </script>
+
+</body>
+
+</html>

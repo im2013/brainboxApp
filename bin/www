@@ -1,0 +1,791 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var debug = require('debug')('brainbox:server');
+var http = require('http');
+const socketIo = require('socket.io');
+const session = require('express-session');
+var createError = require('http-errors');
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
+const bodyParser = require('body-parser');
+const mysql = require('mysql2');
+
+
+var app = express();
+
+
+// Get port from environment and store in Express.
+var port = process.env.PORT || '3000';
+app.set('port', port);
+
+// setting up a session
+app.use(
+  session({
+    secret: '123456',
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
+// sql connection
+const config = {
+  host: 'localhost',
+  user: 'root',
+  password: '0001A',
+  database: 'users_brainbox',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+};
+
+// Create HTTP server
+const server = http.createServer(app);
+
+// socket.io
+// setting up a session
+const io = socketIo(server);
+
+// connected users
+const connectedUsers = {};
+
+io.on('connection', (socket) => {
+  console.log('User connected:', socket.id);
+
+  // Access user information from the session
+  const userID = socket.request.session.userID;
+  const userName = socket.request.session.userName;
+
+  // Use userID and userName as needed
+
+  // Listen for chat messages
+  socket.on('privateMessage', (data) => {
+    const { sender, receiver, message } = data;
+
+    // Send the message to the receiver
+    if (connectedUsers[receiver]) {
+      connectedUsers[receiver].emit('privateMessage', { sender, message });
+    }
+  });
+
+  // Store the user's socket ID when they connect
+  socket.on('login', () => {
+    connectedUsers[userName] = socket;
+  });
+
+  // Handle disconnect
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+
+    // Remove the user from the connectedUsers object
+    if (userName && connectedUsers[userName] === socket) {
+      delete connectedUsers[userName];
+    }
+  });
+});
+
+app.get('/socket.io/socket.io.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'node_modules', 'socket.io', 'client-dist', 'socket.io.js'));
+});
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// body parser
+//app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
+// ROUTING
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, '..', 'public', 'html', 'login.html'));
+});
+
+//C:\Users\ionam\Desktop\F29SoftwareProject\brainbox\public\html\login.html
+
+app.get('/javascripts/main.js', function (req, res) {
+  res.sendFile(path.join(__dirname, 'javascripts', 'main.js'));
+});
+
+app.get('/html/settings.html', function (req, res) {
+  res.sendFile(path.join(__dirname, 'settings.html'));
+});
+
+app.get('/success', function (req, res) {
+  res.sendFile(path.join(__dirname, '..', 'public', 'html', 'user.html'));
+});
+
+app.get('/stylesheets/style.css', function (req, res) {
+  res.sendFile(path.join(__dirname, '..', 'public', 'stylesheets', 'style.css'));
+});
+
+app.get('/images/', function (req, res) {
+  res.sendFile(path.join(__dirname, '..', 'public', 'images'));
+});
+
+app.post('/submit', async (req, res) => {
+  try {
+    const { userName, passWord } = req.body;
+
+    console.log('Received data from the client:', userName, passWord);
+
+    // Connect to the database
+    const connection = mysql.createConnection(config);
+
+    // Check if the username and password combination already exists
+    const [existingUsers] = await connection
+      .promise()
+      .query('SELECT * FROM members WHERE email = ? AND password = ?', [userName, passWord]);
+
+    // store user id in a separate query
+
+    if (existingUsers.length > 0) {
+      // Username and password combination already exists & user exists
+      // store user id from the table
+      const memberID = existingUsers[0].memberID;
+
+      // Store user information in the session
+      req.session.userID = memberID;
+      req.session.userName = userName;
+
+      res.redirect('/success');
+    } else {
+      // Handle errors or redirect to the login page
+      console.error('Invalid credentials');
+      res.redirect('/');
+    }
+
+    // Close the connection pool
+    connection.end();
+  } catch (error) {
+    console.error('Error handling form submission:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.post('/addNewMember', async (req, res) => {
+  try {
+    // forename: this.forenameBoxValue,
+    //                             surname: this.surnameBoxValue,
+    //                             email: this.emailBoxValue,
+    //                             phoneNumber: this.phoneNumBoxValue,
+    //                             gender: this.gender,
+    //                             password: this.passwordBoxValue
+      // Connect to the database
+      const { forename, surname, email, phoneNumber, gender, password } = req.body;
+      //console.log(forename, surname, email, phoneNumber, gender, password);
+
+      const connection = mysql.createConnection(config);
+
+      //first check such a user doesn't already exist
+      const [checkUserExistence] = await connection
+      .promise()
+      .query('SELECT members.email, members.phoneNumber FROM members WHERE members.email = ? AND members.phoneNumber = ?', 
+      [email, phoneNumber]);
+
+      console.log(checkUserExistence);
+
+    
+      if (checkUserExistence.length === 0 && connection)
+      {
+        ////if not-- add to database
+        const [addUserInfo] = await connection
+          .promise()
+          .query('INSERT INTO members (members.forename, members.surname, members.email, members.phoneNumber, members.gender, members.password) VALUES (?, ?, ?, ?, ?, ?)', 
+          [forename, surname, email, phoneNumber, gender, password]);
+
+          // Close the database connection
+          connection.end();
+          res.json(addUserInfo);
+      }
+  else 
+  {
+    res.status(404).send('User already exists.');
+  }
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//getting the classrooms
+app.get('/classrooms', async (req, res) => {
+  try {
+    // Connect to the database
+    const connection = mysql.createConnection(config);
+
+    //get user's id from the session
+    const userID = req.session.userID;
+
+    // Query the database to fetch the classrooms data
+    const [classrooms] = await connection.promise().query('SELECT * FROM classroom, junction_classroommembers, members WHERE junction_classroommembers.fk_classroomID = classroom.classroomID AND members.memberID = junction_classroommembers.fk_memberID AND members.memberID = ?', [userID]);
+    // Close the database connection
+    connection.end();
+
+    // Send the classrooms data as a JSON response
+    res.json(classrooms);
+  } catch (error) {
+    console.error('Error fetching classrooms:', error);
+    // If an error occurs, send a 500 Internal Server Error response
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+//getting groupchats
+app.get('/groupchats', async (req, res) => {
+  try {
+    // Connect to the database
+    const connection = mysql.createConnection(config);
+
+    //get user's id from the session
+    const userID = req.session.userID;
+
+    // Query the database to fetch the classrooms data
+    const [groupchats] = await connection.promise().query('SELECT * FROM groupchat, junction_groupchatmembers, members WHERE junction_groupchatmembers.groupchatID = groupchat.groupchatID AND members.memberID = junction_groupchatmembers.memberID AND members.memberID = ?', [userID]);
+    // Close the database connection
+    connection.end();
+
+    // Send the classrooms data as a JSON response
+    res.json(groupchats);
+  } catch (error) {
+    console.error('Error fetching groupchats:', error);
+    // If an error occurs, send a 500 Internal Server Error response
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+//retrieving classroom data based on html id
+app.get('/getClassroomFromID', async (req, res) => {
+  try {
+      // Connect to the database
+      const connection = mysql.createConnection(config);
+
+      // Get the classroom name from the query parameters
+      const classroomID = req.query.classroomID;
+
+      // Query the database to fetch the classroom data based on the provided classroomName
+      const [classroomInfo] = await connection
+          .promise()
+          .query('SELECT * FROM classroom WHERE classroomID = ?', [classroomID]);
+
+      // Close the database connection
+      connection.end();
+
+      // Send the filtered classroom data as a JSON response
+      res.json(classroomInfo);
+  } catch (error) {
+      console.error('Error fetching classroom info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//getClassroomMembersFromID
+app.get('/getClassroomMembersFromID', async (req, res) => {
+  try {
+      // Connect to the database
+      const connection = mysql.createConnection(config);
+
+      // Get the classroom name from the query parameters
+      const classroomID = req.query.classroomID;
+
+      // Query the database to fetch the classroom data based on the provided classroomName
+      const [classroomInfo] = await connection
+          .promise()
+          .query('SELECT * FROM junction_classroommembers, classroom, members WHERE junction_classroommembers.fk_classroomID = classroom.classroomID AND junction_classroommembers.fk_memberID = members.memberID AND classroom.classroomID = ? GROUP BY members.memberID', [classroomID]);
+
+      // Close the database connection
+      connection.end();
+
+      // Send the filtered classroom data as a JSON response
+      res.json(classroomInfo);
+  } catch (error) {
+      console.error('Error fetching classroom info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//retrieving groupchat data based on html id
+app.get('/getIsManagerFromIDs', async (req, res) => {
+  try {
+      // Connect to the database
+      const connection = mysql.createConnection(config);
+
+      // Get the classroom name from the query parameters
+      const classroomID = req.query.classroomID;
+      const memberID = req.query.memberID;
+
+      // Query the database to fetch the junction data based on the provided classroomID and memberID
+      const [junctionData] = await connection
+          .promise()
+          .query('SELECT * FROM junction_classroommembers, members, classroom WHERE junction_classroommembers.fk_classroomID = classroom.classroomID AND junction_classroommembers.fk_memberID = members.memberID AND classroom.classroomID = ? AND junction_classroommembers.isManager = 1 AND members.memberID = ?', [classroomID, memberID]);
+
+      // Close the database connection
+      connection.end();
+
+      // Send the filtered classroom data as a JSON response
+      res.json(junctionData);
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//getGroupchatFromID
+//retrieving junction_managers from memberID and classroomID
+app.get('/getGroupchatFromID', async (req, res) => {
+  try {
+      // Connect to the database
+      const connection = mysql.createConnection(config);
+
+      // Get the classroom name from the query parameters
+      const groupchatID = req.query.groupchatID;
+
+      // Query the database to fetch the classroom data based on the provided classroomName
+      const [groupchatInfo] = await connection
+          .promise()
+          .query('SELECT * FROM groupchat WHERE groupchatID = ?', [groupchatID]);
+
+      // Close the database connection
+      connection.end();
+
+      // Send the filtered classroom data as a JSON response
+      res.json(groupchatInfo);
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//getChannelsFromID
+app.get('/getChannelsFromID', async (req, res) => {
+  try {
+      // Connect to the database
+      const connection = mysql.createConnection(config);
+
+      // Get the classroom name from the query parameters
+      const classroomID = req.query.classroomID;
+
+      // Query the database to fetch the classroom data based on the provided classroomName
+      const [channels] = await connection
+          .promise()
+          .query('SELECT * FROM classroomchannels, classroom WHERE classroomchannels.classroomID = classroom.classroomID AND classroom.classroomID = ?', [classroomID]);
+
+      // Close the database connection
+      connection.end();
+
+      // Send the filtered classroom data as a JSON response
+      res.json(channels);
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/getManagersFromID', async (req, res) => {
+  try {
+      // Connect to the database
+      const connection = mysql.createConnection(config);
+
+      // Get the classroom name from the query parameters
+      const classroomID = req.query.classroomID;
+
+      // Query the database to fetch the classroom data based on the provided classroomName
+      const [channels] = await connection
+          .promise()
+          .query('SELECT * FROM junction_classroommembers, members, classroom WHERE junction_classroommembers.fk_classroomID = classroom.classroomID AND junction_classroommembers.fk_memberID = members.memberID AND classroom.classroomID = ? AND isManager = 1', [classroomID]);
+
+      // Close the database connection
+      connection.end();
+
+      // Send the filtered classroom data as a JSON response
+      res.json(channels);
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//retrieving groupchat members based on html id
+app.get('/getGroupchatMembersFromID', async (req, res) => {
+  try {
+      // Connect to the database
+      const connection = mysql.createConnection(config);
+
+      // Get the classroom name from the query parameters
+      const groupchatID = req.query.groupchatID;
+
+      // Query the database to fetch the classroom data based on the provided classroomName
+      const [groupchatInfo] = await connection
+          .promise()
+          .query('SELECT members.memberID, members.name, members.email FROM members, junction_groupchatmembers, groupchat WHERE junction_groupchatmembers.groupchatID = groupchat.groupchatID AND members.memberID = junction_groupchatmembers.memberID AND groupchat.groupchatID = ? GROUP BY members.memberID', [groupchatID]);
+
+      // Close the database connection
+      connection.end();
+
+      // Send the filtered classroom data as a JSON response
+      res.json(groupchatInfo);
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/getGroupchatChatlog', async (req, res) => {
+  try {
+      // Connect to the database
+      const connection = mysql.createConnection(config);
+
+      // Get the classroom name from the query parameters
+      const groupchatID = req.query.groupchatID;
+
+      console.log("groupchat id:" + req.query.groupchatID);
+
+      // Query the database to fetch the classroom data based on the provided classroomName
+      const [groupchatLogInfo] = await connection
+          .promise()
+          .query('SELECT messages_groupchat.messages_groupchat_ID, messages_groupchat.memberID, messages_groupchat.messages_groupchat_timestamp, messages_groupchat.messages_groupchat_content FROM messages_groupchat, groupchat WHERE messages_groupchat.groupchatID = groupchat.groupchatID AND groupchat.groupchatID = ?', [groupchatID]);
+
+      // Close the database connection
+      connection.end();
+
+      // Send the filtered classroom data as a JSON response
+      res.json(groupchatLogInfo);
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/getChannelChatlog', async (req, res) => {
+  try {
+      // Connect to the database
+      const connection = mysql.createConnection(config);
+
+      // Get the classroom name from the query parameters
+      const channelID = req.query.channelID;
+
+      console.log("groupchat id:" + req.query.groupchatID);
+
+      // Query the database to fetch the classroom data based on the provided classroomName
+      const [groupchatLogInfo] = await connection
+          .promise()
+          .query('SELECT * FROM messages_channel, classroomchannels WHERE messages_channel.channelID = classroomchannels.channelID AND classroomchannels.channelID = ?', [channelID]);
+
+      // Close the database connection
+      connection.end();
+
+      // Send the filtered classroom data as a JSON response
+      res.json(groupchatLogInfo);
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/getGroupchatChatlog_userOnly', async (req, res) => {
+  try {
+      // Connect to the database
+      const connection = mysql.createConnection(config);
+
+      // Get the classroom name from the query parameters
+      const groupchatID = req.query.groupchatID;
+      console.log('groupchat: ' + groupchatID);
+      const memberID = req.query.memberID;
+      console.log('memberID: ' + memberID);
+
+      console.log("groupchat id:" + req.query.groupchatID);
+
+      // Query the database to fetch the classroom data based on the provided classroomName
+      const [groupchatLogInfo] = await connection
+          .promise()
+          .query('SELECT messages_groupchat.messages_groupchat_ID, messages_groupchat.memberID, messages_groupchat.messages_groupchat_timestamp, messages_groupchat.messages_groupchat_content FROM messages_groupchat, groupchat WHERE messages_groupchat.groupchatID = groupchat.groupchatID AND groupchat.groupchatID = ? AND messages_groupchat.memberID = ?', [groupchatID, memberID]);
+
+      // Close the database connection
+      connection.end();
+
+      // Send the filtered classroom data as a JSON response
+      res.json(groupchatLogInfo);
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//retrieveUserinfo
+app.get('/retrieveUserinfo', async (req, res) => {
+  try {
+      // Connect to the database
+      const connection = mysql.createConnection(config);
+
+      // Get the classroom name from the query parameters
+      const email = req.session.userName;
+
+      // Query the database to fetch the classroom data based on the provided classroomName
+      const [userData] = await connection
+          .promise()
+          .query('SELECT * FROM members WHERE email=? GROUP BY members.memberID', [email]);
+
+      // Close the database connection
+      connection.end();
+
+      // Send the filtered classroom data as a JSON response
+      res.json(userData);
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+
+//add chat message
+app.post('/addGroupchatMessage', async (req, res) => {
+  try {
+      // Connect to the database
+      const { text, memberID, groupchatID } = req.body;
+
+      const connection = mysql.createConnection(config);
+
+      //console.log("groupchat id:" + groupchatID);
+      console.log("member id:" + memberID);
+      console.log("text:" + text);
+
+      // Query the database to fetch the classroom data based on the provided classroomName
+      const [groupchatInfo] = await connection
+          .promise()
+          .query('INSERT INTO messages_groupchat (messages_groupchat.groupchatID, messages_groupchat.memberID, messages_groupchat.messages_groupchat_content) VALUES (?, ?, ?)', [groupchatID, memberID, text]);
+
+      // Close the database connection
+      connection.end();
+
+      // Send the filtered classroom data as a JSON response
+      res.json(groupchatInfo);
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//add chat message
+app.post('/removeGroupchatMessage', async (req, res) => {
+  try {
+      // Connect to the database
+      const { messages_groupchat_ID } = req.body;
+
+      const connection = mysql.createConnection(config);
+
+      //console.log("groupchat id:" + groupchatID);
+      console.log("message id:" + messages_groupchat_ID);
+
+      // Query the database to fetch the classroom data based on the provided classroomName
+      const [msgInfo] = await connection
+          .promise()
+          .query('DELETE FROM messages_groupchat WHERE messages_groupchat_ID = ?', [messages_groupchat_ID])
+
+      // Close the database connection
+      connection.end();
+
+      // Send the filtered classroom data as a JSON response
+      res.json(msgInfo);
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+app.post('/removeGroupchatMember', async (req, res) => {
+  try {
+      // Connect to the database
+      const { memberID, groupchatID } = req.body;
+
+      const connection = mysql.createConnection(config);
+
+      //console.log("groupchat id:" + groupchatID);
+      console.log("member deleted id:" + memberID);
+
+      // Query the database to fetch the classroom data based on the provided classroomName
+      const [msgInfo] = await connection
+          .promise()
+          .query('DELETE FROM junction_groupchatmembers WHERE memberID = ? AND groupchatID = ?', [memberID, groupchatID])
+
+      // Close the database connection
+      connection.end();
+
+      // Send the filtered classroom data as a JSON response
+      res.json(msgInfo);
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+app.post('/addGroupchatMember', async (req, res) => {
+  try {
+      // Connect to the database
+      const { memberID, groupchatID } = req.body;
+
+      const connection = mysql.createConnection(config);
+
+      //console.log("groupchat id:" + groupchatID);
+      console.log("member deleted id:" + memberID);
+
+      //first make sure the user and groupchat exists
+      const [checkUseGroupchatExistence] = await connection
+          .promise()
+          .query('SELECT members.memberID, groupchat.groupchatID FROM members, groupchat WHERE members.memberID = ? AND groupchat.groupchatID = ?', [memberID, groupchatID])
+
+        
+      if (checkUseGroupchatExistence && connection)
+      {
+        //add the user to the groupchat
+        const [msgInfo] = await connection
+          .promise()
+          .query('INSERT INTO junction_groupchatmembers (junction_groupchatmembers.memberID, junction_groupchatmembers.groupchatID) VALUES (?, ?)', [memberID, groupchatID])
+
+          // Close the database connection
+          connection.end();
+          res.json(msgInfo);
+      }
+      else 
+      {
+        res.status(404).send('Unable to find user.');
+      }
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+app.post('/createGroupchat', async (req, res) => {
+  try {
+      // Connect to the database
+      const { memberID, groupchatName } = req.body;
+
+      const connection = mysql.createConnection(config);
+
+      //first make the groupchat
+      const [addgroupchat] = await connection
+          .promise().query('INSERT INTO groupchat (groupchat.groupchatName) VALUES (?) RETURNING groupchat.groupchatID;', [groupchatName])
+
+      //secondly add the user to the groupchat
+      const addusertoGC = await connection.promise().query('INSERT INTO junction_groupchatmembers (junction_groupchatmembers.groupchatID, junction_groupchatmembers.memberID) VALUES (?, ?)', [addgroupchat[0].groupchatID, memberID])
+
+      res.json(addusertoGC);
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+app.post('/deleteGroupchat', async (req, res) => {
+  try {
+      // Connect to the database
+      const { groupchatID } = req.body;
+
+      const connection = mysql.createConnection(config);
+
+      //first; remove all users from the groupchat
+      await connection.promise().query('DELETE FROM junction_groupchatmembers WHERE groupchatID = ?', [ groupchatID]);
+
+      //second; remove all messages from the groupchat
+      await connection.promise().query('DELETE FROM messages_groupchat WHERE groupchatID = ?', [groupchatID]);
+
+      //lastly; delete the groupchat from the table Groupchat
+      await connection.promise().query('DELETE FROM groupchat WHERE groupchatID = ?', [groupchatID]);
+
+      const confirm = 'yes';
+
+      res.json(confirm);
+
+  } catch (error) {
+      console.error('Error fetching groupchat info:', error);
+      // If an error occurs, send a 500 Internal Server Error response
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+
+//retrieving the user information from the session
+app.get('/email', (req, res) => {
+  // Get the username from the session
+  const username = req.session.userName;
+  
+  // Send the username as a JSON response
+  res.json({username});
+});
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404));
+});
+
+// error handler
+app.use(function (err, req, res, next) {
+  console.error(err.stack);
+  res.status(err.status || 500).send('Internal Server Error');
+});
+// Listen on provided port, on all network interfaces.
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

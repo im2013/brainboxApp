@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html style="background-color:#F3F3F3; margin: 0">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Brainbox - Login</title>
+        <script type="module" src="https://unpkg.com/vue@3/dist/vue.esm-browser.js"></script>
+        <link rel="stylesheet" href="\stylesheets\style.css">
+    </head>
+    <body style="margin: 0">
+
+      <div id="login_backgroundimg">
+        <img src="/images/loginsignin_background.png" width="100%" height="auto">
+      </div>
+
+        <div id="homepageBox">
+        <h1>LOGIN</h1>
+
+        <div id="app">
+            <!--enter username-->
+            <label for="userName">Email</label>
+            <br>
+            <input
+                type="text"
+                class="form-control"
+                id="usernameBox"
+                v-model="usernameBoxValue"
+                placeholder="Enter Email..."
+            />
+            <br>
+            <br>
+            <!--enter password-->
+            <label for="passWord">Password</label>
+            <br>
+            <input
+                type="text"
+                class="form-control"
+                id="passwordBox"
+                v-model="passwordBoxValue"
+                placeholder="Enter Password..."
+                style="-webkit-text-security: square;"
+            />
+            <a href="" style="color:gray; float: right; position: relative; right: -110%">Forgot Password?</a>
+            <br>
+            <br>
+            <div id="buttonInput">
+            <button @click="submitForm" style="width: 150%">LOGIN</button>
+          </div>
+        </div>
+
+        <img src="/images/OR.png">
+        <br>
+        <h2>New here?</h2>
+        <h3><a href="\html\signup.html">create account</a></h3>
+
+
+        <script src="https://unpkg.com/vue@3"></script>
+        <script type="module">
+            const { createApp, ref } = Vue;
+          
+            const app = createApp({
+              setup() {
+                const usernameBoxValue = ref('');
+                const passwordBoxValue = ref('');
+          
+                const submitForm = async () => {
+                  const enteredUsername = usernameBoxValue.value;
+                  const enteredPassword = passwordBoxValue.value;
+          
+                  try {
+                    // Make a POST request to your server
+                    const response = await fetch('/submit', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        userName: enteredUsername,
+                        passWord: enteredPassword,
+                      }),
+                    });
+          
+                    // Check if the request was successful
+                    if (response.ok) {
+                      // Do something on success
+                      console.log('Form submitted successfully');
+                    //   window.location.href = '/success';
+                      window.location.href = `/success?username=${encodeURIComponent(enteredUsername)}`;
+                    } else {
+                      // Handle errors
+                      console.error('Form submission failed');
+                    }
+                  } catch (error) {
+                    console.error('Error sending form data:', error);
+                  }
+                };
+          
+                return {
+                  usernameBoxValue,
+                  passwordBoxValue,
+                  submitForm,
+                };
+              },
+            });
+          
+            app.mount('#app');
+          </script>
+        <br>
+        </div>
+        <br>
+    </body>
+</html>

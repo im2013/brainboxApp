@@ -1,0 +1,103 @@
+/* Your CSS styles here */
+#container {
+    display: flex;
+}
+
+body {
+    margin: 0;
+}
+
+#navBar ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    overflow: hidden;
+    background-color: #423076;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 15vw;
+}
+
+#navBar li {
+    flex: 1;
+}
+
+#navBar p {
+    color: white;
+    font-size: 18px;
+    padding-bottom: 4vh;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    max-height: fit;
+    display: flex;
+    align-items: center;
+    margin: auto;
+}
+
+#navBar a {
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin: auto;
+    width: 15vw;
+    max-height: fit;
+    padding-left: 1.25vw;
+}
+
+#navBar img {
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10vw;
+    margin: auto;
+
+}
+
+#content {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 85vw;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#stuff {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#heading {
+    width: 100%; /* Take full width */
+    height: 8vh;
+    color: #423076;
+    font-size: 3vh;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 2vw;
+    margin-bottom: 3vh;
+}
+
+.line {
+    border-bottom: 3px solid #423076;
+    margin-left: -2vw;
+    width: 100%; /* Take full width */
+}
+
+#settingsList {
+    width: 10vw;
+    height: auto; /* Adjust height as needed */
+    margin-top: 5vh;
+}
+
+#SettingsContent {
+    margin-top: 20px; /* Add margin for spacing */
+}

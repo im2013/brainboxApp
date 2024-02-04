@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home Page</title>
+    <link rel="stylesheet" href="\stylesheets\homepage.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="navBar">
+            <ul>
+                <img src="\images\groupSys_icon.png" alt="brainbox logo" height="auto">
+                <p>BrainBox</p>
+                <li><a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
+                        onmouseout="this.style.backgroundColor='#eb7b34'" href="#our product">Home</a></li>
+                <li><a a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
+                        onmouseout="this.style.backgroundColor='#eb7b34'" href="#features">Test 2</a></li>
+                <li><a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
+                        onmouseout="this.style.backgroundColor='#eb7b34'" href="aboutus.html">Test 3</a></li>
+                <img src="\images\brainy_icon.png" alt="brainy" height="auto" id="redirectButton"
+                    @click="redirecttosettings">
+            </ul>
+        </div>
+        <div id="contentUser">
+            <h1 id="displayUser">Welcome {{ username }}!</h1>
+            <button @click="">Log Out</button>
+            <br>
+            <h3 id="carouselHeads">Classrooms</h3>
+            <div id="classroomCarousel">
+                <!--:perPageCustom="{ '100%': 1, '50%': 2, '100%': 3, '150%': 4}"-->
+                <carousel id="classroomContainer" style="width: 100%;">
+                    <slide v-for="classroom in classrooms" :key="classroom.classroomID">
+                        <!--<a :href="'/html/classroom.html?classroomID=' + classroom.classroomID">-->
+                        <div id="classroomBox" @dblclick="redirectToClassroom(classroom.classroomID)">
+                            <h4>{{ classroom.classroomName }}</h4>
+                            <h3>Classroom ID: {{ classroom.classroomID }}</h3>
+                        </div>
+                    </slide>
+                </carousel>
+                <div id="createClassroomsBox">
+                    <h4 id="createText">Create New Classroom</h4>
+                    <div id="plusIcon">+</div>
+                </div>
+            </div>
+            <br>
+            <h3 id="carouselHeads">Groupchats</h3>
+
+            <div id="groupchatCarousel">
+                <!--:perPageCustom="{ '100%': 1, '50%': 2, '100%': 3, '150%': 4}"-->
+                <carousel id="groupchatContainer" style="width: 100%;">
+                    <slide v-for="groupchat in groupchats" :key="groupchat.groupchatID">
+                        <!--<a :href="'/html/classroom.html?classroomID=' + classroom.classroomID">-->
+                        <div id="groupchatBox" @dblclick="redirectToGroupchat(groupchat.groupchatID)">
+                            <h4>{{ groupchat.groupchatName }}</h4>
+                            <h3>Groupchat ID: {{ groupchat.groupchatID }}</h3>
+                        </div>
+                    </slide>
+                </carousel>
+                <!-- Create New Groupchat Box -->
+                <div id="createGroupchatBox">
+                    <h4 id="createText">Create New Groupchat</h4>
+                    <input type="text" v-model="groupchatName" placeholder="Enter groupchat name...">
+                    <button @click="makeGroupchat">Create!</button>
+                    <!--groupchatName-->
+                    <div id="plusIcon">+</div>
+                </div>
+                <!-- Create New Groupchat Box -->
+                <div id="createGroupchatBox">
+                    <h4 id="createText">Join Groupchat</h4>
+                    <input type="text" v-model="searchGroupchat" placeholder="Enter groupchatID...">
+                    <button @click="joinGroupchat">Join!</button>
+                    <div id="plusIcon">+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
+    <script>
+        // Vue app creation
+        new Vue({
+            el: '#displayUser',
+            data: {
+                username: 'NULL'
+            },
+            mounted() {
+                fetch('/email')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update the username in the Vue instance
+                        this.username = data.username;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching username:', error);
+                    });
+            }
+        });
+    </script>
+
+    <!--classroom multiplier based on how many classrooms the user is apart of-->
+    <script>
+        Vue.use(VueCarousel.default);
+        new Vue({
+
+            el: '#classroomCarousel',
+            data: {
+                username: 'No username provided',
+                classrooms: [],
+                user_memberID: '',
+                userinfor: []
+            },
+
+            methods: {
+                redirectToClassroom(classroomID) {
+                    window.location.href = '/html/classroom.html?classroomID=' + classroomID + "&memberID=" + this.user_memberID;
+                    //'/html/chatroom.html?groupchatID=' + groupchatID + "&memberID=" + this.memberID
+                }
+            },
+            mounted() {
+                fetch('/classrooms')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update classrooms data with the fetched data
+                        this.classrooms = data;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching classrooms:', error);
+                    });
+                fetch('/retrieveUserinfo')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update classrooms data with the fetched data
+                        this.userinfor = data;
+                        this.user_memberID = this.userinfor[0].memberID;
+                        console.log(this.userinfor[0].memberID);
+                        console.log(this.memberID);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user data:', error);
+                    });
+            }
+        });
+    </script>
+
+    <!--Group chat multiplier based on how many groupchats the user is apart of-->
+    <script>
+        Vue.use(VueCarousel.default);
+        new Vue({
+
+            el: '#groupchatCarousel',
+            data: {
+                username: 'No username provided',
+                groupchats: [],
+                userinfor: [],
+                memberID: '',
+                searchGroupchat: '',
+                groupchatName: '',
+                NewGroupchatID: ''
+            },
+            mounted() {
+                fetch('/groupchats')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update classrooms data with the fetched data
+                        this.groupchats = data;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching groupchats:', error);
+                    });
+
+                fetch('/retrieveUserinfo')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update classrooms data with the fetched data
+                        this.userinfor = data;
+                        this.memberID = this.userinfor[0].memberID;
+                        console.log(this.userinfor[0].memberID);
+                        console.log(this.memberID);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user data:', error);
+                    });
+            },
+            methods: {
+                redirectToGroupchat(groupchatID, memberID) {
+                    window.location.href = '/html/chatroom.html?groupchatID=' + groupchatID + "&memberID=" + this.memberID
+                },
+                joinGroupchat: async function () {
+                    //get groupchat from database and add user to it
+                    try {
+                        // Make a POST request to your server
+                        const response = await fetch('/addGroupchatMember', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                memberID: this.memberID,
+                                groupchatID: this.searchGroupchat
+                            }),
+                        });
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+
+                    //refresh the page
+                    window.location.reload();
+                },
+                makeGroupchat: async function () {
+                    //get groupchat from database and add user to it
+                    try {
+                        // Make a POST request to your server
+                        const response = await fetch('/createGroupchat', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                memberID: this.memberID,
+                                groupchatName: this.groupchatName
+                            }),
+                        });
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+                    //refresh the page
+                    window.location.reload();
+                }
+            }
+        });
+    </script>
+
+    <script>
+        new Vue({
+            el: '#redirectButton',
+            data: {
+                userMemberID: '',
+                userData: [],
+            },
+            methods:
+            {
+                redirecttohomepage() {
+                    // const urlParams = new URLSearchParams(window.location.search);
+                    // this.userMemberID = urlParams.get('memberID');
+
+                    // window.location.href = `/success?username=${encodeURIComponent(this.userMemberID)}`;
+                },
+                redirecttosettings() {
+                    ///html/settings.html
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const userEmail = urlParams.get('username');
+
+                    // '/retrieveUserinfo'
+                    fetch(`/retrieveUserinfo?email=${userEmail}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.userData = data;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching user member id:', error);
+                        });
+
+                    window.location.href = `/html/settings.html?username=${encodeURIComponent(this.userData[0].memberID)}`;
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

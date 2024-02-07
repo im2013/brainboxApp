@@ -1,79 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Home Page</title>
-    <link rel="stylesheet" href="\stylesheets\homepage.css">
+    <title>Classroom</title>
+    <link rel="stylesheet" href="\stylesheets\classroom.css">
+    <script src="https://kit.fontawesome.com/e15d1ee196.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
 </head>
 
 <body>
-    <div id="container">
+    <div id="content">
         <div id="navBar">
             <ul>
-              <img src="\images\groupSys_icon.png" alt="brainbox logo" height="auto" id="redirectButton" @click="redirecttohomepage">
-              <p>BrainBox</p>
-              <li><a style="background-color: #eb7b34;"  onmouseover="this.style.backgroundColor='#da7434'" onmouseout="this.style.backgroundColor='#eb7b34'" 
-                href="#our product">Test 1</a></li>
-              <li><a a style="background-color: #eb7b34;"  onmouseover="this.style.backgroundColor='#da7434'" onmouseout="this.style.backgroundColor='#eb7b34'" 
-                href="#features">Test 2</a></li>
-              <li><a style="background-color: #eb7b34;"  onmouseover="this.style.backgroundColor='#da7434'" onmouseout="this.style.backgroundColor='#eb7b34'" 
-                href="aboutus.html">Test 3</a></li>
-                <img src="\images\brainy_icon.png" alt="brainy" height="auto" id="redirectButton" @click="redirecttosettings">
+                <img src="\images\groupSys_icon.png" alt="brainbox logo" height="auto" id="redirectButton"
+                    @click="redirecttohomepage">
+                <p>BrainBox</p>
+                <li><a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
+                        onmouseout="this.style.backgroundColor='#eb7b34'" href="#our product">Test 1</a></li>
+                <li><a a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
+                        onmouseout="this.style.backgroundColor='#eb7b34'" href="#features">Test 2</a></li>
+                <li><a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
+                        onmouseout="this.style.backgroundColor='#eb7b34'" href="aboutus.html">Test 3</a></li>
+                <img src="\images\brainy_icon.png" alt="brainy" height="auto" id="redirectButton"
+                    @click="redirecttosettings">
             </ul>
-          </div>
-          <div id="getClassroomInfo" style="background-color:gray">
-            <div v-for="classroom in classroomInfo" :key="classroom.classroomID" style="background-color: aliceblue; margin-bottom: 10px;">
-              <h1>{{ classroom.classroomName }}</h1>
-              <p>{{ classroom.classroomDescription }}</p>
-            </div>
-            <div id="TeacherListBox" style="background-color: lightsteelblue;">
-              display list of teachers here:
-              <div v-for="teacher in junctionManagersData" :key="teacher.memberID">
-                <h2>{{teacher.name}} | ID: {{teacher.memberID}}</h2>
-              </div>
-            </div>
-
-            <div id="ChannelSidebarL">
-              <div v-for="channel in classroomChannels" :key="channel.channelID">
-                <div id="channelSegment" style="background-color: lightblue; margin-top: 10px;" @click="openChannelChat(channel)">
-                  <h1>{{ channel.channelName }}</h1>
-                  <p>{{ channel.channelDescription }}</p>
+        </div>
+        <div id="code">
+            <div v-if="isMan" id="channelBarTeacher">
+                <div id="classroomHeading" v-for="classroom in classroomInfo" :key="classroom.classroomID">
+                    <h1>{{ classroom.classroomName }}</h1>
+                    <p>{{ classroom.classroomDescription }} <button class="delete-button"
+                            @click="showDeleteClassroomPopup">
+                            <i class="fa-solid fa-trash"></i>
+                        </button></p>
                 </div>
-              </div>
-            </div>
-
-            <div id="ClassroomStudents" style="background-color: aliceblue;">
-              Students:
-              <div v-for="member in classroomMembers" :key="member.memberID" v-if="member.isManager === 0"> <!-- v-if="member.isManager[0] === 0"-->
-                {{ member.name }} {{member.isManager}}
-                {{ member.memberID }}
-              </div>
-            </div>
-
-            <div v-if="openChannelChatActive" style="background-color: aqua; position: absolute; transform: translateX(322.5px); top: 0; width: 63vw">
-              <h2>{{currentActiveChannel}}</h2>
-              <div id="channelMessages">
-                <div v-for="channelMsg in currentChannelChatLog" :key="channelMsg.message_channel_ID">
-                  MemberID: {{channelMsg.memberID}} | {{channelMsg.message_channel_content}}
+                <div id="channelList">
+                    <div v-for="channel in classroomChannels" :key="channel.channelID" id="channelSegment"
+                        @click="openChannelChat(channel)">
+                        <h1>{{ channel.channelName }}</h1>
+                    </div>
                 </div>
-              </div>
+
+                <div id="editBtns">
+                    <button @click="AddChannelPopup"><i class="fa-solid fa-plus"></i></button>
+                    <button @click="DeleteChannelPopup"><i class="fa-solid fa-trash"></i></button>
+                    <button @click="leaveClassroom"><i class="fa-solid fa-person-walking-arrow-right"></i></button>
+                </div>                
+            </div>
+            <div v-else id="channelBarStudent">
+                <div id="classroomHeading" v-for="classroom in classroomInfo" :key="classroom.classroomID">
+                    <h1>{{ classroom.classroomName }}</h1>
+                    <p>{{ classroom.classroomDescription }}</p>
+                </div>
+                <div id="channelList">
+                    <div v-for="channel in classroomChannels" :key="channel.channelID" id="channelSegment"
+                        @click="openChannelChat(channel)">
+                        <h1>{{ channel.channelName }}</h1>
+                    </div>
+                </div>
+
+                <div id="editBtns">
+                    <button @click="leaveClassroom"><i class="fa-solid fa-person-walking-arrow-right"></i></button>
+                </div>
             </div>
 
-          </div>
+            <div id="mainContent">
 
+                <div id="channelHeader" div v-if="openChannelChatActive">
+                    <h1>{{currentActiveChannel}}</h1>
+                    <p>{{ currentActiveChannel_desc }}</p>
+                </div>
 
+                <div id="chatBox">
+                    <div id="messageBox">
+                        <div id="message" v-for="channelMsg in currentChannelChatLog"
+                            :key="channelMsg.message_channel_ID">
+                            MemberID: {{channelMsg.memberID}} | {{channelMsg.message_channel_content}} | {{
+                            channelMsg.message_channel_ID }}
+                            <div v-if="checkUserMsg(channelMsg)" v-html="ifUser_buttonDeleteText"
+                                @click="toggleDeleteConfirmOn(channelMsg.message_channel_ID)"></div>
+                            <div v-else v-html="ifNOTUser_buttonReportText" @click="toggleMenu"></div>
+                        </div>
+                    </div>
+                    <div id="composeBox">
+                        <!-- box for writing messages to send-->
+                        <input type="text" id="typeyBox" name="myTextField" placeholder="Enter msg here" maxlength="200"
+                            v-model="inputText" @keyup.enter="enterText">
+                    </div>
+                </div>
 
-          
-            
+                <div id="membersBar">
+                    <div id="teacherList">
+                        <h1>Teachers:</h1>
+                        <div v-for="teacher in junctionManagersData" :key="teacher.memberID">
+                            <p>{{teacher.name}}</p>
+                        </div>
+                    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+                    <div id="otherMemberList">
+                        <h1>Members:</h1>
+                        <div v-for="member in classroomMembers" :key="member.memberID" v-if="member.isManager === 0">
+                            <!-- v-if="member.isManager[0] === 0"-->
+                            <p>{{ member.name }} <button id="kickMember" v-if="isMan" @click="RemoveMemberPopup(member.memberID)">
+                                <i class="fa-solid fa-user-xmark"></i>
+                            </button></p>                    
+                        </div>                        
+                    </div>
+                    <div id="addMemDiv">
+                    <button id="addMemBtn" v-if="isMan" @click="AddMemberPopup">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </button>
+                </div>
+                </div>
+            </div>
+
+            <div class="popupMenu" v-if="showChannelCreator" style="display: block; background-color: gray;">
+                <input type="text" v-model="addChannelName" placeholder="Enter new channel name...">
+                <input type="text" v-model="addChannelDesc" placeholder="Enter new channel description...">
+                <button @click="addChannelConfirm">Add New Channel</button>
+                <button @click="CancelChannelPopup">Cancel</button>
+            </div>
+
+            <div class="popupMenu" v-if="DeleteChannelPopupIf" style="display: block; background-color: gray;">
+                Are you sure you want to delete {channel name} ?
+                <button @click="ConfirmRemoveChannel">Confirm</button>
+                <button @click="CancelChannelDeletePopup">Cancel</button>
+            </div>
+
+            <div class="popupMenu" v-if="AddMemberPopupIf">
+                Add a new member to the classroom
+                <input type="text" v-model="addMemberName" placeholder="Enter new member ID...">
+                <button @click="addMemberPopupConfirm">Confirm</button>
+                <button @click="CancelAddMemberPopup">Cancel</button>
+            </div>
+
+            <div class="popupMenu" v-if="RemoveMemberPopupIf">
+                Remove member from the classroom?
+                <button @click="ConfirmRemoveClassroomMember">Confirm</button>
+                <button @click="Cancel_RemoveMemberPopup">Cancel</button>
+            </div>
+
+            <!--deleteClassPopup-->
+            <div class="popupMenu" v-if="deleteClassPopup">
+                Delete classroom?
+                <button @click="ConfirmDeleteClass">Confirm</button>
+                <button @click="Cancel_DeleteClassPopup">Cancel</button>
+            </div>
+
+            <div class="popupMenu" v-if="openPopup">
+                    <!-- Menu content goes here -->
+                    <ul>
+                        Reporting this message
+                        <br>
+                        Message content:
+                        <br>
+                        [box with words of the message]
+                        <br>
+                        <div id="dpDMenu">
+                            <button id="dropbtn">Type of Offense</button>
+                            <div id="dpDMenuCon">
+                                Abuse or Harassment<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                                    value="checkboxValue">
+                                <br>
+                                Inappropriate Content<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                                    value="checkboxValue">
+                                <br>
+                                Threatening Behaviour<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                                    value="checkboxValue">
+                                <br>
+                                Spam<input type="checkbox" id="myCheckbox" name="myCheckbox" value="checkboxValue">
+                                <br>
+                                Exposing private identifying information<input type="checkbox" id="myCheckbox"
+                                    name="myCheckbox" value="checkboxValue">
+                                <br>
+                                Harmful Misinformation<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                                    value="checkboxValue">
+                            </div>
+                        </div>
+                        <br>
+                        <div id="buttonContainer">
+                            <button id="reportButton" @click="toggleReportConfirm">Report</button>
+                            <button id="cancelButton" @click="cancelPopup">Cancel</button>
+                        </div>
+                    </ul>
+            </div>
+
+            <div id="reportPopup2" style="margin-bottom: 0; padding-bottom: 0;">
+                <div v-if="openPopup2" id="menu">
+                    <p>Message Successfully Reported</p>
+                    <button @click="toggleReportConfirmOff">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
     <script>
         new Vue({
-            el: '#getClassroomInfo',
+            el: '#code',
             data: {
                 classroomInfo: [],
                 user_memberID: '',
@@ -83,14 +211,34 @@
                 junctionManagersData: [],
                 openChannelChatActive: false,
                 currentActiveChannel: '',
+                currentActiveChannel_ID: '',
+                currentActiveChannel_desc: '',
                 currentChannelChatLog: [],
-                classroomMembers: []
+                classroomMembers: [],
+                isUserMsg: [],
+                showChannelCreator: false,
+                addChannelName: '',
+                addChannelDesc: '',
+                DeleteChannelPopupIf: false,
+                getUserMessageID: '',
+                openPopup: false,
+                openPopup2: false,
+                deletePopup: false,
+                ifUser_buttonDeleteText: '<button @click="toggleDeleteConfirmOn(channelMsg.messages_channel_ID)">Delete</button>',
+                ifNOTUser_buttonReportText: '<button @click="toggleMenu">Report</button>',
+                AddMemberPopupIf: false,
+                inputText: '',
+                deleteClassPopup: false,
+                RemoveMemberPopupIf: false,
+                deleteMember: '',
+                addMemberName: ''
             },
             mounted() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const classroomID = urlParams.get('classroomID');
-                user_memberID = urlParams.get('memberID');
+                this.user_memberID = urlParams.get('memberID');
 
+                // Fetch classroom info
                 fetch(`/getClassroomFromID?classroomID=${classroomID}`)
                     .then(response => response.json())
                     .then(data => {
@@ -100,99 +248,392 @@
                         console.error('Error fetching classroom info:', error);
                     });
 
-                  fetch(`/getClassroomMembersFromID?classroomID=${classroomID}`)
-                  .then(response => response.json())
-                  .then(data => {
-                      this.classroomMembers = data;
-                  })
-                  .catch(error => {
-                      console.error('Error fetching classroom info:', error);
-                  });
-
-                //check if user is a manager
-                fetch(`/getIsManagerFromIDs?classroomID=${classroomID}&memberID=${user_memberID}`)
+                // Fetch classroom members
+                fetch(`/getClassroomMembersFromID?classroomID=${classroomID}`)
                     .then(response => response.json())
                     .then(data => {
-                        this.junctionData = data;
-                        console.log(this.junctionData[0].isManager);
-
-                        if(this.junctionData[0].isManager = '1')
-                        {
-                          this.isMan = true;
-                        }
-                        console.log(this.openChannelChatActive);
+                        this.classroomMembers = data;
                     })
                     .catch(error => {
-                        console.error('Error fetching junction info:', error);
+                        console.error('Error fetching classroom members:', error);
                     });
 
-                //get the channels of the classroom
+                // Fetch classroom channels
                 fetch(`/getChannelsFromID?classroomID=${classroomID}`)
                     .then(response => response.json())
                     .then(data => {
                         this.classroomChannels = data;
+                        // Check if there are channels available and if so, open the first channel
+                        if (this.classroomChannels.length > 0) {
+                            this.openChannelChat(this.classroomChannels[0]);
+                            this.currentActiveChannel = this.classroomChannels[0].channelName;
+                            this.currentActiveChannel_ID = this.classroomChannels[0].channelID;
+                            this.currentActiveChannel_desc = this.classroomChannels[0].channelDescription;
+                        }
                     })
                     .catch(error => {
-                        console.error('Error fetching channel info:', error);
+                        console.error('Error fetching classroom channels:', error);
                     });
 
-                //get the managers of the classroom
+                // Fetch managers of the classroom
                 fetch(`/getManagersFromID?classroomID=${classroomID}`)
                     .then(response => response.json())
                     .then(data => {
                         this.junctionManagersData = data;
-                        console.log(this.junctionManagersData);
                     })
                     .catch(error => {
-                        console.error('Error fetching channel info:', error);
+                        console.error('Error fetching classroom managers:', error);
+                    });
+
+                // Check if the user is a manager
+                fetch(`/getIsManagerFromIDs?classroomID=${classroomID}&memberID=${this.user_memberID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.junctionData = data;
+                        if (this.junctionData.length > 0 && this.junctionData[0].isManager === 1) {
+                            this.isMan = true;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching junction info:', error);
                     });
             },
             methods: {
-              openChannelChat(channel) {
-                this.openChannelChatActive = true;
-                this.currentActiveChannel = channel.channelName;
-                //currentActiveChannel
+                openChannelChat(channel) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const classroomID = urlParams.get('classroomID');
+                    this.user_memberID = urlParams.get('memberID');
+                    this.openChannelChatActive = true;
+                    this.currentActiveChannel = channel.channelName;
+                    this.currentActiveChannel_ID = channel.channelID;
+                    this.currentActiveChannel_desc = channel.channelDescription;
 
-                //open and display chat messages from the channel
-                ///getChannelChatlog
-                fetch(`/getChannelChatlog?channelID=${channel.channelID}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        this.currentChannelChatLog = data;
-                        console.log(this.currentChannelChatLog);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching channel logs info:', error);
-                    });
-              }
+                    //open and display chat messages from the channel
+                    ///getChannelChatlog
+                    fetch(`/getChannelChatlog?channelID=${channel.channelID}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.currentChannelChatLog = data;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching channel logs info:', error);
+                        });
+
+
+                    //get and store only user messages
+                    //get only user messages
+                    fetch(`/getChannelChatlog_userOnly?channelID=${channel.channelID}&memberID=${this.user_memberID}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.isUserMsg = data;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching groupchat messages:', error);
+                        });
+                },
+                checkUserMsg(msg) {
+                    //return this.isUserMsg(msg).some(userMsg => userMsg.memberID === msg.memberID);
+                    //check is msg is within usermsgs is not, return false, if true return true
+                    for (var i = 0; i < this.isUserMsg.length; i++) {
+                        if (msg.memberID == this.isUserMsg[i].memberID) {
+                            return true;
+                        }
+                    }
+                    return false;
+                    //check if manager, return true
+                },
+                toggleDeleteMenu(value) {
+                    this.getUserMessageID = value;
+                    this.deletePopup = true;
+                },
+                AddChannelPopup() {
+                    this.showChannelCreator = true;
+                },
+                CancelChannelPopup() {
+                    this.showChannelCreator = false;
+                },
+                ConfirmAddChannel() {
+                    this.showChannelCreator = true;
+                    window.location.reload();
+                },
+                DeleteChannelPopup() {
+                    this.DeleteChannelPopupIf = true;
+                },
+                CancelChannelDeletePopup() {
+                    this.DeleteChannelPopupIf = false;
+                },
+                toggleDeleteConfirmOff() {
+                    this.deletePopup = false;
+                },
+                toggleDeleteConfirmOn: async function (value) {
+                    //get user's message id
+                    this.deletePopup = false;
+                    this.getUserMessageID = value;
+                    console.log(value);
+                    console.log(this.getUserMessageID);
+                    //connect to database
+                    try {
+                        // Make a POST request to your server
+                        const response = await fetch('/removeChannelMessage', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                messages_channel_ID: this.getUserMessageID,
+                            }),
+                        });
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+                    window.location.reload();
+                },
+                //    FINISH ENTER TEXT
+                enterText: async function () {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const memberID = urlParams.get('memberID');
+                    const channelID = this.currentActiveChannel_ID;
+
+                    console.log('chat input log inputText' + this.inputText);
+
+                    try {
+                        // Make a POST request to your server
+                        const response = await fetch('/addChannelMessage', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                text: this.inputText,
+                                memberID: memberID,
+                                channelID: channelID
+                            }),
+                        });
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+                    window.location.reload();
+                },
+                toggleMenu() {
+                    this.openPopup = true;
+                },
+                toggleReportConfirm() {
+                    this.openPopup2 = true;
+                    this.openPopup = false;
+                },
+                toggleReportConfirmOff() {
+                    this.openPopup2 = false;
+                },
+                cancelPopup() {
+                    this.openPopup = false;
+                },
+                AddMemberPopup() {
+                    this.AddMemberPopupIf = true;
+                },
+                CancelAddMemberPopup() {
+                    this.AddMemberPopupIf = false;
+                },
+                showDeleteClassroomPopup() {
+                    this.deleteClassPopup = true;
+                },
+                Cancel_DeleteClassPopup() {
+                    this.deleteClassPopup = true;
+                },
+                RemoveMemberPopup(remove_member) {
+                    this.RemoveMemberPopupIf = true;
+                    this.deleteMember = remove_member;
+                },
+                Cancel_RemoveMemberPopup() {
+                    this.RemoveMemberPopupIf = false;
+                    this.deleteMember = '';
+                },
+                ConfirmRemoveClassroomMember: async function () {
+                    this.RemoveMemberPopupIf = false;
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const classroomID = urlParams.get('classroomID');
+                    //this.deleteMember;
+                    //database functionality
+                    //remove member from groupchat
+                    try {
+                        // Make a POST request to your server
+                        const response = await fetch('/removeClassroomMember', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                memberID: this.deleteMember,
+                                classroomID: classroomID
+                            }),
+                        });
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+                    //wait 3 seconds to kickUserConfirmToggle = false
+                    setTimeout(() => { this.kickUserConfirmToggle = false; window.location.reload(); }, 3000);
+                },
+                leaveClassroom: async function () {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const classroomID = urlParams.get('classroomID');
+                    this.user_memberID = urlParams.get('memberID');
+                    try {
+                        // Make a POST request to your server
+                        const response = await fetch('/removeClassroomMember', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                memberID: this.user_memberID,
+                                classroomID: classroomID
+                            }),
+                        });
+                        if (response.ok) {
+                            // Do something on success
+                            console.log('Form submitted successfully');
+                            //   window.location.href = '/success';
+                            window.location.href = `/success?username=${encodeURIComponent(this.user_memberID)}`;
+                        } else {
+                            // Handle errors
+                            console.error('Form submission failed');
+                        }
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+                },
+                ConfirmDeleteClass: async function() {
+                    //deleteClassroom
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const classroomID = urlParams.get('classroomID');
+                    try {
+                        // Make a POST request to your server
+                        const response = await fetch('/deleteClassroom', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                classroomID: classroomID
+                            }),
+                        });
+                        if (response.ok) {
+                            // Do something on success
+                            console.log('Form submitted successfully');
+                            //   window.location.href = '/success';
+                            window.location.href = `/success?username=${encodeURIComponent(this.user_memberID)}`;
+                        } else {
+                            // Handle errors
+                            console.error('Form submission failed');
+                        }
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+                },
+                addMemberPopupConfirm: async function() {
+                    //addMemberName
+                    //addClassroomMember
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const classroomID = urlParams.get('classroomID');
+                    //this.deleteMember;
+                    //database functionality
+                    //remove member from groupchat
+                    try {
+                        // Make a POST request to your server
+                        const response = await fetch('/addClassroomMember', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                memberID: this.addMemberName,
+                                classroomID: classroomID
+                            }),
+                        });
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+                    window.location.reload();
+                },
+                //addChannel
+                addChannelConfirm: async function() {
+                    //addChannelName: '',
+                    //addChannelDesc: '',
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const classroomID = urlParams.get('classroomID');
+                    console.log(this.addChannelName);
+                    console.log(this.addChannelDesc);
+
+                    //this.deleteMember;
+                    //database functionality
+                    //remove member from groupchat
+                    try {
+                        // Make a POST request to your server
+                        const response = await fetch('/addChannel', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                classroomID: classroomID,
+                                channelName: this.addChannelName,
+                                channelDesc: this.addChannelDesc
+                            }),
+                        });
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+                    window.location.reload();
+                },
+                ConfirmRemoveChannel: async function() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const classroomID = urlParams.get('classroomID');
+                    this.DeleteChannelPopupIf = false;
+
+                    try {
+                        // Make a POST request to your server
+                        const response = await fetch('/deleteChannel', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                classroomID: classroomID,
+                                channelID: this.currentActiveChannel_ID
+                            }),
+                        });
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+                    window.location.reload();
+                }
             }
         });
     </script>
 
-<script>
-  new Vue ({
-      el: '#redirectButton',
-      data: {
-        userMemberID: ''
-      },
-      methods:
-      {
-          redirecttohomepage(){
-              const urlParams = new URLSearchParams(window.location.search);
-              this.userMemberID = urlParams.get('memberID');
+    <script>
+        new Vue({
+            el: '#navBar',
+            data: {
+                userMemberID: ''
+            },
+            methods:
+            {
+                redirecttohomepage() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const userMemberID = urlParams.get('memberID');
 
-              window.location.href = `/success?username=${encodeURIComponent(this.userMemberID)}`;
-          },
-          redirecttosettings(){
-            ///html/settings.html
-            const urlParams = new URLSearchParams(window.location.search);
-              this.userMemberID = urlParams.get('memberID');
+                    window.location.href = `/success?username=${encodeURIComponent(userMemberID)}`;
+                },
+                redirecttosettings() {
+                    ///html/settings.html
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const userMemberID = urlParams.get('memberID');
 
-              window.location.href = `/html/settings.html?username=${encodeURIComponent(this.userMemberID)}`;
-          }
-      }
-  });
-</script>
-
+                    window.location.href = `/html/settings.html?username=${encodeURIComponent(userMemberID)}`;
+                }
+            }
+        });
+    </script>
 </body>
+
 </html>

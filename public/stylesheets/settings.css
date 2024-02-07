@@ -5,6 +5,12 @@
 
 body {
     margin: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+#navBar{
+    position: fixed;
 }
 
 #navBar ul {
@@ -65,39 +71,64 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    transform: translateX(15vw);
     width: 85vw;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
     font-family: Arial, Helvetica, sans-serif;
-}
-
-#stuff {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
 }
 
 #heading {
     width: 100%; /* Take full width */
-    height: 8vh;
+    height: 15vh;
     color: #423076;
     font-size: 3vh;
     font-family: Arial, Helvetica, sans-serif;
-    margin-left: 2vw;
-    margin-bottom: 3vh;
+    border-bottom: #423076 solid 5px;
+    top: 0;
+}
+#heading h1{
+    transform: translateX(2vw);
 }
 
-.line {
-    border-bottom: 3px solid #423076;
-    margin-left: -2vw;
-    width: 100%; /* Take full width */
+#logOutBtn {
+    border: none;
+    background-color: #423076;
+    color: white;
+    border-radius: 20%;
+    height: 11vh;
+    font-size: 4vh;
+    width: 5vw;
+    padding: 10px 20px;
+    cursor: pointer;
+    display: flex;
+    text-align: center;
+    justify-content: center; /* Center the icon horizontally */
+    align-items: center;
+    transform: translateX(160vh) translateY(-13vh);
+}
+
+#logOutBtn i {
+    margin-left: 5px;
 }
 
 #settingsList {
+    position: absolute;
     width: 10vw;
-    height: auto; /* Adjust height as needed */
-    margin-top: 5vh;
+    height: 85vh; /* Adjust height as needed */
+    background-color: red;
+    transform: translateX(-1vw) translateY(15.7vh);
 }
 
 #SettingsContent {
-    margin-top: 20px; /* Add margin for spacing */
+    position: absolute;
+    background-color: aqua;
+    transform: translateX(9vw) translateY(15.65vh);
+    width: 76vw;
+    height: 85vh;
+    overflow-y: auto; /* Add scroll if necessary */
+}
+
+#text {
+    margin-left: 2vw;
 }

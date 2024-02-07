@@ -1,4 +1,6 @@
-/* Your CSS styles here */
+
+/*STYLING FOR THE SETTINGS PAGE*/
+
 #container {
     display: flex;
 }
@@ -79,7 +81,7 @@ body {
 }
 
 #heading {
-    width: 100%; /* Take full width */
+    width: 100%;
     height: 15vh;
     color: #423076;
     font-size: 3vh;
@@ -103,7 +105,7 @@ body {
     cursor: pointer;
     display: flex;
     text-align: center;
-    justify-content: center; /* Center the icon horizontally */
+    justify-content: center;
     align-items: center;
     transform: translateX(160vh) translateY(-13vh);
 }
@@ -115,7 +117,7 @@ body {
 #settingsList {
     position: absolute;
     width: 10vw;
-    height: 85vh; /* Adjust height as needed */
+    height: 85vh;
     background-color: red;
     transform: translateX(-1vw) translateY(15.7vh);
 }
@@ -126,7 +128,7 @@ body {
     transform: translateX(9vw) translateY(15.65vh);
     width: 76vw;
     height: 85vh;
-    overflow-y: auto; /* Add scroll if necessary */
+    overflow-y: auto;
 }
 
 #text {

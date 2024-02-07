@@ -1,3 +1,6 @@
+
+/*STYLING FOR THE HOMEPAGE*/
+
 #container {
     display: flex;
 }
@@ -34,9 +37,7 @@
     text-align: center;
     max-height: fit;
     display: flex;
-    /* Use flex for centering vertically */
     align-items: center;
-    /* Center vertically */
     margin: auto;
 }
 
@@ -47,9 +48,7 @@
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     display: flex;
-    /* Use flex for centering vertically */
     align-items: center;
-    /* Center vertically */
     margin: auto;
     width: 15vw;
     max-height: fit;
@@ -90,12 +89,9 @@ body {
     margin: 0;
 }
 
-#classroomCarousel,
-#groupchatCarousel {
+#classroomCarousel, #groupchatCarousel {
     margin: 0 auto;
-    /* Center the carousel horizontally */
     width: 80%;
-    /* Adjust the width as per your design */
 }
 
 
@@ -121,8 +117,7 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#createGroupchatBox,
-#createClassroomsBox {
+#createGroupchatBox, #createClassroomsBox {
     width: 89.5%;
     height: 4vh;
     display: flex;
@@ -142,8 +137,7 @@ body {
     background-color: #66c7ff;
 }
 
-#createGroupchatBox #plusIcon,
-#createClassroomsBox #plusIcon {
+#createGroupchatBox #plusIcon, #createClassroomsBox #plusIcon {
     color: #ffffff;
     text-decoration: none;
     padding: 0;
@@ -279,7 +273,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    /* Align items to the top of the container */
     flex-direction: column;
     height: 100vh;
     width: 70vw;
@@ -307,9 +300,7 @@ body {
 
 #message-container p {
     flex: 1;
-    /* Allow the message content to grow and fill the remaining space */
     margin-left: 10px;
-    /* Add space between the message content and the button */
 }
 
 #chatbox input {

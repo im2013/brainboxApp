@@ -169,7 +169,6 @@
                     //deleteUser
                     //connect to database
                     try {
-                        // Make a POST request to your server
                         const response = await fetch('/deleteUser', {
                             method: 'POST',
                             headers: {
@@ -193,7 +192,6 @@
                     //deleteUser
                     //connect to database
                     try {
-                        // Make a POST request to your server
                         const response = await fetch('/changeEmail', {
                             method: 'POST',
                             headers: {
@@ -216,7 +214,6 @@
                     })
                         .then(response => {
                             if (response.ok) {
-                                // Redirect the user to the login page
                                 window.location.href = '/html/login.html';
                             } else {
                                 console.error('Logout failed');

@@ -35,10 +35,10 @@ app.use(
 
 // sql connection
 const config = {
-  host: 'localhost',
-  user: 'root',
-  password: '0001A',
-  database: 'users_brainbox',
+  host: 'j5zntocs2dn6c3fj.chr7pe7iynqr.eu-west-1.rds.amazonaws.com	',
+  user: 'a726g1l6ztxc8my1',
+  password: 'apk7gwi4013j7k3v',
+  database: 'as1u1hagjjf2ohme',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -137,28 +137,21 @@ app.post('/submit', async (req, res) => {
   }
 });
 
+//addNewMember
 app.post('/addNewMember', async (req, res) => {
   try {
-    // forename: this.forenameBoxValue,
-    //                             surname: this.surnameBoxValue,
-    //                             email: this.emailBoxValue,
-    //                             phoneNumber: this.phoneNumBoxValue,
-    //                             gender: this.gender,
-    //                             password: this.passwordBoxValue
       // Connect to the database
       const { forename, surname, email, phoneNumber, gender, password } = req.body;
-      //console.log(forename, surname, email, phoneNumber, gender, password);
 
       const connection = mysql.createConnection(config);
 
-      //first check such a user doesn't already exist
+      // First check such a user doesn't already exist in the database
       const [checkUserExistence] = await connection
       .promise()
       .query('SELECT members.email, members.phoneNumber FROM members WHERE members.email = ? AND members.phoneNumber = ?', 
       [email, phoneNumber]);
 
-      console.log(checkUserExistence);
-
+      // console.log(checkUserExistence);
     
       if (checkUserExistence.length === 0 && connection)
       {
@@ -177,8 +170,8 @@ app.post('/addNewMember', async (req, res) => {
     res.status(404).send('User already exists.');
   }
   } catch (error) {
+      // If error, send 404
       console.error('Error fetching groupchat info:', error);
-      // Error, send 404
       res.status(500).send('Internal Server Error');
   }
 });
@@ -197,6 +190,7 @@ app.get('/classrooms', async (req, res) => {
 
     res.json(classrooms);
   } catch (error) {
+    // If error, send 404
     console.error('Error fetching classrooms:', error);
     res.status(500).send('Internal Server Error');
   }
@@ -215,6 +209,7 @@ app.get('/groupchats', async (req, res) => {
 
     res.json(groupchats);
   } catch (error) {
+    // If error, send 404
     console.error('Error fetching groupchats:', error);
     res.status(500).send('Internal Server Error');
   }
@@ -237,6 +232,7 @@ app.get('/getClassroomFromID', async (req, res) => {
 
       res.json(classroomInfo);
   } catch (error) {
+      // If error, send 404
       console.error('Error fetching classroom info:', error);
       res.status(500).send('Internal Server Error');
   }
@@ -255,11 +251,10 @@ app.get('/getClassroomMembersFromID', async (req, res) => {
 
       connection.end();
 
-      // Send the filtered classroom data as a JSON response
       res.json(classroomInfo);
   } catch (error) {
+      // If error, send 404
       console.error('Error fetching classroom info:', error);
-      // If an error occurs, send a 500 Internal Server Error response
       res.status(500).send('Internal Server Error');
   }
 });
@@ -267,26 +262,21 @@ app.get('/getClassroomMembersFromID', async (req, res) => {
 //retrieving groupchat data based on html id
 app.get('/getIsManagerFromIDs', async (req, res) => {
   try {
-      // Connect to the database
       const connection = mysql.createConnection(config);
 
-      // Get the classroom name from the query parameters
       const classroomID = req.query.classroomID;
       const memberID = req.query.memberID;
 
-      // Query the database to fetch the junction data based on the provided classroomID and memberID
       const [junctionData] = await connection
           .promise()
           .query('SELECT * FROM junction_classroommembers, members, classroom WHERE junction_classroommembers.fk_classroomID = classroom.classroomID AND junction_classroommembers.fk_memberID = members.memberID AND classroom.classroomID = ? AND junction_classroommembers.isManager = 1 AND members.memberID = ?', [classroomID, memberID]);
 
-      // Close the database connection
       connection.end();
 
-      // Send the filtered classroom data as a JSON response
       res.json(junctionData);
   } catch (error) {
+      // If error, send 404
       console.error('Error fetching groupchat info:', error);
-      // If an error occurs, send a 500 Internal Server Error response
       res.status(500).send('Internal Server Error');
   }
 });
@@ -295,25 +285,20 @@ app.get('/getIsManagerFromIDs', async (req, res) => {
 //retrieving junction_managers from memberID and classroomID
 app.get('/getGroupchatFromID', async (req, res) => {
   try {
-      // Connect to the database
       const connection = mysql.createConnection(config);
 
-      // Get the classroom name from the query parameters
       const groupchatID = req.query.groupchatID;
 
-      // Query the database to fetch the classroom data based on the provided classroomName
       const [groupchatInfo] = await connection
           .promise()
           .query('SELECT * FROM groupchat WHERE groupchatID = ?', [groupchatID]);
 
-      // Close the database connection
       connection.end();
 
-      // Send the filtered classroom data as a JSON response
       res.json(groupchatInfo);
   } catch (error) {
+      // If error, send 404
       console.error('Error fetching groupchat info:', error);
-      // If an error occurs, send a 500 Internal Server Error response
       res.status(500).send('Internal Server Error');
   }
 });
@@ -323,23 +308,19 @@ app.get('/getChannelsFromID', async (req, res) => {
   try {
       // Connect to the database
       const connection = mysql.createConnection(config);
-
-      // Get the classroom name from the query parameters
+      // Get classroomID from Vue query body
       const classroomID = req.query.classroomID;
-
-      // Query the database to fetch the classroom data based on the provided classroomName
+      // Query Database
       const [channels] = await connection
           .promise()
           .query('SELECT * FROM classroomchannels, classroom WHERE classroomchannels.classroomID = classroom.classroomID AND classroom.classroomID = ?', [classroomID]);
-
-      // Close the database connection
+      // End Connection with the Database
       connection.end();
 
-      // Send the filtered classroom data as a JSON response
       res.json(channels);
   } catch (error) {
+      // If error, send 404
       console.error('Error fetching groupchat info:', error);
-      // If an error occurs, send a 500 Internal Server Error response
       res.status(500).send('Internal Server Error');
   }
 });

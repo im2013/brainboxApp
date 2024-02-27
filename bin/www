@@ -35,7 +35,7 @@ app.use(
 
 // sql connection
 const config = {
-  host: 'j5zntocs2dn6c3fj.chr7pe7iynqr.eu-west-1.rds.amazonaws.com	',
+  host: 'j5zntocs2dn6c3fj.chr7pe7iynqr.eu-west-1.rds.amazonaws.com',
   user: 'a726g1l6ztxc8my1',
   password: 'apk7gwi4013j7k3v',
   database: 'as1u1hagjjf2ohme',

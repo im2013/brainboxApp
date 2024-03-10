@@ -80,7 +80,7 @@ app.get('/html/settings.html', function (req, res) {
 });
 
 app.get('/success', function (req, res) {
-  res.sendFile(path.join(__dirname, '..', 'public', 'html', 'user.html'));
+  res.sendFile(path.join(__dirname, '..', 'public', 'html', 'homepage.html'));
 });
 
 app.get('/stylesheets/style.css', function (req, res) {
@@ -200,8 +200,10 @@ app.get('/groupchats', async (req, res) => {
   try {
     // Connect to the database
     const connection = mysql.createConnection(config);
+    console.log(req.session.userID);
 
     const userID = req.session.userID;
+    console.log("User id from session", userID);
 
     const [groupchats] = await connection.promise().query('SELECT * FROM groupchat, junction_groupchatmembers, members WHERE junction_groupchatmembers.groupchatID = groupchat.groupchatID AND members.memberID = junction_groupchatmembers.memberID AND members.memberID = ?', [userID]);
     connection.end();
@@ -824,13 +826,18 @@ app.post('/createGroupchat', async (req, res) => {
       const connection = mysql.createConnection(config);
 
       //first make the groupchat
+      //RETURNING groupchat.groupchatID
       const [addgroupchat] = await connection
-          .promise().query('INSERT INTO groupchat (groupchat.groupchatName) VALUES (?) RETURNING groupchat.groupchatID;', [groupchatName])
+          .promise().query('INSERT INTO groupchat (groupchat.groupchatName) VALUES (?);', [groupchatName])
+        
+      const [getgcid] = await connection.promise().query(
+        'SELECT LAST_INSERT_ID() AS groupchatID'
+      )
 
       //secondly add the user to the groupchat
-      const addusertoGC = await connection.promise().query('INSERT INTO junction_groupchatmembers (junction_groupchatmembers.groupchatID, junction_groupchatmembers.memberID) VALUES (?, ?)', [addgroupchat[0].groupchatID, memberID])
+      const addusertoGC = await connection.promise().query('INSERT INTO junction_groupchatmembers (junction_groupchatmembers.groupchatID, junction_groupchatmembers.memberID) VALUES (?, ?)', [getgcid[0].groupchatID, memberID])
 
-      res.json(addusertoGC);
+      res.json(getgcid[0].groupchatID);
   } catch (error) {
       console.error('Error fetching groupchat info:', error);
       // If an error occurs, send a 500 Internal Server Error response

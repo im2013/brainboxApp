@@ -1,0 +1,16 @@
+h1 {
+    color: black;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2vw;
+}
+
+img {
+    width: 750px;
+    transform: translate(-50%, 50%);
+    left: 50%;
+    bottom: 50%;
+    position: absolute;
+    /*820x1180n - ipad
+    390x844px - iphone 12*/
+}

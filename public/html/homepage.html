@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="\stylesheets\newHomepage.css">
+</head>
+<body id="vue">
+    <h1>Welcome to Brainbox</h1>
+    
+    <img src="\images\brainbox_logo.png" usemap="#workmap" style="display: block">
+
+    <map name="workmap" id="links">
+        <area id="settings" shape="poly" coords="374,395,557,588,373,786,189,589" @click="redirecttosettings">
+        <area id="groups" shape="poly" coords="374,395,189,199,374,0,559,198" @click="redirecttogroups">
+        <area id="brainlink" shape="poly" coords="374,395,559,202,743,393,560,590" href="\html\brainlink.html">
+        <area id="brainframe" shape="poly" coords="374,395,188,200,0,394,186,585" href="\html\brainframe.html">
+    </map>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+        new Vue({
+            el: "#links",
+            data: {
+                userMemberID: '',
+                userData: []
+            },
+            mounted() {
+                const urlParams = new URLSearchParams(window.location.search);
+                this.userMemberID = urlParams.get('username');
+                console.log("user id: ", this.userMemberID);
+            },
+            methods: {
+                redirecttogroups() {
+                    window.location.href = `/html/groups.html`;
+                },
+                redirecttosettings() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const userEmail = urlParams.get('username');
+
+                    fetch(`/retrieveUserinfo?email=${userEmail}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.userData = data;
+                            window.location.href = `/html/settings.html?userID=${encodeURIComponent(this.userData[0].memberID)}`;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching user member id:', error);
+                        });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

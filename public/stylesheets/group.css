@@ -69,6 +69,8 @@
 #contentUser {
     padding: 0;
     display: flex;
+    top: 0;
+    left: 15vw;
     justify-content: center;
     align-items: flex-start;
     flex-direction: column;
@@ -81,7 +83,8 @@
     color: #eb7b34;
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
-    margin-bottom: 3vh;
+    margin-top: 3vh;
+    margin-left: 2vw;
     font-size: 1.25;
 }
 
@@ -89,25 +92,41 @@ body {
     margin: 0;
 }
 
-#classroomCarousel, #groupchatCarousel {
-    margin: 0 auto;
-    width: 80%;
-}
-
-
-
-#classroomBox {
-    width: 25vw;
-    height: 13vh;
+#classroomCarousel,
+#groupchatCarousel {
+    width: 79vw; 
+    height: 30vh;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 2vw;
-    background-color: #347aeb;
-    border-radius: 10px;
 }
+
+#classroomContainer,
+#groupchatContainer {
+    margin-left: 3vw;
+    margin-right: 3vw;
+    width: 79vw; 
+    height: 30vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+ #classroomBox {
+    width: 25vw; 
+    height: 30vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #347aeb;
+    border-radius: 7px;
+} 
 
 #createText {
     font-size: 2vh;
@@ -117,18 +136,50 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#createGroupchatBox, #createClassroomsBox {
-    width: 89.5%;
-    height: 4vh;
+#createClassroomsBox, #createGroupchatBox {
+    width: 25vw; 
+    height: 30vh;  
+}
+
+#createGroupchatBox input, 
+#createClassroomsBox input {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ffffff;
+}
+
+#classroomCarousel .slide,
+#groupchatCarousel .slide {
+    width: 25vw; 
+    height: 30vh;  
+    margin-right: 1vw;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 1vw;
     border-radius: 10px;
 }
+#groupchatCarousel .slide {
+    background-color: #66c7ff;
+}
 
+#classroomCarousel .slide {
+    background-color: #347aeb;
+}
+
+#classroomCarousel .slide:last-child,
+#groupchatCarousel .slide:last-child {
+    width: 25vw; 
+    height: 30vh;  
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 10px;  
+    margin-right: 0;
+}
 #createClassroomsBox {
     background-color: #347aeb;
 }
@@ -151,27 +202,25 @@ body {
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
     margin-bottom: 0.5vh;
-    /* Adjust spacing as needed */
 }
 
 #groupchatBox {
-    width: 25vw;
-    height: 13vh;
+    width: 25vw; 
+    height: 30vh;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 2vw;
     background-color: #66c7ff;
-    border-radius: 10px;
-}
+    border-radius: 7px;
+}  
 
 #carouselHeads {
     color: #eb7b34;
     text-decoration: underline;
     font-family: Arial, Helvetica, sans-serif;
-    margin-left: 2vw;
+    margin-left: 2.5vw;
     font-size: 1.2vw;
 }
 
@@ -279,7 +328,7 @@ body {
     overflow: hidden;
 }
 
-#groupchatText {
+#groupchatText { 
     overflow: auto;
     height: 71%;
     width: 65vw;
@@ -435,39 +484,6 @@ body {
     margin-left: 1.5vw;
 }
 
-/* #reportUserPopup,
-#KickUserConfirmPopup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-} */
-
-/*#KickUserConfirmPopup {
-    display: block;
-}
-
-#reportUserPopup button,
-#KickUserConfirmPopup button {
-    margin-top: 10px;
-    padding: 8px 16px;
-    background-color: #eb7b34;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#reportUserPopup button:hover,
-#KickUserConfirmPopup button:hover {
-    background-color: #bd5e23;
-} */
 
 #BottomGroupchatSection {
     width: 100%;

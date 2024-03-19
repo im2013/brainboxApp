@@ -1,4 +1,5 @@
-/*STYLING FOR THE HOMEPAGE*/
+
+/*STYLING FOR BRAINLINK*/
 
 #container {
     display: flex;
@@ -9,7 +10,7 @@
     margin: 0;
     list-style-type: none;
     overflow: hidden;
-    background-color: #eb7b34;
+    background-color: #006A78;
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -79,7 +80,7 @@
 }
 
 #contentUser h1 {
-    color: #eb7b34;
+    color: #006A78;
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
     margin-top: 3vh;
@@ -91,45 +92,32 @@ body {
     margin: 0;
 }
 
-#classroomCarousel {
-    width: 78vw;
-    height: 28vh;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-#classroomContainer {
-    margin-left: 2vw;
-    margin-right: 2vw;
-    padding: 1.75vw;
-    width: 77.5vw;
+#classroomCarousel,
+#groupchatCarousel {
+    width: 79vw; 
     height: 30vh;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: #cecece;
-    border-radius: 7px;
-    transform: translateY(-3vh);
 }
 
-#classroomBox {
-    width: 25vw;
+#classroomContainer,
+#groupchatContainer {
+    margin-left: 3vw;
+    margin-right: 3vw;
+    width: 79vw; 
     height: 30vh;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: #ff995a;
-    border-radius: 7px;
 }
 
-#createText , #joinText{
+
+#createText {
     font-size: 2vh;
     color: #ffffff;
     text-decoration: none;
@@ -137,15 +125,22 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+#createClassroomsBox, #createGroupchatBox {
+    width: 25vw; 
+    height: 30vh;  
+}
+
+#createGroupchatBox input, 
 #createClassroomsBox input {
     border-style: solid;
     border-width: 1px;
     border-color: #ffffff;
 }
 
-#classroomCarousel .slide {
-    width: 25vw;
-    height: 30vh;
+#classroomCarousel .slide,
+#groupchatCarousel .slide {
+    width: 25vw; 
+    height: 30vh;  
     margin-right: 1vw;
     display: flex;
     flex-direction: row;
@@ -155,48 +150,55 @@ body {
     border-radius: 10px;
 }
 
+#classroomCarousel .slide:last-child,
+#groupchatCarousel .slide:last-child {
+    width: 25vw; 
+    height: 30vh;  
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 10px;  
+    margin-right: 0;
+}
 
-#classroomCarousel .slide:last-child {
-    width: 25vw;
+#createGroupchatBox {
+    background-color: #008ea1;
+}
+
+#createGroupchatBox #plusIcon, #createClassroomsBox #plusIcon {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0;
+    padding-bottom: 0.5vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#createGroupchatBox h4,
+#createClassroomsBox h4 {
+    color: #ffffff;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 0.5vh;
+}
+
+#groupchatBox {
+    width: 25vw; 
     height: 30vh;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     text-align: center;
-    border-radius: 10px;
-    margin-right: 0;
-}
-
-#createClassroomBox,
-#joinClassroomBox {
-    background-color: #ff995a;
-    width: 78vw;
-    height: 20vh;
-    margin: 2vw 2vw 0vh;
-    padding: 1.5vw;
+    background-color: #008ea1;
     border-radius: 7px;
-    transform: translateY(-3vh);
-}
-
-#joinButton, #createButton, #joinClassroomInput, #newClassroomName, #newClassroomDesc {
-    height: 5vh;
-}
-
-#joinClassroomInput, #newClassroomName, #newClassroomDesc {
-    border-radius: 6px;
-}
-
-#createClassroomBox {
-  display: flex;
-  flex-direction: row;
-}
+}  
 
 #carouselHeads {
-    color: #eb7b34;
+    color: #006A78;
     text-decoration: underline;
     font-family: Arial, Helvetica, sans-serif;
-    transform: translateY(-3vh);
     margin-left: 2.5vw;
     font-size: 1.2vw;
 }
@@ -209,6 +211,20 @@ body {
 }
 
 #classroomBox h3 {
+    color: #ffffff;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1vw;
+}
+
+#groupchatBox h4 {
+    color: #ffffff;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.1vw;
+}
+
+#groupchatBox h3 {
     color: #ffffff;
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
@@ -291,7 +307,7 @@ body {
     overflow: hidden;
 }
 
-#groupchatText {
+#groupchatText { 
     overflow: auto;
     height: 71%;
     width: 65vw;

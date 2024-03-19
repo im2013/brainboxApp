@@ -243,23 +243,22 @@
                     //get the username from the database
                     ///retrieveUserinfoID
                     fetch(`/retrieveUserinfoID?memberID=${userMemberID}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    this.userData = data;
-                                })
-                                .catch(error => {
-                                    console.error('Error fetching user member id:', error);
-                                });
+                        .then(response => response.json())
+                        .then(data => {
+                            this.userData = data;
+                            window.location.href = `/success?username=${encodeURIComponent(this.userData[0].email)}`;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching user member id:', error);
+                        });
 
-                    window.location.href = `/success?username=${encodeURIComponent(this.userData[0].email)}`;
                 },
-                redirecttosettings() {
-                    ///html/settings.html
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const userMemberID = urlParams.get('memberID');
-
-                    window.location.href = `/html/settings.html?username=${encodeURIComponent(userMemberID)}`;
-                }
+                // redirecttosettings() {
+                //     ///html/settings.html
+                //     const urlParams = new URLSearchParams(window.location.search);
+                //     const userMemberID = urlParams.get('memberID');
+                //     window.location.href = `/html/settings.html?username=${encodeURIComponent(userMemberID)}`;
+                // }
             }
         });
     </script>

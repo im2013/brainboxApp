@@ -216,25 +216,24 @@
                     },
                     methods:
                     {
-                        redirecttohomepage() {
+                    redirecttohomepage() {
                         const urlParams = new URLSearchParams(window.location.search);
                         this.username = urlParams.get('username');
-
                         window.location.href = `/success?username=${encodeURIComponent(this.username)}`;
                     },
                     redirecttosettings() {
                         const urlParams = new URLSearchParams(window.location.search);
-                    const email = urlParams.get('username');
+                        const email = urlParams.get('username');
 
-                    fetch(`/retrieveUserinfoQUERY?email=${email}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            this.userData = data;
-                        })
-                        .catch(error => {
-                            console.error('Error fetching user member id:', error);
-                        });
-                        window.location.href = `/html/settings.html?userID=${encodeURIComponent(this.userData[0].memberID)}`;
+                        fetch(`/retrieveUserinfoQUERY?email=${email}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                this.userData = data;
+                                window.location.href = `/html/settings.html?userID=${encodeURIComponent(this.userData[0].memberID)}`;
+                            })
+                            .catch(error => {
+                                console.error('Error fetching user member id:', error);
+                            });
                     }
                 }
             });

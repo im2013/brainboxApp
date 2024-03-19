@@ -1,9 +1,4 @@
 #!/usr/bin/env node
-
-/**
- * Module dependencies.
- */
-
 var debug = require('debug')('brainbox:server');
 var http = require('http');
 const session = require('express-session');

@@ -5,7 +5,7 @@ h1 {
     font-size: 2vw;
 }
 
-img {
+#logoIcon {
     width: 750px;
     transform: translate(-50%, 50%);
     left: 50%;
@@ -13,4 +13,11 @@ img {
     position: absolute;
     /*820x1180n - ipad
     390x844px - iphone 12*/
+}
+
+#brainyIcon {
+    position: absolute;
+    left: 2.5%;
+    bottom: 4%;
+    width: 125px;
 }

@@ -2,11 +2,39 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="\stylesheets\newHomepage.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
 </head>
-<body id="vue">
+<body>
+        <!--BRAINY-->
+        <div id="BRAINY">
+            <link rel="stylesheet" href="\stylesheets\brainy.css">
+            <img @click="showBrainy" id="brainyIcon" src="\images\brainyIcon.png" usemap="#workmap">
+            <div v-if="isShow" id="brainy_container">
+                <img class="brainyImage" src="\images\brainy_neutralPose.png">
+                <div id="speech">
+                    <p>Hi! I'm Brainy and I'm here to help!</p>
+                </div>
+                <div id="options">
+                    <button @click="">Tutorial</button>
+                    <button @click="showLogout">How to logout?</button>
+                    <button @click="">I'm stuck!</button>
+                </div>
+
+                <div id="logoutTutorial" v-if="logout">
+                    <p style="width:50%; position: absolute; left: -90%; bottom: 10%; background-color: #dbdbdb; padding: 1.5%; border-radius:15px; text-align: center;">
+                        Logout by accessing the settings here!</p>
+                    <img src="/images/brainy_pointer.png" style="width:50%; position: absolute; left: -90%; bottom: 10%;">
+                </div>
+
+                <button id="exitButton" @click="hideBrainy" onmouseover="this.style.backgroundColor='#fddfff'" onmouseout="this.style.backgroundColor='#fbc9ff'">Exit</button>
+            </div>
+        </div>
+
+
     <h1>Welcome to Brainbox</h1>
     
-    <img src="\images\brainbox_logo.png" usemap="#workmap" style="display: block">
+    <img id= "logoIcon" src="\images\brainbox_logo.png" usemap="#workmap" style="display: block">
 
     <map name="workmap" id="links">
         <area id="settings" shape="poly" coords="374,395,557,588,373,786,189,589" @click="redirecttosettings">
@@ -14,6 +42,7 @@
         <area id="brainlink" shape="poly" coords="374,395,559,202,743,393,560,590" @click="redirecttobrainlink">
         <area id="brainframe" shape="poly" coords="374,395,188,200,0,394,186,585" href="\html\brainframe.html">
     </map>
+    
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script>
@@ -26,7 +55,7 @@
             mounted() {
                 const urlParams = new URLSearchParams(window.location.search);
                 this.userMemberID = urlParams.get('username');
-                console.log("user id: ", this.userMemberID);
+                //console.log("user id: ", this.userMemberID);
             },
             methods: {
                 redirecttogroups() {
@@ -50,6 +79,30 @@
                 redirecttobrainlink() {
                     const urlParams = new URLSearchParams(window.location.search);
                     window.location.href = `/html/brainlink.html?username=${encodeURIComponent(this.userMemberID)}`;
+                }
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+        new Vue ({
+            el: "#BRAINY",
+            data: {
+                isShow: false,
+                logout: false
+            },
+            mounted() {
+                console.log("working!");
+            },
+            methods: {
+                showBrainy() {
+                    this.isShow = true;
+                },
+                hideBrainy() {
+                    this.isShow = false;
+                },
+                showLogout() {
+                    this.logout = true;
                 }
             }
         });

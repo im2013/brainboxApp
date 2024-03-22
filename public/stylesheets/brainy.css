@@ -62,3 +62,13 @@ p {
     position: absolute;
     bottom: 2.5%;
 }
+
+#logoutButtonTutorial {
+    position: absolute;
+    background-color: #fbc9ff;
+    left: 70%;
+    bottom: 5%;
+    border: 0;
+    padding: 2.5%;
+    width: 15%;
+}

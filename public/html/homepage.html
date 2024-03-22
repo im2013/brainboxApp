@@ -11,21 +11,63 @@
             <link rel="stylesheet" href="\stylesheets\brainy.css">
             <img @click="showBrainy" id="brainyIcon" src="\images\brainyIcon.png" usemap="#workmap">
             <div v-if="isShow" id="brainy_container">
-                <img class="brainyImage" src="\images\brainy_neutralPose.png">
+                <img v-if="defaultBrainy" class="brainyImage" src="\images\brainy_neutralPose.png">
+                <img v-if="happyBrainy" class="brainyImage" src="\images\brainy_smilePose.png">
                 <div id="speech">
-                    <p>Hi! I'm Brainy and I'm here to help!</p>
+                    <p v-if="defaultText">Hi! I'm Brainy and I'm here to help!</p>
+                    <p v-if="tutorial1" style="font-size: 75%;">I'll give you a quick overview of what these buttons do!</p>
+                    <p v-if="tutorial2" style="font-size: 75%;">This is 'Groups' where you can find your classrooms!</p>
+                    <p v-if="tutorial3" style="font-size: 75%;">This is 'Brainlink' where you can find your groupchats!</p>
+                    <p v-if="tutorial4" style="font-size: 75%;">This is 'Brainframe' where you can find your posted and edited files!</p>
+                    <p v-if="tutorial5" style="font-size: 75%;">This is 'Settings' where you can access your settings!</p>
+                    <p v-if="tutorial6" style="font-size: 75%;">I hope that quick tour helps!</p>
+
+                    <p v-if="stuck1">Don't Fret! Select the 'Tutorial' on this page!</p>
                 </div>
                 <div id="options">
-                    <button @click="">Tutorial</button>
+                    <button @click="showTutorial1">Tutorial</button>
                     <button @click="showLogout">How to logout?</button>
-                    <button @click="">I'm stuck!</button>
+                    <button @click="isStuck1">I'm stuck!</button>
                 </div>
 
                 <div id="logoutTutorial" v-if="logout">
                     <p style="width:50%; position: absolute; left: -90%; bottom: 10%; background-color: #dbdbdb; padding: 1.5%; border-radius:15px; text-align: center;">
                         Logout by accessing the settings here!</p>
                     <img src="/images/brainy_pointer.png" style="width:50%; position: absolute; left: -90%; bottom: 10%;">
+                    <button id="logoutButtonTutorial" @click="hideBrainy">Okay!</button>
                 </div>
+
+                <div id="generalTutorial" v-if="tutorial1"> 
+                    <button id="logoutButtonTutorial" @click="showTutorial2">Next!</button>
+                </div>
+                <div id="generalTutorial" v-if="tutorial2"> 
+                    <!-- point to groups -->
+                    <img src="/images/brainy_pointer.png" style="width:50%; position: absolute; left: -90%; bottom: 150%;">
+                    <button id="logoutButtonTutorial" @click="showTutorial3">Next!</button>
+                </div>
+                <div id="generalTutorial" v-if="tutorial3"> 
+                    <!-- point to brainlink -->
+                    <img src="/images/brainy_pointer.png" style="width:50%; position: absolute; left: -50%; bottom: 90%;">
+                    <button id="logoutButtonTutorial" @click="showTutorial4">Next!</button>
+                </div>
+                <div id="generalTutorial" v-if="tutorial4"> 
+                    <!-- point to brainframe -->
+                    <img src="/images/brainy_pointer.png" style="width:50%; position: absolute; left: -140%; bottom: 90%;">
+                    <button id="logoutButtonTutorial" @click="showTutorial5">Next!</button>
+                </div>
+                <div id="generalTutorial" v-if="tutorial5"> 
+                    <!-- point to settings -->
+                    <img src="/images/brainy_pointer.png" style="width:50%; position: absolute; left: -90%; bottom: 10%;">
+                    <button id="logoutButtonTutorial" @click="showTutorial6">Next!</button>
+                </div>
+                <div id="generalTutorial" v-if="tutorial6"> 
+                    <button id="logoutButtonTutorial" @click="hideBrainy">Fin!</button>
+                </div>
+
+                <div id="generalTutorial" v-if="stuck1"> 
+                    <button id="logoutButtonTutorial" @click="hideStuck">Thanks!</button>
+                </div>
+                
 
                 <button id="exitButton" @click="hideBrainy" onmouseover="this.style.backgroundColor='#fddfff'" onmouseout="this.style.backgroundColor='#fbc9ff'">Exit</button>
             </div>
@@ -89,7 +131,17 @@
             el: "#BRAINY",
             data: {
                 isShow: false,
-                logout: false
+                logout: false,
+                tutorial1: false,
+                defaultText: true,
+                tutorial2: false,
+                tutorial3: false,
+                tutorial4: false,
+                tutorial5: false,
+                tutorial6: false,
+                happyBrainy: false,
+                defaultBrainy: true,
+                stuck1: false
             },
             mounted() {
                 console.log("working!");
@@ -97,12 +149,55 @@
             methods: {
                 showBrainy() {
                     this.isShow = true;
+                    this.defaultText = true;
+                    this.happyBrainy = false;
+                    this.defaultBrainy = true;
                 },
                 hideBrainy() {
                     this.isShow = false;
+                    this.logout = false;
+                    this.tutorial6 = false;
                 },
                 showLogout() {
                     this.logout = true;
+                },
+                showTutorial1() {
+                    this.tutorial1 = true;
+                    this.defaultText = false;
+                    this.happyBrainy = true;
+                    this.defaultBrainy = false;
+                },
+                showTutorial2() {
+                    this.tutorial2 = true;
+                    this.tutorial1 = false;
+                    this.happyBrainy = false;
+                    this.defaultBrainy = true;
+                },
+                showTutorial3() {
+                    this.tutorial2 = false;
+                    this.tutorial3 = true;
+                },
+                showTutorial4() {
+                    this.tutorial3 = false;
+                    this.tutorial4 = true;
+                },
+                showTutorial5() {
+                    this.tutorial4 = false;
+                    this.tutorial5 = true;
+                },
+                showTutorial6() {
+                    this.tutorial5 = false;
+                    this.tutorial6 = true;
+                    this.happyBrainy = true;
+                    this.defaultBrainy = false;
+                },
+                isStuck1() {
+                    this.defaultText = false;
+                    this.stuck1 = true;
+                },
+                hideStuck() {
+                    this.stuck1 = false;
+                    this.defaultText = true;
                 }
             }
         });

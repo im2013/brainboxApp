@@ -316,3 +316,27 @@ transform: translateY(-1vh);
     justify-content: center;
     align-items: center;
 }
+
+#discussionHeader {
+    margin-left: 2.5%;
+}
+
+#post {
+    background-color: #d2d2d2;
+    width: 90%;
+    margin-left: 4%;
+}
+
+#post h2 {
+    background-color: #d2d2d2;
+}
+
+#postContentBox {
+    background-color: #ebebeb;
+    height: 15vw;
+}
+
+#PostBoard {
+    overflow-y: scroll;
+    height: 40vw;
+}

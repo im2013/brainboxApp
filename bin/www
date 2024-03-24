@@ -9,6 +9,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
+const fs = require('fs');
 
 var app = express();
 var port = process.env.PORT || '3000';
@@ -764,15 +765,31 @@ app.get('/email', (req, res) =>
 //adding posts to a discussion board
 app.post('/addPost', async (req, res) => {
   try {
-      const { memberID, classroomID, postTitle, postContent } = req.body;
+      const { memberID, classroomID, postTitle, postContent, inputFile } = req.body;
+
+      console.log(classroomID);
+      console.log(inputFile);
+      
+      // let inputFileData = null;
+      
       const connection = mysql.createConnection(config);
-      
-      const [discussionPostInfo] = await connection
+
+        if(inputFile != null) {
+          // inputFileData = inputFile.data.toString('base64');
+
+            const [discussionPostFile] = await connection
           .promise()
-          .query('INSERT INTO post (post.classroomlD, post.memberID, post.postTitle, post.postContent) VALUES (?, ?, ?, ?)', [classroomID, memberID, postTitle, postContent]);
-      
-      connection.end();
-      res.json(discussionPostInfo);
+          .query('INSERT INTO post (post.classroomID, post.memberID, post.postTitle, post.postContent, post.postFile) VALUES (?, ?, ?, ?, ?)', [classroomID, memberID, postTitle, postContent, inputFile]);
+          connection.end();
+          res.json(discussionPostFile);
+        } else 
+          {
+            const [discussionPostInfo] = await connection
+          .promise()
+          .query('INSERT INTO post (post.classroomID, post.memberID, post.postTitle, post.postContent) VALUES (?, ?, ?, ?)', [classroomID, memberID, postTitle, postContent]);
+          connection.end();
+          res.json(discussionPostInfo);
+        }
   } 
   catch (error) {
       console.error('Error adding post to classroom discussion board:', error);
@@ -821,13 +838,14 @@ app.post('/updatePostTitleContents', async (req, res) => {
 //get all posts by classroomID
 app.get('/getPosts', async (req, res) => {
   try {
-      
       const connection = mysql.createConnection(config);
       const classroomID = req.query.classroomID;
 
+      console.log(classroomID);
+
       const [channels] = await connection
           .promise()
-          .query('SELECT * FROM post, classroom WHERE post.classroomID = classroom.classroomID AND classroom.classroomID = ?', [classroomID]);
+          .query('SELECT * FROM post JOIN classroom ON post.classroomID = classroom.classroomID LEFT JOIN post_files ON post.postID = post_files.postID WHERE classroom.classroomID = ? GROUP BY post.postID;', [classroomID]);
       connection.end();
       res.json(channels);
   } 
@@ -863,6 +881,22 @@ app.get('/getPostsBYMEMBER', async (req, res) => {
 //remove post file (memberID, postID)
 
 //get post file by postID
+app.get('/getPostFile', async (req, res) => {
+  try {
+      const connection = mysql.createConnection(config);
+      const postID = req.query.postID;
+
+      const [post] = await connection
+          .promise()
+          .query('SELECT * FROM post_files WHERE post_files.postID = ?', [postID]);
+      connection.end();
+      res.json(post);
+  } 
+  catch (error) {
+      console.error('Error fetching post`s file:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
 
 //get post file by post_file_ID
 
@@ -871,7 +905,7 @@ app.get('/getPostsBYMEMBER', async (req, res) => {
 //get post table details by post_file_ID (for brainframe; see where file posted and when)
 
 
-app.use(function (next) 
+app.use(function (req, res, next) 
 {
   next(createError(404));
 });

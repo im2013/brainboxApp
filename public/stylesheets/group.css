@@ -1,4 +1,4 @@
-/*STYLING FOR THE HOMEPAGE*/
+/*STYLING FOR THE GROUP PAGE*/
 
 #container {
     display: flex;
@@ -469,4 +469,8 @@ body {
 
 #BottomGroupchatSection button:hover {
     background-color: #bd5e23;
+}
+
+#post {
+    background-color: #a3a3a3;
 }

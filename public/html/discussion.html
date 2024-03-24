@@ -28,24 +28,52 @@
                     @click="redirecttosettings">
             </ul>
         </div>
+    </div>
 
-        help
+        <div id="code">
+            <div id="channelBarStudent">
+                <div id="classroomHeading" v-for="classroom in classroomInfo" :key="classroom.classroomID">
+                    <h1>{{ classroom.classroomName }}</h1>
+                    <p>{{ classroom.classroomDescription }}</p>
+                </div>
+            </div>
 
-        <div id="code_discussion">
-            <div v-for="classroom in classroomInfo" :key="classroom.classroomID">
-                <h1>{{ classroom.classroomName }}</h1>
-                <p>{{ classroom.classroomDescription }}
+
+            <div id="mainContent">
+                <div id="discussionHeader" style="left: 10%;">
+                    <h1>Discussion Board</h1>
+                </div>
+                    <!--Want to display posts here-->
+                <div id="PostBoard">
+                    <div id="postsDisplay" v-for="post in classroomPosts" :key="post.postID"> 
+                        <div id="post">
+                            <h3>{{ post.postTitle }}</h3>
+                            <div id="postContentBox">
+                                <p>{{ post.postContent }}</p>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <!--Post creation-->
+                    <div id="composeBox">
+                        <!-- box for writing messages to send-->
+                        <input type="text" id="typeyBox" name="myTextField" placeholder="Enter post title here" maxlength="50"
+                            v-model="inputText_title" @keyup.enter="postPost">
+                        <input type="text" id="typeyBox" name="myTextField" placeholder="Enter post content here" maxlength="10000"
+                            v-model="inputText_body"  @keyup.enter="postPost">
+                            <input type="file" id="fileInput" accept=".txt, .pdf, .doc, .docx, .png, .jpeg, .jpg" @change="handleFileChange">
+                    </div>
+                    </div>
+
             </div>
         </div>
-
-
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
     <script>
         new Vue({
-            el: '#code_discussion',
+            el: '#code',
             data: {
                 classroomInfo: [],
                 user_memberID: '',
@@ -54,10 +82,6 @@
                 classroomChannels: [],
                 junctionManagersData: [],
                 openChannelChatActive: false,
-                currentActiveChannel: '',
-                currentActiveChannel_ID: '',
-                currentActiveChannel_desc: '',
-                currentChannelChatLog: [],
                 classroomMembers: [],
                 isUserMsg: [],
                 showChannelCreator: false,
@@ -71,15 +95,20 @@
                 ifUser_buttonDeleteText: '<button @click="toggleDeleteConfirmOn(channelMsg.messages_channel_ID)">Delete</button>',
                 ifNOTUser_buttonReportText: '<button @click="toggleMenu">Report</button>',
                 AddMemberPopupIf: false,
-                inputText: '',
+                inputText_title: '',
+                inputText_body: '',
                 deleteClassPopup: false,
                 RemoveMemberPopupIf: false,
                 deleteMember: '',
                 addMemberName: '',
+                classroomPosts: [],
+                classroomID: '',
+                inputFile: null,
             },
             mounted() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const classroomID = urlParams.get('classroomID');
+                this.classroomID = urlParams.get('classroomID');
                 this.user_memberID = urlParams.get('memberID');
 
                 // Fetch classroom info
@@ -87,6 +116,7 @@
                     .then(response => response.json())
                     .then(data => {
                         this.classroomInfo = data;
+                        console.log(this.classroomInfo);
                     })
                     .catch(error => {
                         console.error('Error fetching classroom info:', error);
@@ -100,23 +130,6 @@
                     })
                     .catch(error => {
                         console.error('Error fetching classroom members:', error);
-                    });
-
-                // Fetch classroom channels
-                fetch(`/getChannelsFromID?classroomID=${classroomID}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        this.classroomChannels = data;
-                        // Check if there are channels available and if so, open the first channel
-                        if (this.classroomChannels.length > 0) {
-                            this.openChannelChat(this.classroomChannels[0]);
-                            this.currentActiveChannel = this.classroomChannels[0].channelName;
-                            this.currentActiveChannel_ID = this.classroomChannels[0].channelID;
-                            this.currentActiveChannel_desc = this.classroomChannels[0].channelDescription;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching classroom channels:', error);
                     });
 
                 // Fetch managers of the classroom
@@ -141,51 +154,17 @@
                     .catch(error => {
                         console.error('Error fetching junction info:', error);
                     });
+
+                    fetch(`/getPosts?classroomID=${this.classroomID}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.classroomPosts = data;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching classroom posts info:', error);
+                        });
             },
             methods: {
-                openChannelChat(channel) {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const classroomID = urlParams.get('classroomID');
-                    this.user_memberID = urlParams.get('memberID');
-                    this.openChannelChatActive = true;
-                    this.currentActiveChannel = channel.channelName;
-                    this.currentActiveChannel_ID = channel.channelID;
-                    this.currentActiveChannel_desc = channel.channelDescription;
-
-                    //open and display chat messages from the channel
-                    ///getChannelChatlog
-                    fetch(`/getChannelChatlog?channelID=${channel.channelID}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            this.currentChannelChatLog = data;
-                        })
-                        .catch(error => {
-                            console.error('Error fetching channel logs info:', error);
-                        });
-
-
-                    //get and store only user messages
-                    //get only user messages
-                    fetch(`/getChannelChatlog_userOnly?channelID=${channel.channelID}&memberID=${this.user_memberID}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            this.isUserMsg = data;
-                        })
-                        .catch(error => {
-                            console.error('Error fetching groupchat messages:', error);
-                        });
-                },
-                checkUserMsg(msg) {
-                    //return this.isUserMsg(msg).some(userMsg => userMsg.memberID === msg.memberID);
-                    //check is msg is within usermsgs is not, return false, if true return true
-                    for (var i = 0; i < this.isUserMsg.length; i++) {
-                        if (msg.memberID == this.isUserMsg[i].memberID) {
-                            return true;
-                        }
-                    }
-                    return false;
-                    //check if manager, return true
-                },
                 toggleDeleteMenu(value) {
                     this.getUserMessageID = value;
                     this.deletePopup = true;
@@ -209,54 +188,34 @@
                 toggleDeleteConfirmOff() {
                     this.deletePopup = false;
                 },
-                toggleDeleteConfirmOn: async function (value) {
-                    //get user's message id
-                    this.deletePopup = false;
-                    this.getUserMessageID = value;
-                    console.log(value);
-                    console.log(this.getUserMessageID);
-                    //connect to database
-                    try {
-                        // Make a POST request to your server
-                        const response = await fetch('/removeChannelMessage', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                messages_channel_ID: this.getUserMessageID,
-                            }),
-                        });
-                    } catch (error) {
-                        console.error('Error sending message:', error);
-                    }
-                    window.location.reload();
+                handleFileChange(event) {
+                    this.inputFile = event.target.files[0];
                 },
-                //    FINISH ENTER TEXT
-                enterText: async function () {
+                postPost: async function () {
                     const urlParams = new URLSearchParams(window.location.search);
                     const memberID = urlParams.get('memberID');
-                    const channelID = this.currentActiveChannel_ID;
 
-                    console.log('chat input log inputText' + this.inputText);
+                    
 
                     try {
                         // Make a POST request to your server
-                        const response = await fetch('/addChannelMessage', {
+                        const response = await fetch('/addPost', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                text: this.inputText,
                                 memberID: memberID,
-                                channelID: channelID
+                                classroomID: this.classroomID,
+                                postTitle: this.inputText_title,
+                                postContent: this.inputText_body,
+                                inputFile: this.inputFile,
                             }),
                         });
+                    //window.location.reload();
                     } catch (error) {
-                        console.error('Error sending message:', error);
+                        console.error('Error making post:', error);
                     }
-                    window.location.reload();
                 },
                 toggleMenu() {
                     this.openPopup = true;
@@ -291,165 +250,6 @@
                     this.RemoveMemberPopupIf = false;
                     this.deleteMember = '';
                 },
-                ConfirmRemoveClassroomMember: async function () {
-                    this.RemoveMemberPopupIf = false;
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const classroomID = urlParams.get('classroomID');
-                    //this.deleteMember;
-                    //database functionality
-                    //remove member from groupchat
-                    try {
-                        // Make a POST request to your server
-                        const response = await fetch('/removeClassroomMember', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                memberID: this.deleteMember,
-                                classroomID: classroomID
-                            }),
-                        });
-                    } catch (error) {
-                        console.error('Error sending message:', error);
-                    }
-                    //wait 3 seconds to kickUserConfirmToggle = false
-                    setTimeout(() => { this.kickUserConfirmToggle = false; window.location.reload(); }, 3000);
-                },
-                leaveClassroom: async function () {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const classroomID = urlParams.get('classroomID');
-                    this.user_memberID = urlParams.get('memberID');
-                    try {
-                        // Make a POST request to your server
-                        const response = await fetch('/removeClassroomMember', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                memberID: this.user_memberID,
-                                classroomID: classroomID
-                            }),
-                        });
-                        if (response.ok) {
-                            // Do something on success
-                            console.log('Form submitted successfully');
-                            //   window.location.href = '/success';
-                            window.location.href = `/success?username=${encodeURIComponent(this.user_memberID)}`;
-                        } else {
-                            // Handle errors
-                            console.error('Form submission failed');
-                        }
-                    } catch (error) {
-                        console.error('Error sending message:', error);
-                    }
-                },
-                ConfirmDeleteClass: async function() {
-                    //deleteClassroom
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const classroomID = urlParams.get('classroomID');
-                    try {
-                        // Make a POST request to your server
-                        const response = await fetch('/deleteClassroom', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                classroomID: classroomID
-                            }),
-                        });
-                        if (response.ok) {
-                            // Do something on success
-                            console.log('Form submitted successfully');
-                            //   window.location.href = '/success';
-                            window.location.href = `/success?username=${encodeURIComponent(this.user_memberID)}`;
-                        } else {
-                            // Handle errors
-                            console.error('Form submission failed');
-                        }
-                    } catch (error) {
-                        console.error('Error sending message:', error);
-                    }
-                },
-                addMemberPopupConfirm: async function() {
-                    //addMemberName
-                    //addClassroomMember
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const classroomID = urlParams.get('classroomID');
-                    //this.deleteMember;
-                    //database functionality
-                    //remove member from groupchat
-                    try {
-                        // Make a POST request to your server
-                        const response = await fetch('/addClassroomMember', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                memberID: this.addMemberName,
-                                classroomID: classroomID
-                            }),
-                        });
-                    } catch (error) {
-                        console.error('Error sending message:', error);
-                    }
-                    window.location.reload();
-                },
-                //addChannel
-                addChannelConfirm: async function() {
-                    //addChannelName: '',
-                    //addChannelDesc: '',
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const classroomID = urlParams.get('classroomID');
-                    console.log(this.addChannelName);
-                    console.log(this.addChannelDesc);
-
-                    //this.deleteMember;
-                    //database functionality
-                    //remove member from groupchat
-                    try {
-                        // Make a POST request to your server
-                        const response = await fetch('/addChannel', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                classroomID: classroomID,
-                                channelName: this.addChannelName,
-                                channelDesc: this.addChannelDesc
-                            }),
-                        });
-                    } catch (error) {
-                        console.error('Error sending message:', error);
-                    }
-                    window.location.reload();
-                },
-                ConfirmRemoveChannel: async function() {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const classroomID = urlParams.get('classroomID');
-                    this.DeleteChannelPopupIf = false;
-
-                    try {
-                        // Make a POST request to your server
-                        const response = await fetch('/deleteChannel', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                classroomID: classroomID,
-                                channelID: this.currentActiveChannel_ID
-                            }),
-                        });
-                    } catch (error) {
-                        console.error('Error sending message:', error);
-                    }
-                    window.location.reload();
-                }
             }
         });
     </script>
@@ -482,7 +282,7 @@
                     window.location.href = `/html/discussion.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
                 },
                 navigateToWhiteboard() {
-                    window.location.href = `/html/whiteboardClassroom.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
+                    window.location.href = `/html/whiteboardClass.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
                 }
             }
         });

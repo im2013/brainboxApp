@@ -266,6 +266,12 @@ button {
     border-style: hidden;
 }
 
+#deleteButton {
+    background-color: #be0000;
+    margin-right: 5px;
+    border-style: hidden;
+}
+
 ::-webkit-scrollbar {
     width: 10px;
     background-color: #0093a7;

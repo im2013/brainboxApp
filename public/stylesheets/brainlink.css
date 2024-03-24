@@ -260,6 +260,21 @@ body {
     overflow-x: hidden;
 }
 
+button {
+    background-color: #00a5be;
+    margin-right: 5px;
+    border-style: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: #0093a7;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #00464f;
+  }
+  
+
 #groupChatMembers_Section ul {
     padding: 0;
     margin: 0;
@@ -318,8 +333,9 @@ body {
     overflow: hidden;
 }
 
+/* this is what we need to edit for the scrollbar */
 #groupchatText { 
-    overflow: auto;
+    overflow-y: scroll;
     height: 71%;
     width: 65vw;
     border-style: solid;

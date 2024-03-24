@@ -10,7 +10,7 @@
     <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
 </head>
 
-<body style="margin: 0;">
+<body onload="scrollFunction()" style="margin: 0;">
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
     <div id="container" style="margin: 0; padding: 0;">
@@ -186,6 +186,8 @@
                         const groupchatID = urlParams.get('groupchatID');
                         const memberID = urlParams.get('memberID');
 
+                        const reloadSection = document.querySelector("#groupchatText").innerHTML;
+
                         fetch(`/getGroupchatFromID?groupchatID=${groupchatID}`)
                             .then(response => response.json())
                             .then(data => {
@@ -196,24 +198,52 @@
                                 console.error('Error fetching groupchat info:', error);
                             });
 
-                        fetch(`/getGroupchatChatlog?groupchatID=${groupchatID}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                this.chatMessages = data;
-                            })
-                            .catch(error => {
-                                console.error('Error fetching groupchat messages:', error);
-                            });
+                        const retrieveMessage = async () => {
+                            try {
+                                fetch(`/getGroupchatChatlog?groupchatID=${groupchatID}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    this.chatMessages = data;
+                                    var element = this.$el.querySelector("#groupchatText");
+                                    element.scrollTop = element.scrollHeight;
+                                    //console.log("reloading!");
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching groupchat messages:', error);
+                                });
+                            } catch (error) {
+                                console.error ('Cannot get groupchat messages', error);
+                            }
+                        } 
 
+                        retrieveMessage();
+                        setInterval(retrieveMessage, 1000);
+                        
+                        
+                        // fetch(`/getGroupchatChatlog?groupchatID=${groupchatID}`)
+                        //     .then(response => response.json())
+                        //     .then(data => {
+                        //         this.chatMessages = data;
+                        //         var element = this.$el.querySelector("#groupchatText");
+                        //         element.scrollTop = element.scrollHeight;
+                        //         console.log("reloading!");
+                        //     })
+                        //     .catch(error => {
+                        //         console.error('Error fetching groupchat messages:', error);
+                        //     });
+                            //setInterval(reloadSection, 1000);
 
                         fetch(`/getGroupchatChatlog_userOnly?groupchatID=${groupchatID}&memberID=${memberID}`)
                             .then(response => response.json())
                             .then(data => {
                                 this.isUserMsg = data;
+                                var element = this.$el.querySelector("#groupchatText");
+                                element.scrollTop = element.scrollHeight;
                             })
                             .catch(error => {
                                 console.error('Error fetching groupchat messages:', error);
                             });
+                        
 
                         // setTimeout(() => {
 
@@ -221,6 +251,8 @@
                         //     .then(response => response.json())
                         //     .then(data => {
                         //         this.chatMessages = data;
+                        //         var element = this.$el.querySelector("#groupchatText");
+                        //         element.scrollTop = element.scrollHeight;
                         //     })
                         //     .catch(error => {
                         //         console.error('Error fetching groupchat messages:', error);
@@ -231,17 +263,17 @@
                         //     .then(response => response.json())
                         //     .then(data => {
                         //         this.isUserMsg = data;
+                        //         var element = this.$el.querySelector("#groupchatText");
+                        //         element.scrollTop = element.scrollHeight;
                         //     })
                         //     .catch(error => {
                         //         console.error('Error fetching groupchat messages:', error);
                         //     });
 
-                        //     //window.location.reload();
+                        //     window.location.reload();
 
-                        // }, 3000);
+                        // }, 1000000);
 
-                        var element = document.getElementById('groupchatText');
-                        element.scrollTop = element.scrollHeight - element.clientHeight;
 
                         //if user print <delete> if not print the report button
                         //for each message;
@@ -539,7 +571,14 @@
                 });
 
             </script>
-
+<script>
+    //onload="scrollFunction()"
+    var element = document.getElementById("groupchatText");
+    
+    function scrollFunction() { 
+        element.scrollTop = element.scrollHeight;
+    }
+</script>
 </body>
 
 </html>

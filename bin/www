@@ -766,30 +766,25 @@ app.get('/email', (req, res) =>
 app.post('/addPost', async (req, res) => {
   try {
       const { memberID, classroomID, postTitle, postContent, inputFile } = req.body;
-
-      console.log(classroomID);
-      console.log(inputFile);
-      
-      // let inputFileData = null;
       
       const connection = mysql.createConnection(config);
 
-        if(inputFile != null) {
-          // inputFileData = inputFile.data.toString('base64');
-
+        if(inputFile) {
             const [discussionPostFile] = await connection
           .promise()
           .query('INSERT INTO post (post.classroomID, post.memberID, post.postTitle, post.postContent, post.postFile) VALUES (?, ?, ?, ?, ?)', [classroomID, memberID, postTitle, postContent, inputFile]);
           connection.end();
           res.json(discussionPostFile);
-        } else 
-          {
+        } 
+        else if (!inputFile)
+        {
             const [discussionPostInfo] = await connection
           .promise()
           .query('INSERT INTO post (post.classroomID, post.memberID, post.postTitle, post.postContent) VALUES (?, ?, ?, ?)', [classroomID, memberID, postTitle, postContent]);
           connection.end();
           res.json(discussionPostInfo);
         }
+        connection.end();
   } 
   catch (error) {
       console.error('Error adding post to classroom discussion board:', error);

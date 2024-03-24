@@ -10,7 +10,7 @@
     <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
 </head>
 
-<body onload="scrollFunction()" style="margin: 0;">
+<body style="margin: 0;">
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
     <div id="container" style="margin: 0; padding: 0;">
@@ -180,6 +180,7 @@
                         ifUser_buttonDeleteText: '<button id="deleteButton">Delete</button>',
                         ifNOTUser_buttonReportText: '<button @click="toggleMenu">Report</button>',
                         getUserMessageID: '',
+                        scroll: 0,
                     },
                     mounted() {
                         const urlParams = new URLSearchParams(window.location.search);
@@ -204,9 +205,11 @@
                                 .then(response => response.json())
                                 .then(data => {
                                     this.chatMessages = data;
+
                                     var element = this.$el.querySelector("#groupchatText");
-                                    element.scrollTop = element.scrollHeight;
-                                    //console.log("reloading!");
+                                    if (this.scroll < 2) { element.scrollTop = element.scrollHeight; this.scroll += 1;}
+                                    
+                                    // console.log(this.scroll);
                                 })
                                 .catch(error => {
                                     console.error('Error fetching groupchat messages:', error);
@@ -237,49 +240,10 @@
                             .then(response => response.json())
                             .then(data => {
                                 this.isUserMsg = data;
-                                var element = this.$el.querySelector("#groupchatText");
-                                element.scrollTop = element.scrollHeight;
                             })
                             .catch(error => {
                                 console.error('Error fetching groupchat messages:', error);
                             });
-                        
-
-                        // setTimeout(() => {
-
-                        //     fetch(`/getGroupchatChatlog?groupchatID=${groupchatID}`)
-                        //     .then(response => response.json())
-                        //     .then(data => {
-                        //         this.chatMessages = data;
-                        //         var element = this.$el.querySelector("#groupchatText");
-                        //         element.scrollTop = element.scrollHeight;
-                        //     })
-                        //     .catch(error => {
-                        //         console.error('Error fetching groupchat messages:', error);
-                        //     });
-
-
-                        //     fetch(`/getGroupchatChatlog_userOnly?groupchatID=${groupchatID}&memberID=${memberID}`)
-                        //     .then(response => response.json())
-                        //     .then(data => {
-                        //         this.isUserMsg = data;
-                        //         var element = this.$el.querySelector("#groupchatText");
-                        //         element.scrollTop = element.scrollHeight;
-                        //     })
-                        //     .catch(error => {
-                        //         console.error('Error fetching groupchat messages:', error);
-                        //     });
-
-                        //     window.location.reload();
-
-                        // }, 1000000);
-
-
-                        //if user print <delete> if not print the report button
-                        //for each message;
-                        //check if its in userMsgs
-                        //if it is; print <delete>
-                        //if not; print <report>
                     },
                     methods: {
                         toggleMenu() {
@@ -358,10 +322,10 @@
                             //return this.isUserMsg(msg).some(userMsg => userMsg.memberID === msg.memberID);
                             //check is msg is within usermsgs is not, return false, if true return true
                             for (var i = 0; i < this.isUserMsg.length; i++) {
-                                console.log("going thru loop!");
+                                // console.log("going thru loop!");
                                 if (msg.memberID == this.isUserMsg[i].memberID) {
                                     return true;
-                                    console.log("match found!");
+                                    // console.log("match found!");
                                 }
                             }
                             return false;
@@ -571,14 +535,6 @@
                 });
 
             </script>
-<script>
-    //onload="scrollFunction()"
-    var element = document.getElementById("groupchatText");
-    
-    function scrollFunction() { 
-        element.scrollTop = element.scrollHeight;
-    }
-</script>
 </body>
 
 </html>

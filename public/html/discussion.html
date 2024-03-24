@@ -28,180 +28,24 @@
                     @click="redirecttosettings">
             </ul>
         </div>
-        <div id="code">
-            <div v-if="isMan" id="channelBarTeacher">
-                <div id="classroomHeading" v-for="classroom in classroomInfo" :key="classroom.classroomID">
-                    <h1>{{ classroom.classroomName }}</h1>
-                    <p>{{ classroom.classroomDescription }} <button class="delete-button"
-                            @click="showDeleteClassroomPopup">
-                            <i class="fa-solid fa-trash"></i>
-                        </button></p>
-                </div>
-                <div v-if="showChannels" id="channelList">
-                    <div v-for="channel in classroomChannels" :key="channel.channelID" id="channelSegment"
-                        @click="openChannelChat(channel)">
-                        <h1>{{ channel.channelName }}</h1>
-                    </div>
-                </div>
 
-                <div id="editBtns">
-                    <button @click="AddChannelPopup"><i class="fa-solid fa-plus"></i></button>
-                    <button @click="DeleteChannelPopup"><i class="fa-solid fa-trash"></i></button>
-                    <button @click="leaveClassroom"><i class="fa-solid fa-person-walking-arrow-right"></i></button>
-                </div>                
-            </div>
-            <div v-else id="channelBarStudent">
-                <div id="classroomHeading" v-for="classroom in classroomInfo" :key="classroom.classroomID">
-                    <h1>{{ classroom.classroomName }}</h1>
-                    <p>{{ classroom.classroomDescription }}</p>
-                </div>
-                <div id="channelList">
-                    <div v-for="channel in classroomChannels" :key="channel.channelID" id="channelSegment"
-                        @click="openChannelChat(channel)">
-                        <h1>{{ channel.channelName }}</h1>
-                    </div>
-                </div>
+        help
 
-                <div id="editBtns">
-                    <button @click="leaveClassroom"><i class="fa-solid fa-person-walking-arrow-right"></i></button>
-                </div>
-            </div>
-
-            <div id="mainContent">
-
-                <div id="channelHeader" div v-if="openChannelChatActive">
-                    <h1>{{currentActiveChannel}}</h1>
-                    <p>{{ currentActiveChannel_desc }}</p>
-                </div>
-
-                <div id="chatBox">
-                    <div id="messageBox">
-                        <div id="message" v-for="channelMsg in currentChannelChatLog"
-                            :key="channelMsg.message_channel_ID">
-                            MemberID: {{channelMsg.memberID}} | {{channelMsg.message_channel_content}} | {{
-                            channelMsg.message_channel_ID }}
-                            <div v-if="checkUserMsg(channelMsg)" v-html="ifUser_buttonDeleteText"
-                                @click="toggleDeleteConfirmOn(channelMsg.message_channel_ID)"></div>
-                            <div v-else v-html="ifNOTUser_buttonReportText" @click="toggleMenu"></div>
-                        </div>
-                    </div>
-                    <div id="composeBox">
-                        <!-- box for writing messages to send-->
-                        <input type="text" id="typeyBox" name="myTextField" placeholder="Enter msg here" maxlength="200"
-                            v-model="inputText" @keyup.enter="enterText">
-                    </div>
-                </div>
-
-                <div id="membersBar">
-                    <div id="teacherList">
-                        <h1>Teachers:</h1>
-                        <div v-for="teacher in junctionManagersData" :key="teacher.memberID">
-                            <p>{{teacher.name}}</p>
-                        </div>
-                    </div>
-
-                    <div id="otherMemberList">
-                        <h1>Members:</h1>
-                        <div v-for="member in classroomMembers" :key="member.memberID" v-if="member.isManager === 0">
-                            <!-- v-if="member.isManager[0] === 0"-->
-                            <p>{{ member.name }} <button id="kickMember" v-if="isMan" @click="RemoveMemberPopup(member.memberID)">
-                                <i class="fa-solid fa-user-xmark"></i>
-                            </button></p>                    
-                        </div>                        
-                    </div>
-                    <div id="addMemDiv">
-                    <button id="addMemBtn" v-if="isMan" @click="AddMemberPopup">
-                        <i class="fa-solid fa-user-plus"></i>
-                    </button>
-                </div>
-                </div>
-            </div>
-
-            <div class="popupMenu" v-if="showChannelCreator" style="display: block; background-color: gray;">
-                <input type="text" v-model="addChannelName" placeholder="Enter new channel name...">
-                <input type="text" v-model="addChannelDesc" placeholder="Enter new channel description...">
-                <button @click="addChannelConfirm">Add New Channel</button>
-                <button @click="CancelChannelPopup">Cancel</button>
-            </div>
-
-            <div class="popupMenu" v-if="DeleteChannelPopupIf" style="display: block; background-color: gray;">
-                Are you sure you want to delete {channel name} ?
-                <button @click="ConfirmRemoveChannel">Confirm</button>
-                <button @click="CancelChannelDeletePopup">Cancel</button>
-            </div>
-
-            <div class="popupMenu" v-if="AddMemberPopupIf">
-                Add a new member to the classroom
-                <input type="text" v-model="addMemberName" placeholder="Enter new member ID...">
-                <button @click="addMemberPopupConfirm">Confirm</button>
-                <button @click="CancelAddMemberPopup">Cancel</button>
-            </div>
-
-            <div class="popupMenu" v-if="RemoveMemberPopupIf">
-                Remove member from the classroom?
-                <button @click="ConfirmRemoveClassroomMember">Confirm</button>
-                <button @click="Cancel_RemoveMemberPopup">Cancel</button>
-            </div>
-
-            <!--deleteClassPopup-->
-            <div class="popupMenu" v-if="deleteClassPopup">
-                Delete classroom?
-                <button @click="ConfirmDeleteClass">Confirm</button>
-                <button @click="Cancel_DeleteClassPopup">Cancel</button>
-            </div>
-
-            <div class="popupMenu" v-if="openPopup">
-                    <!-- Menu content goes here -->
-                    <ul>
-                        Reporting this message
-                        <br>
-                        Message content:
-                        <br>
-                        [box with words of the message]
-                        <br>
-                        <div id="dpDMenu">
-                            <button id="dropbtn">Type of Offense</button>
-                            <div id="dpDMenuCon">
-                                Abuse or Harassment<input type="checkbox" id="myCheckbox" name="myCheckbox"
-                                    value="checkboxValue">
-                                <br>
-                                Inappropriate Content<input type="checkbox" id="myCheckbox" name="myCheckbox"
-                                    value="checkboxValue">
-                                <br>
-                                Threatening Behaviour<input type="checkbox" id="myCheckbox" name="myCheckbox"
-                                    value="checkboxValue">
-                                <br>
-                                Spam<input type="checkbox" id="myCheckbox" name="myCheckbox" value="checkboxValue">
-                                <br>
-                                Exposing private identifying information<input type="checkbox" id="myCheckbox"
-                                    name="myCheckbox" value="checkboxValue">
-                                <br>
-                                Harmful Misinformation<input type="checkbox" id="myCheckbox" name="myCheckbox"
-                                    value="checkboxValue">
-                            </div>
-                        </div>
-                        <br>
-                        <div id="buttonContainer">
-                            <button id="reportButton" @click="toggleReportConfirm">Report</button>
-                            <button id="cancelButton" @click="cancelPopup">Cancel</button>
-                        </div>
-                    </ul>
-            </div>
-
-            <div id="reportPopup2" style="margin-bottom: 0; padding-bottom: 0;">
-                <div v-if="openPopup2" id="menu">
-                    <p>Message Successfully Reported</p>
-                    <button @click="toggleReportConfirmOff">Close</button>
-                </div>
+        <div id="code_discussion">
+            <div v-for="classroom in classroomInfo" :key="classroom.classroomID">
+                <h1>{{ classroom.classroomName }}</h1>
+                <p>{{ classroom.classroomDescription }}
             </div>
         </div>
+
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
     <script>
         new Vue({
-            el: '#code',
+            el: '#code_discussion',
             data: {
                 classroomInfo: [],
                 user_memberID: '',
@@ -610,39 +454,39 @@
         });
     </script>
 
-<script>
-    new Vue({
-        el: '#navBar',
-        data: {
-            userMemberID: '',
-            memberID: '',
-            classroomID: ''
-        },
-        mounted() {
-            const urlParams = new URLSearchParams(window.location.search);
-            this.memberID = urlParams.get('memberID');
-            this.classroomID = urlParams.get('classroomID');
-        },
-        methods:
-        {
-            redirecttohomepage() {
-                window.location.href = `/success?username=${encodeURIComponent(this.memberID)}`;
+    <script>
+        new Vue({
+            el: '#navBar',
+            data: {
+                userMemberID: '',
+                memberID: '',
+                classroomID: ''
             },
-            redirecttosettings() {
-                window.location.href = `/html/settings.html?username=${encodeURIComponent(this.memberID)}`;
+            mounted() {
+                const urlParams = new URLSearchParams(window.location.search);
+                this.memberID = urlParams.get('memberID');
+                this.classroomID = urlParams.get('classroomID');
             },
-            navigateToChannels() {
-                window.location.href = `/html/classroom.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
-            },
-            navigateToDiscussion() {
-                window.location.href = `/html/discussion.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
-            },
-            navigateToWhiteboard() {
-                window.location.href = `/html/whiteboardClassroom.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
+            methods:
+            {
+                redirecttohomepage() {
+                    window.location.href = `/success?username=${encodeURIComponent(this.memberID)}`;
+                },
+                redirecttosettings() {
+                    window.location.href = `/html/settings.html?username=${encodeURIComponent(this.memberID)}`;
+                },
+                navigateToChannels() {
+                    window.location.href = `/html/classroom.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
+                },
+                navigateToDiscussion() {
+                    window.location.href = `/html/discussion.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
+                },
+                navigateToWhiteboard() {
+                    window.location.href = `/html/whiteboardClassroom.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
+                }
             }
-        }
-    });
-</script>
+        });
+    </script>
 </body>
 
 </html>

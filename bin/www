@@ -759,6 +759,117 @@ app.get('/email', (req, res) =>
   res.json({username});
 });
 
+// *POSTING IN CLASSROOM DISCUSSION BOARD* //
+
+//adding posts to a discussion board
+app.post('/addPost', async (req, res) => {
+  try {
+      const { memberID, classroomID, postTitle, postContent } = req.body;
+      const connection = mysql.createConnection(config);
+      
+      const [discussionPostInfo] = await connection
+          .promise()
+          .query('INSERT INTO post (post.classroomlD, post.memberID, post.postTitle, post.postContent) VALUES (?, ?, ?, ?)', [classroomID, memberID, postTitle, postContent]);
+      
+      connection.end();
+      res.json(discussionPostInfo);
+  } 
+  catch (error) {
+      console.error('Error adding post to classroom discussion board:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//remove post from discussion board
+app.post('/removePost', async (req, res) => {
+  try {
+      const { postID } = req.body;
+      const connection = mysql.createConnection(config);
+      
+      const [discussionPostInfo] = await connection
+          .promise()
+          .query('DELETE FROM post WHERE post.postID = ?)', [postID]);
+      
+      connection.end();
+      res.json(discussionPostInfo);
+  } 
+  catch (error) {
+      console.error('Error removing post from classroom discussion board:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//update post title+contents
+app.post('/updatePostTitleContents', async (req, res) => {
+  try {
+      const { postID, postTitle, postContent } = req.body;
+      const connection = mysql.createConnection(config);
+      
+      const [discussionPostInfo] = await connection
+          .promise()
+          .query('UPDATE post SET post.postTitle = ?, post.postContent = ? WHERE post.postID = ?', [postTitle, postContent, postID]);
+      
+      connection.end();
+      res.json(discussionPostInfo);
+  } 
+  catch (error) {
+      console.error('Error adding post to classroom discussion board:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//get all posts by classroomID
+app.get('/getPosts', async (req, res) => {
+  try {
+      
+      const connection = mysql.createConnection(config);
+      const classroomID = req.query.classroomID;
+
+      const [channels] = await connection
+          .promise()
+          .query('SELECT * FROM post, classroom WHERE post.classroomID = classroom.classroomID AND classroom.classroomID = ?', [classroomID]);
+      connection.end();
+      res.json(channels);
+  } 
+  catch (error) {
+      console.error('Error fetching classroom discussion board posts:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//only get posts made by user, memberID, classroomID
+app.get('/getPostsBYMEMBER', async (req, res) => {
+  try {
+      
+      const connection = mysql.createConnection(config);
+      const classroomID = req.query.classroomID;
+      const memberID = req.query.memberID;
+
+      const [channels] = await connection
+          .promise()
+          .query('SELECT * FROM post, classroom WHERE post.classroomID = classroom.classroomID AND classroom.classroomID = ? AND post.memberID = ?', [classroomID, memberID]);
+      connection.end();
+      res.json(channels);
+  } 
+  catch (error) {
+      console.error('Error fetching classroom discussion board posts:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+
+//upload post file (memberID, postID)
+
+//remove post file (memberID, postID)
+
+//get post file by postID
+
+//get post file by post_file_ID
+
+//get ALL post file by memberID (for brainframe)
+
+//get post table details by post_file_ID (for brainframe; see where file posted and when)
+
 
 app.use(function (next) 
 {

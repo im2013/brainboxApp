@@ -34,7 +34,7 @@
             <div id="groupchatText">
                 <div v-for="msg in chatMessages" :key="chatMessages.messages_groupchat_ID">
                     <div id="message-container">
-                        <p> user: {{msg.memberID}} text: {{msg.messages_groupchat_content }}</p>
+                        <p> user ID: {{msg.memberID}} | {{msg.messages_groupchat_content }}</p>
                         <div v-if="checkUserMsg(msg)" v-html="ifUser_buttonDeleteText"
                             @click="toggleDeleteMenu(msg.messages_groupchat_ID)"></div>
                         <div v-else v-html="ifNOTUser_buttonReportText" @click="toggleMenu"></div>

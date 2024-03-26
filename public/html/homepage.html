@@ -82,8 +82,9 @@
         <area id="settings" shape="poly" coords="374,395,557,588,373,786,189,589" @click="redirecttosettings">
         <area id="groups" shape="poly" coords="374,395,189,199,374,0,559,198" @click="redirecttogroups">
         <area id="brainlink" shape="poly" coords="374,395,559,202,743,393,560,590" @click="redirecttobrainlink">
-        <area id="brainframe" shape="poly" coords="374,395,188,200,0,394,186,585" href="\html\brainframe.html">
+        <area id="brainframe" shape="poly" coords="374,395,188,200,0,394,186,585" @click="redirectobrainframe">
     </map>
+
     
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
@@ -119,8 +120,20 @@
                         });
                 },
                 redirecttobrainlink() {
-                    const urlParams = new URLSearchParams(window.location.search);
                     window.location.href = `/html/brainlink.html?username=${encodeURIComponent(this.userMemberID)}`;
+                },
+                redirectobrainframe() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const userEmail = urlParams.get('username');
+                    fetch(`/retrieveUserinfo?email=${userEmail}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.userData = data;
+                            window.location.href = `/html/brainframe.html?memberID=${encodeURIComponent(this.userData[0].memberID)}`;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching user member id:', error);
+                        });
                 }
             }
         });

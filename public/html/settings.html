@@ -17,14 +17,14 @@
             <!-- Navigation bar content -->
             <ul>
                 <img src="\images\brainy_icon.png" alt="brainy" height="auto" id="redirectButton"
-                @click="redirecttohomepage">
+                    @click="redirecttohomepage">
                 <p>BrainBox</p>
                 <li><a style="background-color: #423076;" onmouseover="this.style.backgroundColor='#5a4791'"
-                        onmouseout="this.style.backgroundColor='#423076'" href="#our product">Home</a></li>
+                        onmouseout="this.style.backgroundColor='#423076'" href="#our product"> </a></li>
                 <li><a a style="background-color: #423076;" onmouseover="this.style.backgroundColor='#5a4791'"
-                        onmouseout="this.style.backgroundColor='#423076'" href="#features">Settings</a></li>
+                        onmouseout="this.style.backgroundColor='#423076'" href="#features"> </a></li>
                 <li><a style="background-color: #423076;" onmouseover="this.style.backgroundColor='#5a4791'"
-                        onmouseout="this.style.backgroundColor='#423076'" href="aboutus.html">Help</a></li>
+                        onmouseout="this.style.backgroundColor='#423076'" href="aboutus.html"> </a></li>
             </ul>
         </div>
 
@@ -39,74 +39,58 @@
             <div id="settingsList">
                 <!-- Settings list content -->
                 <ul>
-                    <button @click="showGeneralSettings">General Settings</button>
                     <button @click="showAccountSettings">Account Settings</button>
                     <button @click="showPrivacySettings">Privacy Settings</button>
-                    <button @click="showNotificationSettings">Notification Settings</button>
                 </ul>
             </div>
             <!-- Content sections go here -->
-            <div id="SettingsContent" v-if="displayGeneralSettings">
-                <div id="text">
-                    <h2>General Settings</h2>
 
-                    <div id="SettingOptions">
-                        <h3>Theme</h3>
-                        <p>Theme [dark / light]</p>
+            <div id="SettingsContent" v-if="displayAccountSettings">
+                <h2>Account Settings</h2>
+                <div id="SettingOptions">
+                    <h3>Account Information</h3>
+                    <p>Reset Password</p> <input type="text" v-model="newPassword" placeholder="Enter new password...">
+                    <button @click="enterNewPassword">Confirm Change Password</button>
 
-                        <h3>Accessibility</h3>
-                        <p>Language [drop down for several languages]</p>
-                        <p>Font-size [small, medium, large]</p>
+                    <h4>Contact Details</h4>
+                    <p>Change forename</p> <input type="text" v-model="newForename" placeholder="Enter new forename...">
+                    <button @click="enterNewForename">Confirm Change Forename</button>
+                    <p>Change surname name</p> <input type="text" v-model="newSurname"
+                        placeholder="Enter new surname...">
+                    <button @click="enterNewSurname">Confirm Change Surname</button>
+                    <p>Change phone Number</p> <input type="text" v-model="newPhoneNum"
+                        placeholder="Enter new phonenumber..."> <!--editEmailConfirm-->
+                    <button @click="enterNewPhoneNum">Confirm Change Phonenumber</button>
+                    <p>Change email</p> <input type="text" v-model="newEmail" placeholder="Enter new email...">
+                    <button @click="editEmailConfirm">Confirm Change Email</button>
+                    <p>Change pronouns </p> <input type="text" v-model="newPronouns"
+                        placeholder="Enter new pronouns...">
+                    <p>Change gender</p>
+                    <div id="dpDMenu">
+                        <select v-model="gender">
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Non-Binary</option>
+                            <option>Prefer Not To Say</option>
+                        </select>
                     </div>
+
+                    <p><button @click="">Confirm Changes</button></p>
+
+                    <h3>Account</h3>
+                    <button @click="deleteAccount">Delete Account</button>
                 </div>
+            </div>
 
-                <div id="SettingsContent" v-if="displayAccountSettings">
-                    <h2>Account Settings</h2>
-                    <div id="SettingOptions">
-                        <h3>Account Information</h3>
-                        <p>Change email [field for new email]</p>
-                        <p>Reset Password [field to send reset password]</p>
-
-                        <h4>Contact Details</h4>
-                        <p>Change forename</p> <input type="text" v-model="newForename"
-                            placeholder="Enter new forename...">
-                        <p>Change surname name</p> <input type="text" v-model="newSurname"
-                            placeholder="Enter new surname...">
-                        <p>Change phone Number</p> <input type="text" v-model="newPhoneNum"
-                            placeholder="Enter new phonenumber..."> <!--editEmailConfirm-->
-                        <p>Change email</p> <input type="text" v-model="newEmail" placeholder="Enter new email...">
-                        <button @click="editEmailConfirm">Confirm Change Email</button>
-                        <p>Change pronouns </p> <input type="text" v-model="newPronouns"
-                            placeholder="Enter new pronouns...">
-                        <p>Change gender</p>
-                        <div id="dpDMenu">
-                            <select v-model="gender">
-                                <option>Male</option>
-                                <option>Female</option>
-                                <option>Non-Binary</option>
-                                <option>Prefer Not To Say</option>
-                            </select>
-                        </div>
-
-                        <h3>Account</h3>
-                        <button @click="deleteAccount">Delete Account</button>
-                    </div>
-                </div>
-
-                <div id="SettingsContent" v-if="displayPrivacySettings">
-                    <h2>Privacy Settings</h2>
-                    <div id="SettingOptions">
-                        <h3>Cookies</h3>
-                        <p>Cookies toggle [on/off]</p>
-                    </div>
-                </div>
-
-                <div id="SettingsContent" v-if="displayNotifSettings">
-                    <h2>Notification Settings</h2>
-                    <div id="SettingOptions">
-                        <h3>Notifications</h3>
-                        <p>[toggle notifications on or off]</p>
-                    </div>
+            <div id="SettingsContent" v-if="displayPrivacySettings">
+                <h2>Privacy Settings</h2>
+                <div id="SettingOptions">
+                    <h3>Cookies</h3>
+                    <p>Cookies toggle</p>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -116,49 +100,93 @@
         new Vue({
             el: '#content',
             data: {
-                displayGeneralSettings: true,
-                displayAccountSettings: false,
+                displayAccountSettings: true,
                 displayPrivacySettings: false,
-                displayNotifSettings: false,
                 newForename: '',
                 newSurname: '',
                 newPhoneNum: '',
                 newPronouns: '',
                 newGender: '',
                 gender: '',
-                newEmail: ''
+                newEmail: '',
+                newPassword: ''
             },
             methods: {
-                showGeneralSettings() {
-                    this.displayGeneralSettings = true;
-                    this.displayAccountSettings = false;
-                    this.displayPrivacySettings = false;
-                    this.displayNotifSettings = false;
-                },
                 showAccountSettings() {
-                    this.displayGeneralSettings = false;
                     this.displayAccountSettings = true;
                     this.displayPrivacySettings = false;
-                    this.displayNotifSettings = false;
                 },
                 showPrivacySettings() {
-                    this.displayGeneralSettings = false;
                     this.displayAccountSettings = false;
                     this.displayPrivacySettings = true;
-                    this.displayNotifSettings = false;
                 },
-                showNotificationSettings() {
-                    this.displayGeneralSettings = false;
-                    this.displayAccountSettings = false;
-                    this.displayPrivacySettings = false;
-                    this.displayNotifSettings = true;
-                },
-                enterNewEmail() {
-                    //new email
+                enterNewPassword: async function() {
+                    //new password
+                    //newPassword
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const userID = urlParams.get('userID');
+                    try {
+                        const response = await fetch('/changePassword', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                memberID: userID,
+                                newPassword: this.newPassword
+                            }),
+                        });
+
+                        window.location.href = '/html/login.html';
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
 
                 },
-                enterNewPassword() {
+                enterNewSurname: async function() {
                     //new password
+                    //newPassword
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const userID = urlParams.get('userID');
+                    try {
+                        const response = await fetch('/changeSurname', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                memberID: userID,
+                                newSurname: this.newSurname
+                            }),
+                        });
+
+                        window.location.href = '/html/login.html';
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+
+                },
+                enterNewForename: async function() {
+                    //new password
+                    //newPassword
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const userID = urlParams.get('userID');
+                    try {
+                        const response = await fetch('/changeForename', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                memberID: userID,
+                                newForename: this.newForename
+                            }),
+                        });
+
+                        window.location.href = '/html/login.html';
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
 
                 },
                 deleteAccount: async function () {
@@ -187,7 +215,7 @@
                 editEmailConfirm: async function () {
                     //delete account
                     const urlParams = new URLSearchParams(window.location.search);
-                    const userID = urlParams.get('username');
+                    const userID = urlParams.get('userID');
 
                     //deleteUser
                     //connect to database
@@ -223,6 +251,9 @@
                             console.error('Error logging out:', error);
                         });
                 },
+                enterNewPhoneNum() {
+                    
+                }
             }
         });
     </script>

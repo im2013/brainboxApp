@@ -542,7 +542,6 @@ app.post('/addGroupchatMember', async (req, res) => {
   try {
       const { memberID, groupchatID } = req.body;
       const connection = mysql.createConnection(config);
-      //console.log("member deleted id:" + memberID);
 
       const [checkUseGroupchatExistence] = await connection
           .promise()
@@ -563,28 +562,6 @@ app.post('/addGroupchatMember', async (req, res) => {
   } 
   catch (error) {
       console.error('Error adding member to groupchat:', error);
-      res.status(500).send('Internal Server Error');
-  }
-});
-
-//change the user's email
-app.post('/changeEmail', async (req, res) => 
-{
-  try 
-  {
-    const { memberID, newEmail } = req.body;
-    const connection = mysql.createConnection(config);
-  
-    const [checkUseGroupchatExistence] = await connection
-        .promise()
-        .query('UPDATE members SET email = ? WHERE memberID = ?;', [newEmail,memberID,])
-
-    connection.end();
-    res.json(checkUseGroupchatExistence);
-  } 
-  catch (error) 
-  {
-      console.error('Error changing user`s email:', error);
       res.status(500).send('Internal Server Error');
   }
 });
@@ -760,6 +737,31 @@ app.get('/email', (req, res) =>
   res.json({username});
 });
 
+app.post('/createClassroom', async (req, res) => {
+  try {
+    //make member a manager
+    const { memberID, classroomName, classroomDescription } = req.body;
+      const connection = mysql.createConnection(config);
+
+      const [addClassroom] = await connection
+          .promise().query('INSERT INTO classroom (classroom.classroomName, classroom.classroomDescription) VALUES (?, ?);', [classroomName, classroomDescription])
+      
+          const [getgcid] = await connection.promise().query(
+            'SELECT LAST_INSERT_ID() AS classroomID'
+          )
+
+      //add user to classroom + as a manager
+      const addusertoGC = await connection
+      .promise().query('INSERT INTO junction_classroommembers (junction_classroommembers.fk_classroomID, junction_classroommembers.fk_memberID, junction_classroommembers.isManager) VALUES (?, ?, ?)', [getgcid[0].classroomID, memberID, '1'])
+
+      res.json(getgcid[0].groupchatID);
+  } 
+  catch (error) {
+      console.error('Error creating a groupchat:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
 // *POSTING IN CLASSROOM DISCUSSION BOARD* //
 
 //adding posts to a discussion board
@@ -800,7 +802,7 @@ app.post('/removePost', async (req, res) => {
       
       const [discussionPostInfo] = await connection
           .promise()
-          .query('DELETE FROM post WHERE post.postID = ?)', [postID]);
+          .query('DELETE FROM post WHERE post.postID = ?', [postID]);
       
       connection.end();
       res.json(discussionPostInfo);
@@ -840,7 +842,7 @@ app.get('/getPosts', async (req, res) => {
 
       const [channels] = await connection
           .promise()
-          .query('SELECT post.postID, post.postTitle, post.postContent, post.postFile FROM post JOIN classroom ON post.classroomID = classroom.classroomID WHERE classroom.classroomID = ? GROUP BY post.postID;', [classroomID]);
+          .query('SELECT post.postID, post.postTitle, post.postContent, post.postFile, post.memberID FROM post JOIN classroom ON post.classroomID = classroom.classroomID WHERE classroom.classroomID = ? GROUP BY post.postID;', [classroomID]);
       connection.end();
 
       //console.log("Fetched channels:", channels);
@@ -872,11 +874,6 @@ app.get('/getPostsBYMEMBER', async (req, res) => {
   }
 });
 
-
-//upload post file (memberID, postID)
-
-//remove post file (memberID, postID)
-
 //get post file by postID
 app.get('/getPostFile', async (req, res) => {
   try {
@@ -895,12 +892,184 @@ app.get('/getPostFile', async (req, res) => {
   }
 });
 
-//get post file by post_file_ID
-
 //get ALL post file by memberID (for brainframe)
+app.get('/getPostsBYMEMBERONLY', async (req, res) => {
+  try {
+      
+      const connection = mysql.createConnection(config);
+      const memberID = req.query.memberID;
 
-//get post table details by post_file_ID (for brainframe; see where file posted and when)
+      const [postData] = await connection
+          .promise()
+          .query('SELECT * FROM post, members WHERE post.memberID = members.memberID AND post.memberID = ?', [memberID]);
+      connection.end();
+      res.json(postData);
+  } 
+  catch (error) {
+      console.error('Error fetching classroom discussion board posts:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
 
+//report groupchat message
+app.post('/reportGroupchatMessage', async (req, res) => {
+  try {
+      const { messages_groupchat_ID, messages_groupchat_content, memberID, r1, r2, r3, r4, r5, r6 } = req.body;
+      const connection = mysql.createConnection(config);
+      
+      const [discussionPostInfo] = await connection
+          .promise()
+          .query('INSERT INTO reportMsg (reportMsg_originalMsg_ID, reportMsg_text, reportMsg_memberID, reportMsg_abuseHarassment, reportMsg_InnappropriateContent, reportMsg_ThreateningBehaviour, reportMsg_Spam, reportMsg_privateIdentifyingInfo, reportMsg_misinformation, reportMsg_inChannel) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [messages_groupchat_ID, messages_groupchat_content, memberID, r1, r2, r3, r4, r5, r6, 'N']);
+      
+        const [msgInfo] = await connection
+          .promise()
+          .query('DELETE FROM messages_groupchat WHERE messages_groupchat_ID = ?', [messages_groupchat_ID])
+
+      connection.end();
+      res.json(discussionPostInfo);
+  } 
+  catch (error) {
+      console.error('Error reporting groupchat message:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//report channel message
+app.post('/reportChannelsMessage', async (req, res) => {
+  try {
+      const { messages_channel_ID, messages_channel_content, memberID, r1, r2, r3, r4, r5, r6 } = req.body;
+      const connection = mysql.createConnection(config);
+      
+      const [discussionPostInfo] = await connection
+          .promise()
+          .query('INSERT INTO reportMsg (reportMsg_originalMsg_ID, reportMsg_text, reportMsg_memberID, reportMsg_abuseHarassment, reportMsg_InnappropriateContent, reportMsg_ThreateningBehaviour, reportMsg_Spam, reportMsg_privateIdentifyingInfo, reportMsg_misinformation, reportMsg_inChannel) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [messages_channel_ID, messages_channel_content, memberID, r1, r2, r3, r4, r5, r6, 'Y']);
+      
+        const [msgInfo] = await connection
+          .promise()
+          .query('DELETE FROM messages_channel WHERE message_channel_ID = ?', [messages_channel_ID])
+
+      connection.end();
+      res.json(discussionPostInfo);
+  } 
+  catch (error) {
+      console.error('Error reporting channel message:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+
+//report post
+app.post('/reportPost', async (req, res) => {
+  try {
+      const { post_ID, memberID, postTitle, postContent, postFile, r1, r2, r3, r4, r5, r6 } = req.body;
+      const connection = mysql.createConnection(config);
+      
+      const [discussionPostInfo] = await connection
+          .promise()
+          .query('INSERT INTO reportPost (reportPost_originalPost_ID, reportPost_title, reportPost_bodytext, reportPost_file, reportPost_memberID, reportPost_abuseHarassment, reportPost_InnappropriateContent, reportPost_ThreateningBehaviour, reportPost_Spam, reportPost_privateIdentifyingInfo, reportPost_misinformation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [post_ID, postTitle, postContent, postFile, memberID, r1, r2, r3, r4, r5, r6]);
+      
+        const [msgInfo] = await connection
+          .promise()
+          .query('DELETE FROM post WHERE postID = ?', [post_ID])
+
+      connection.end();
+      res.json(discussionPostInfo);
+  } 
+  catch (error) {
+      console.error('Error reporting channel message:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+// SETTINGS //
+
+//change the user's email
+app.post('/changeEmail', async (req, res) => 
+{
+  try 
+  {
+    const { memberID, newEmail } = req.body;
+    const connection = mysql.createConnection(config);
+  
+    const [checkUseGroupchatExistence] = await connection
+        .promise()
+        .query('UPDATE members SET email = ? WHERE memberID = ?;', [newEmail,memberID,])
+
+    connection.end();
+    res.json(checkUseGroupchatExistence);
+  } 
+  catch (error) 
+  {
+      console.error('Error changing user`s email:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//change the user's password
+app.post('/changePassword', async (req, res) => 
+{
+  try 
+  {
+    const { memberID, newPassword } = req.body;
+    const connection = mysql.createConnection(config);
+  
+    const [checkUseGroupchatExistence] = await connection
+        .promise()
+        .query('UPDATE members SET password = ? WHERE memberID = ?;', [newPassword,memberID,])
+
+    connection.end();
+    res.json(checkUseGroupchatExistence);
+  } 
+  catch (error) 
+  {
+      console.error('Error changing user`s password:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//change the user's surname
+app.post('/changeSurname', async (req, res) => 
+{
+  try 
+  {
+    const { memberID, newSurname } = req.body;
+    const connection = mysql.createConnection(config);
+  
+    const [checkUseGroupchatExistence] = await connection
+        .promise()
+        .query('UPDATE members SET surname = ? WHERE memberID = ?;', [newSurname,memberID,])
+
+    connection.end();
+    res.json(checkUseGroupchatExistence);
+  } 
+  catch (error) 
+  {
+      console.error('Error changing user`s surname:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//change the user's surname
+app.post('/changeForename', async (req, res) => 
+{
+  try 
+  {
+    const { memberID, newForename } = req.body;
+    const connection = mysql.createConnection(config);
+  
+    const [checkUseGroupchatExistence] = await connection
+        .promise()
+        .query('UPDATE members SET forename = ? WHERE memberID = ?;', [newForename,memberID,])
+
+    connection.end();
+    res.json(checkUseGroupchatExistence);
+  } 
+  catch (error) 
+  {
+      console.error('Error changing user`s forename:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
 
 app.use(function (req, res, next) 
 {

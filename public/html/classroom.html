@@ -21,9 +21,11 @@
                 <li><a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
                         onmouseout="this.style.backgroundColor='#eb7b34'" @click="navigateToChannels">Channels</a></li>
                 <li><a a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
-                        onmouseout="this.style.backgroundColor='#eb7b34'" @click="navigateToDiscussion">Discussion</a></li>
+                        onmouseout="this.style.backgroundColor='#eb7b34'" @click="navigateToDiscussion">Discussion</a>
+                </li>
                 <li><a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
-                        onmouseout="this.style.backgroundColor='#eb7b34'" @click="navigateToWhiteboard">Whiteboard</a></li>
+                        onmouseout="this.style.backgroundColor='#eb7b34'" @click="navigateToWhiteboard">Whiteboard</a>
+                </li>
                 <img src="\images\brainy_icon.png" alt="brainy" height="auto" id="redirectButton"
                     @click="redirecttosettings">
             </ul>
@@ -48,7 +50,7 @@
                     <button @click="AddChannelPopup"><i class="fa-solid fa-plus"></i></button>
                     <button @click="DeleteChannelPopup"><i class="fa-solid fa-trash"></i></button>
                     <button @click="leaveClassroom"><i class="fa-solid fa-person-walking-arrow-right"></i></button>
-                </div>                
+                </div>
             </div>
             <div v-else id="channelBarStudent">
                 <div id="classroomHeading" v-for="classroom in classroomInfo" :key="classroom.classroomID">
@@ -82,7 +84,9 @@
                             channelMsg.message_channel_ID }}
                             <div v-if="checkUserMsg(channelMsg)" v-html="ifUser_buttonDeleteText"
                                 @click="toggleDeleteConfirmOn(channelMsg.message_channel_ID)"></div>
-                            <div v-else v-html="ifNOTUser_buttonReportText" @click="toggleMenu"></div>
+                            <div v-else v-html="ifNOTUser_buttonReportText"
+                                @click="toggleMenu(channelMsg.message_channel_ID, channelMsg.message_channel_content)">
+                            </div>
                         </div>
                     </div>
                     <div id="composeBox">
@@ -104,16 +108,17 @@
                         <h1>Members:</h1>
                         <div v-for="member in classroomMembers" :key="member.memberID" v-if="member.isManager === 0">
                             <!-- v-if="member.isManager[0] === 0"-->
-                            <p>{{ member.name }} <button id="kickMember" v-if="isMan" @click="RemoveMemberPopup(member.memberID)">
-                                <i class="fa-solid fa-user-xmark"></i>
-                            </button></p>                    
-                        </div>                        
+                            <p>{{ member.name }} <button id="kickMember" v-if="isMan"
+                                    @click="RemoveMemberPopup(member.memberID)">
+                                    <i class="fa-solid fa-user-xmark"></i>
+                                </button></p>
+                        </div>
                     </div>
                     <div id="addMemDiv">
-                    <button id="addMemBtn" v-if="isMan" @click="AddMemberPopup">
-                        <i class="fa-solid fa-user-plus"></i>
-                    </button>
-                </div>
+                        <button id="addMemBtn" v-if="isMan" @click="AddMemberPopup">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -150,42 +155,36 @@
                 <button @click="Cancel_DeleteClassPopup">Cancel</button>
             </div>
 
-            <div class="popupMenu" v-if="openPopup">
-                    <!-- Menu content goes here -->
-                    <ul>
-                        Reporting this message
-                        <br>
-                        Message content:
-                        <br>
-                        [box with words of the message]
-                        <br>
-                        <div id="dpDMenu">
-                            <button id="dropbtn">Type of Offense</button>
-                            <div id="dpDMenuCon">
-                                Abuse or Harassment<input type="checkbox" id="myCheckbox" name="myCheckbox"
-                                    value="checkboxValue">
-                                <br>
-                                Inappropriate Content<input type="checkbox" id="myCheckbox" name="myCheckbox"
-                                    value="checkboxValue">
-                                <br>
-                                Threatening Behaviour<input type="checkbox" id="myCheckbox" name="myCheckbox"
-                                    value="checkboxValue">
-                                <br>
-                                Spam<input type="checkbox" id="myCheckbox" name="myCheckbox" value="checkboxValue">
-                                <br>
-                                Exposing private identifying information<input type="checkbox" id="myCheckbox"
-                                    name="myCheckbox" value="checkboxValue">
-                                <br>
-                                Harmful Misinformation<input type="checkbox" id="myCheckbox" name="myCheckbox"
-                                    value="checkboxValue">
-                            </div>
+            <div id="reportPopup" v-if="openPopup">
+                <!-- Menu content goes here -->
+                <ul>
+                    <div id="dpDMenu">
+                        <button id="dropbtn">Type of Offense</button>
+                        <div id="dpDMenuCon">
+                            Abuse or Harassment<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                                value="checkboxValue" v-model="AbuseOrHarassmentBool">
+                            <br>
+                            Inappropriate Content<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                                value="checkboxValue" v-model="InappropriateContentBool">
+                            <br>
+                            Threatening Behaviour<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                                value="checkboxValue" v-model="ThreateningBehaviourBool">
+                            <br>
+                            Spam<input type="checkbox" id="myCheckbox" name="myCheckbox" value="checkboxValue"  v-model="SpamBool">
+                            <br>
+                            Exposing private identifying information<input type="checkbox" id="myCheckbox"
+                                name="myCheckbox" value="checkboxValue" v-model="PrivateIdentifyingInfoBool">
+                            <br>
+                            Harmful Misinformation<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                                value="checkboxValue" v-model="MisinformationBool">
                         </div>
-                        <br>
-                        <div id="buttonContainer">
-                            <button id="reportButton" @click="toggleReportConfirm">Report</button>
-                            <button id="cancelButton" @click="cancelPopup">Cancel</button>
-                        </div>
-                    </ul>
+                    </div>
+                    <br>
+                    <div id="buttonContainer">
+                        <button id="reportButton" @click="toggleReportConfirm">Report</button>
+                        <button id="cancelButton" @click="cancelPopup">Cancel</button>
+                    </div>
+                </ul>
             </div>
 
             <div id="reportPopup2" style="margin-bottom: 0; padding-bottom: 0;">
@@ -232,6 +231,15 @@
                 RemoveMemberPopupIf: false,
                 deleteMember: '',
                 addMemberName: '',
+                showChannels: true,
+                scroll: 0,
+                AbuseOrHarassmentBool: false,
+                InappropriateContentBool: false,
+                ThreateningBehaviourBool: false,
+                SpamBool: false,
+                PrivateIdentifyingInfoBool: false,
+                MisinformationBool: false,
+                getUserMessageContent: ''
             },
             mounted() {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -266,6 +274,7 @@
                         // Check if there are channels available and if so, open the first channel
                         if (this.classroomChannels.length > 0) {
                             this.openChannelChat(this.classroomChannels[0]);
+                            //setInterval(this.openChannelChat(this.classroomChannels[0]), 1000);
                             this.currentActiveChannel = this.classroomChannels[0].channelName;
                             this.currentActiveChannel_ID = this.classroomChannels[0].channelID;
                             this.currentActiveChannel_desc = this.classroomChannels[0].channelDescription;
@@ -309,11 +318,15 @@
                     this.currentActiveChannel_desc = channel.channelDescription;
 
                     //open and display chat messages from the channel
+                    const reloadSection = document.querySelector("#chatBox").innerHTML;
                     ///getChannelChatlog
                     fetch(`/getChannelChatlog?channelID=${channel.channelID}`)
                         .then(response => response.json())
                         .then(data => {
                             this.currentChannelChatLog = data;
+
+                            var element = this.$el.querySelector("#PostBoard");
+                            if (this.scroll < 2) { element.scrollTop = element.scrollHeight; this.scroll += 1; }
                         })
                         .catch(error => {
                             console.error('Error fetching channel logs info:', error);
@@ -388,7 +401,6 @@
                     }
                     window.location.reload();
                 },
-                //    FINISH ENTER TEXT
                 enterText: async function () {
                     const urlParams = new URLSearchParams(window.location.search);
                     const memberID = urlParams.get('memberID');
@@ -414,12 +426,42 @@
                     }
                     window.location.reload();
                 },
-                toggleMenu() {
+                toggleMenu(value1, value2) {
                     this.openPopup = true;
+                    this.getUserMessageID = value1;
+                    this.getUserMessageContent = value2;
                 },
-                toggleReportConfirm() {
+                toggleReportConfirm: async function () {
                     this.openPopup2 = true;
                     this.openPopup = false;
+
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const memberID = urlParams.get('memberID');
+
+                    //reportGroupchatMessage , body.rq: messages_groupchat_ID
+                    try {
+                        // Make a POST request to your server
+                        const response = await fetch('/reportChannelsMessage', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                messages_channel_ID: this.getUserMessageID,
+                                messages_channel_content: this.getUserMessageContent,
+                                memberID: memberID,
+                                r1: this.AbuseOrHarassmentBool,
+                                r2: this.InappropriateContentBool,
+                                r3: this.ThreateningBehaviourBool,
+                                r4: this.SpamBool,
+                                r5: this.PrivateIdentifyingInfoBool,
+                                r6: this.MisinformationBool
+                            }),
+                        });
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+                    window.location.reload();
                 },
                 toggleReportConfirmOff() {
                     this.openPopup2 = false;
@@ -501,7 +543,7 @@
                         console.error('Error sending message:', error);
                     }
                 },
-                ConfirmDeleteClass: async function() {
+                ConfirmDeleteClass: async function () {
                     //deleteClassroom
                     const urlParams = new URLSearchParams(window.location.search);
                     const classroomID = urlParams.get('classroomID');
@@ -529,7 +571,7 @@
                         console.error('Error sending message:', error);
                     }
                 },
-                addMemberPopupConfirm: async function() {
+                addMemberPopupConfirm: async function () {
                     //addMemberName
                     //addClassroomMember
                     const urlParams = new URLSearchParams(window.location.search);
@@ -555,7 +597,7 @@
                     window.location.reload();
                 },
                 //addChannel
-                addChannelConfirm: async function() {
+                addChannelConfirm: async function () {
                     //addChannelName: '',
                     //addChannelDesc: '',
                     const urlParams = new URLSearchParams(window.location.search);
@@ -584,7 +626,7 @@
                     }
                     window.location.reload();
                 },
-                ConfirmRemoveChannel: async function() {
+                ConfirmRemoveChannel: async function () {
                     const urlParams = new URLSearchParams(window.location.search);
                     const classroomID = urlParams.get('classroomID');
                     this.DeleteChannelPopupIf = false;
@@ -610,39 +652,39 @@
         });
     </script>
 
-<script>
-    new Vue({
-        el: '#navBar',
-        data: {
-            userMemberID: '',
-            memberID: '',
-            classroomID: ''
-        },
-        mounted() {
-            const urlParams = new URLSearchParams(window.location.search);
-            this.memberID = urlParams.get('memberID');
-            this.classroomID = urlParams.get('classroomID');
-        },
-        methods:
-        {
-            redirecttohomepage() {
-                window.location.href = `/success?username=${encodeURIComponent(this.memberID)}`;
+    <script>
+        new Vue({
+            el: '#navBar',
+            data: {
+                userMemberID: '',
+                memberID: '',
+                classroomID: ''
             },
-            redirecttosettings() {
-                window.location.href = `/html/settings.html?username=${encodeURIComponent(this.memberID)}`;
+            mounted() {
+                const urlParams = new URLSearchParams(window.location.search);
+                this.memberID = urlParams.get('memberID');
+                this.classroomID = urlParams.get('classroomID');
             },
-            navigateToChannels() {
-                window.location.href = `/html/classroom.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
-            },
-            navigateToDiscussion() {
-                window.location.href = `/html/discussion.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
-            },
-            navigateToWhiteboard() {
-                window.location.href = `/html/whiteboardClassroom.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
+            methods:
+            {
+                redirecttohomepage() {
+                    window.location.href = `/success?username=${encodeURIComponent(this.memberID)}`;
+                },
+                redirecttosettings() {
+                    window.location.href = `/html/settings.html?username=${encodeURIComponent(this.memberID)}`;
+                },
+                navigateToChannels() {
+                    window.location.href = `/html/classroom.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
+                },
+                navigateToDiscussion() {
+                    window.location.href = `/html/discussion.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
+                },
+                navigateToWhiteboard() {
+                    window.location.href = `/html/whiteboardClassroom.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
+                }
             }
-        }
-    });
-</script>
+        });
+    </script>
 </body>
 
 </html>

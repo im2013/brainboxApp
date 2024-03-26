@@ -1,4 +1,3 @@
-
 /*STYLING FOR THE SETTINGS PAGE*/
 
 #container {
@@ -11,7 +10,7 @@ body {
     overflow-x: hidden;
 }
 
-#navBar{
+#navBar {
     position: fixed;
 }
 
@@ -73,8 +72,8 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    transform: translateX(15vw);
-    width: 85vw;
+    transform: translateX(15.01vw) translateY(-0.7vh);
+    width: 90vw;
     overflow-x: hidden;
     overflow-y: hidden;
     font-family: Arial, Helvetica, sans-serif;
@@ -89,7 +88,8 @@ body {
     border-bottom: #423076 solid 5px;
     top: 0;
 }
-#heading h1{
+
+#heading h1 {
     transform: translateX(2vw);
 }
 
@@ -117,20 +117,102 @@ body {
 #settingsList {
     position: absolute;
     width: 10vw;
-    height: 85vh;
-    background-color: red;
-    transform: translateX(-1vw) translateY(15.7vh);
+    height: 90vh;
+    border-right: #423076 solid 5px;
+    transform: translateX(-1vw) translateY(15.5vh);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#settingsList ul {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+#settingsList button {
+    transform: translateX(0.5vw);
+    height: 5vh;
+    margin-top: 2vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #423076;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#settingsList button:hover {
+    background-color: #5a4791;
 }
 
 #SettingsContent {
     position: absolute;
-    background-color: aqua;
-    transform: translateX(9vw) translateY(15.65vh);
+    transform: translateX(11vw) translateY(15.65vh);
     width: 76vw;
-    height: 85vh;
+    height: 90vh;
     overflow-y: auto;
+}
+
+#SettingsContent h2 {
+    font-size: 3vh;
+    text-decoration: underline;
+    color: #423076;
+    padding-left: -1vw;
 }
 
 #text {
     margin-left: 2vw;
 }
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }

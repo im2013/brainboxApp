@@ -3,6 +3,7 @@
 
 #container {
     display: flex;
+    overflow: hidden;
 }
 
 #navBar ul {
@@ -79,6 +80,8 @@
     overflow: hidden;
 }
 
+
+
 #contentUser h1 {
     color: #006A78;
     text-decoration: none;
@@ -128,14 +131,7 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#createGroupchatBox {
-    width: 78vw;
-    height: 20vh;
-    margin: 2vw 2vw 0vh;
-    padding: 1.5vw;
-    border-radius: 7px;
-    transform: translateY(-3vh);
-}
+
 
 #createGroupchatBox input, 
 #createClassroomsBox input {
@@ -171,12 +167,23 @@ body {
 #createGroupchatBox {
     background-color: #008ea1;
     width: 78vw;
-    height: 20vh;
+    height: 15vh;
     margin: 2vw 2vw 0vh;
     padding: 1.5vw;
     border-radius: 7px;
     transform: translateY(-3vh);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
 }
+
+#inputAndButtonContainer {
+    display: flex;
+    justify-content: space-around; 
+    width: 60%;
+} 
 
 #createGroupchatBox #plusIcon, #createClassroomsBox #plusIcon {
     color: #ffffff;
@@ -212,6 +219,7 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     margin-left: 2.5vw;
     font-size: 1.2vw;
+    transform: translateY(-1vh);
 }
 
 #classroomBox h4 {
@@ -494,6 +502,7 @@ button {
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
     margin-left: 1.5vw;
+    transform: translateY(2.5vh);
 }
 
 

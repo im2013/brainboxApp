@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classroom</title>
-    <link rel="stylesheet" href="\stylesheets\classroom.css">
+    <link rel="stylesheet" href="\stylesheets\discussion.css">
     <script src="https://kit.fontawesome.com/e15d1ee196.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
@@ -21,54 +21,94 @@
                 <li><a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
                         onmouseout="this.style.backgroundColor='#eb7b34'" @click="navigateToChannels">Channels</a></li>
                 <li><a a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
-                        onmouseout="this.style.backgroundColor='#eb7b34'" @click="navigateToDiscussion">Discussion</a></li>
+                        onmouseout="this.style.backgroundColor='#eb7b34'" @click="navigateToDiscussion">Discussion</a>
+                </li>
                 <li><a style="background-color: #eb7b34;" onmouseover="this.style.backgroundColor='#da7434'"
-                        onmouseout="this.style.backgroundColor='#eb7b34'" @click="navigateToWhiteboard">Whiteboard</a></li>
+                        onmouseout="this.style.backgroundColor='#eb7b34'" @click="navigateToWhiteboard">Whiteboard</a>
+                </li>
                 <img src="\images\brainy_icon.png" alt="brainy" height="auto" id="redirectButton"
                     @click="redirecttosettings">
             </ul>
         </div>
     </div>
 
-        <div id="code">
-            <div id="channelBarStudent">
-                <div id="classroomHeading" v-for="classroom in classroomInfo" :key="classroom.classroomID">
-                    <h1>{{ classroom.classroomName }}</h1>
-                    <p>{{ classroom.classroomDescription }}</p>
-                </div>
+    <div id="code">
+        <!-- <div id="classroomData">
+        </div> -->
+
+        <div id="mainContent">
+            <div id="classroomHeading" v-for="classroom in classroomInfo" :key="classroom.classroomID">
+                <h1>{{ classroom.classroomName }}</h1>
+                <p>{{ classroom.classroomDescription }}</p>
             </div>
 
-
-            <div id="mainContent">
-                <div id="discussionHeader" style="left: 10%;">
-                    <h1>Discussion Board</h1>
-                </div>
-                    <!--Want to display posts here-->
-                <div id="PostBoard">
-                    <div id="postsDisplay" v-for="post in classroomPosts" :key="post.postID"> 
-                        <div id="post">
-                            <p> {{ post.postID }} </p>
-                            <h3>{{ post.postTitle }}</h3>
-                            <div id="postContentBox">
-                                <p>{{ post.postContent }}</p>
-                                <img v-if="post.postFile" :src="post.postFile" alt="postImage" style="width: 15vw; display: block;">
+            <!--Want to display posts here-->
+            <div id="PostBoard">
+                <div id="postsDisplay" v-for="post in classroomPosts" :key="post.postID">
+                    <div id="post">
+                        <h3>{{ post.postTitle }} MemberID: {{ post.memberID }}</h3>
+                        <div id="postContentBox">
+                            <p>{{ post.postContent }}</p>
+                            <img v-if="post.postFile" :src="post.postFile" alt="postImage" id="postImage"
+                                style="width: 15vw; display: block;">
+                            <div v-if="checkUserPost(post.postID) || isMan">
+                                <button @click="deletePopup1(post.postID)">Delete</button>
+                            </div>
+                            <div v-else>
+                                <button @click="reportPopup(post.postID, post.postTitle, post.postContent, post.postFile, post.memberID)">Report</button>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
-                    <!--Post creation-->
-                    <div id="composeBoxDiscussion" style="overflow-y: scroll;">
-                        <!-- box for writing messages to send-->
-                        <input type="text" id="typeBox" name="myTextField" placeholder="Enter post title here" maxlength="50"
-                            v-model="inputText_title" @keyup.enter="postPost">
-                        <input type="text" id="typeBox" name="myTextField" placeholder="Enter post content here" maxlength="10000"
-                            v-model="inputText_body"  @keyup.enter="postPost">
-                            <input type="file" id="fileInput" accept=".png, .jpeg, .jpg" @change="handleFileChange">
-                    </div>
-                    </div>
-
             </div>
+            <!--Post creation-->
+            <div id="composeBoxDiscussion" style="overflow-y: scroll;">
+                <!-- box for writing messages to send-->
+                <input type="text" id="typeBox" name="myTextField" placeholder="Enter post title here" maxlength="50"
+                    v-model="inputText_title" @keyup.enter="postPost">
+                <input type="text" id="typeBox" name="myTextField" placeholder="Enter post content here"
+                    maxlength="10000" v-model="inputText_body" @keyup.enter="postPost">
+                <input type="file" id="fileInput" accept=".png, .jpeg, .jpg" @change="handleFileChange">
+            </div>
+
+            <div v-if="isDeletePopup1" id="deletePopup" style="width: 500px; height: 200px;">
+                <h1>Delete Post?</h1>
+                <button @click="confirmDeletePost">Confirm</button>
+                <button @click="hideDeletePopup">Cancel</button>
+            </div>
+
+            <div v-if="isReportPopup" id="reportPopup" style="width: 500px; height: 200px;">
+                <h1>Report Post?</h1>
+
+                <div id="dpDMenu">
+                    <button id="dropbtn">Type of Offense</button>
+                    <div id="dpDMenuCon">
+                        Abuse or Harassment<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                            value="checkboxValue" v-model="AbuseOrHarassmentBool">
+                        <br>
+                        Inappropriate Content<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                            value="checkboxValue" v-model="InappropriateContentBool">
+                        <br>
+                        Threatening Behaviour<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                            value="checkboxValue" v-model="ThreateningBehaviourBool">
+                        <br>
+                        Spam<input type="checkbox" id="myCheckbox" name="myCheckbox" value="checkboxValue"  v-model="SpamBool">
+                        <br>
+                        Exposing private identifying information<input type="checkbox" id="myCheckbox"
+                            name="myCheckbox" value="checkboxValue" v-model="PrivateIdentifyingInfoBool">
+                        <br>
+                        Harmful Misinformation<input type="checkbox" id="myCheckbox" name="myCheckbox"
+                            value="checkboxValue" v-model="MisinformationBool">
+                    </div>
+                </div>
+
+                <button @click="confirmReportPost">Confirm</button>
+                <button @click="hideReportPopup">Cancel</button>
+            </div>
+
         </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
@@ -84,9 +124,9 @@
                 junctionManagersData: [],
                 openChannelChatActive: false,
                 classroomMembers: [],
-                isUserMsg: [],
+                isUserPost: [],
                 showChannelCreator: false,
-                addChannelName: '',
+                isDeletePopup1: false,
                 addChannelDesc: '',
                 DeleteChannelPopupIf: false,
                 getUserMessageID: '',
@@ -105,10 +145,23 @@
                 classroomPosts: [],
                 classroomID: '',
                 inputFile: null,
-
+                scroll: 0,
+                reportMsgID: '',
+                isReportPopup: false,
+                reportPostID: '',
+                reportPostTitle: '',
+                reportPostContent: '',
+                reportPostFile: '',
+                reportPostMemberID: '',
+                AbuseOrHarassmentBool: false,
+                        InappropriateContentBool: false,
+                        ThreateningBehaviourBool: false,
+                        SpamBool: false,
+                        PrivateIdentifyingInfoBool: false,
+                        MisinformationBool: false,
             },
             mounted() {
-                
+
                 const urlParams = new URLSearchParams(window.location.search);
                 const classroomID = urlParams.get('classroomID');
                 this.classroomID = urlParams.get('classroomID');
@@ -158,126 +211,178 @@
                         console.error('Error fetching junction info:', error);
                     });
 
-                    fetch(`/getPosts?classroomID=${classroomID}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            this.classroomPosts = data;
-                        })
-                        .catch(error => {
-                            console.error('Error fetching classroom posts info:', error);
-                        });
-                console.log(this.classroomPosts);
+                    const reloadSection = document.querySelector("#PostBoard").innerHTML;
+
+                    const retrieveMessage = async () => {
+                        fetch(`/getPosts?classroomID=${classroomID}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                this.classroomPosts = data;
+
+                                var element = this.$el.querySelector("#PostBoard");
+                                if (this.scroll < 2) { element.scrollTop = element.scrollHeight; this.scroll += 1;}
+                            })
+                            .catch(error => {
+                                console.error('Error fetching classroom posts info:', error);
+                            });
+                    }
+
+                    retrieveMessage();
+                    setInterval(retrieveMessage, 1000);
+
+                //getPostsBYMEMBER
+                fetch(`/getPostsBYMEMBER?classroomID=${classroomID}&memberID=${this.user_memberID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.isUserPost = data;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching classroom posts info:', error);
+                    });
+
+                console.log(this.isUserPost);
             },
             methods: {
-                toggleDeleteMenu(value) {
+                handleFileChange(event) {
+                    this.inputFile = event.target.files[0];
+                },
+                postPost: async function () {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const memberID = urlParams.get('memberID');
+
+                    const reader = new FileReader();
+
+                    // Define a promise to handle the asynchronous file reading
+                    const readFile = new Promise((resolve, reject) => {
+                        reader.onload = () => {
+                            // Resolve the promise with the result of readAsDataURL
+                            resolve(reader.result);
+                        };
+                        reader.onerror = () => {
+                            // Reject the promise if there's an error reading the file
+                            reject(reader.error);
+                        };
+                    });
+
+                    if (this.inputFile) {
+                        // Start reading the file only if inputFile is available
+                        reader.readAsDataURL(this.inputFile);
+                    }
+
+                    // Wait for the file to be read and then make the POST request
+                    try {
+                        let inputFileData = null;
+                        if (this.inputFile) {
+                            inputFileData = await readFile;
+                        }
+
+                        const response = await fetch('/addPost', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                memberID: memberID,
+                                classroomID: this.classroomID,
+                                postTitle: this.inputText_title,
+                                postContent: this.inputText_body,
+                                inputFile: inputFileData,
+                            }),
+                        });
+
+                        window.location.reload();
+                        // Handle the response as needed
+                    } catch (error) {
+                        console.error('Error making post:', error);
+                    }
+                },
+                deletePopup1(value) {
+                    this.isDeletePopup1 = true;
                     this.getUserMessageID = value;
-                    this.deletePopup = true;
                 },
-                AddChannelPopup() {
-                    this.showChannelCreator = true;
+                checkUserPost(msg) {
+                    //msg is post.postID
+                    for (var i = 0; i < this.isUserPost.length; i++) {
+                        if (msg == this.isUserPost[i].postID) {
+                            return true;
+                        }
+                    }
+                    return false;
                 },
-                CancelChannelPopup() {
-                    this.showChannelCreator = false;
+                hideDeletePopup() {
+                    this.isDeletePopup1 = false;
                 },
-                ConfirmAddChannel() {
-                    this.showChannelCreator = true;
+                confirmDeletePost: async function() {
+                    this.deletePopup1 = false;
+
+                    try {
+                        // Make a POST request to your server
+                        const response = await fetch('/removePost', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                postID: this.getUserMessageID,
+                            }),
+                        });
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+
                     window.location.reload();
                 },
-                DeleteChannelPopup() {
-                    this.DeleteChannelPopupIf = true;
-                },
-                CancelChannelDeletePopup() {
-                    this.DeleteChannelPopupIf = false;
-                },
-                toggleDeleteConfirmOff() {
-                    this.deletePopup = false;
-                },
-                handleFileChange(event) {
-    this.inputFile = event.target.files[0];
-},
-postPost: async function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const memberID = urlParams.get('memberID');
+                reportPopup(value1, value2, value3, value4, value5) {
+                    this.reportPostID = value1
+                    this.reportPostTitle = value2;
+                    this.reportPostContent = value3;
+                    this.reportPostFile = value4;
+                    this.reportPostMemberID = value5;
 
-    const reader = new FileReader();
+                    this.isReportPopup = true;
 
-    // Define a promise to handle the asynchronous file reading
-    const readFile = new Promise((resolve, reject) => {
-        reader.onload = () => {
-            // Resolve the promise with the result of readAsDataURL
-            resolve(reader.result);
-        };
-        reader.onerror = () => {
-            // Reject the promise if there's an error reading the file
-            reject(reader.error);
-        };
-    });
+                    //show new report popup
+                },
+                confirmReportPost: async function() {
+                    //put stuff in here
+                            this.openPopup2 = true;
+                            this.openPopup = false;
 
-    if (this.inputFile) {
-        // Start reading the file only if inputFile is available
-        reader.readAsDataURL(this.inputFile);
-    }
-
-    // Wait for the file to be read and then make the POST request
-    try {
-        let inputFileData = null;
-        if (this.inputFile) {
-            inputFileData = await readFile;
-        }
-
-        const response = await fetch('/addPost', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                memberID: memberID,
-                classroomID: this.classroomID,
-                postTitle: this.inputText_title,
-                postContent: this.inputText_body,
-                inputFile: inputFileData,
-            }),
-        });
-
-        window.location.reload();
-        // Handle the response as needed
-    } catch (error) {
-        console.error('Error making post:', error);
-    }
-},
-                toggleMenu() {
-                    this.openPopup = true;
+                //             reportPostID: '',
+                // reportPostTitle: '',
+                // reportPostContent: '',
+                // reportPostFile: '',
+                // reportPostMemberID: ''
+                            try {
+                                // Make a POST request to your server
+                                const response = await fetch('/reportPost', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        //post_ID, memberID, postTitle, postContent, postFile
+                                        post_ID: this.reportPostID,
+                                        postTitle: this.reportPostTitle,
+                                        postContent: this.reportPostContent,
+                                        postFile: this.reportPostFile,
+                                        memberID: this.reportPostMemberID,
+                                        r1: this.AbuseOrHarassmentBool,
+                                        r2: this.InappropriateContentBool,
+                                        r3: this.ThreateningBehaviourBool,
+                                        r4: this.SpamBool,
+                                        r5: this.PrivateIdentifyingInfoBool,
+                                        r6: this.MisinformationBool
+                                    }),
+                                });
+                            } catch (error) {
+                                console.error('Error sending message:', error);
+                            }
+                            window.location.reload();
                 },
-                toggleReportConfirm() {
-                    this.openPopup2 = true;
-                    this.openPopup = false;
-                },
-                toggleReportConfirmOff() {
-                    this.openPopup2 = false;
-                },
-                cancelPopup() {
-                    this.openPopup = false;
-                },
-                AddMemberPopup() {
-                    this.AddMemberPopupIf = true;
-                },
-                CancelAddMemberPopup() {
-                    this.AddMemberPopupIf = false;
-                },
-                showDeleteClassroomPopup() {
-                    this.deleteClassPopup = true;
-                },
-                Cancel_DeleteClassPopup() {
-                    this.deleteClassPopup = true;
-                },
-                RemoveMemberPopup(remove_member) {
-                    this.RemoveMemberPopupIf = true;
-                    this.deleteMember = remove_member;
-                },
-                Cancel_RemoveMemberPopup() {
-                    this.RemoveMemberPopupIf = false;
-                    this.deleteMember = '';
-                },
+                hideReportPopup() {
+                    this.isReportPopup = false;
+                }
             }
         });
     </script>
@@ -298,7 +403,20 @@ postPost: async function () {
             methods:
             {
                 redirecttohomepage() {
-                    window.location.href = `/success?username=${encodeURIComponent(this.memberID)}`;
+                    //username=bob%40gmail.com
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const userMemberID = urlParams.get('memberID');
+                    //get the username from the database
+                    ///retrieveUserinfoID
+                    fetch(`/retrieveUserinfoID?memberID=${userMemberID}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.userData = data;
+                            window.location.href = `/success?username=${encodeURIComponent(this.userData[0].email)}`;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching user member id:', error);
+                        });
                 },
                 redirecttosettings() {
                     window.location.href = `/html/settings.html?username=${encodeURIComponent(this.memberID)}`;

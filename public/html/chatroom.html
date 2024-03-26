@@ -37,7 +37,7 @@
                         <p> user ID: {{msg.memberID}} </p> <p>{{msg.messages_groupchat_content }}</p>
                         <div v-if="checkUserMsg(msg)" v-html="ifUser_buttonDeleteText"
                             @click="toggleDeleteMenu(msg.messages_groupchat_ID)"></div>
-                        <div v-else v-html="ifNOTUser_buttonReportText" @click="toggleMenu"></div>
+                        <div v-else v-html="ifNOTUser_buttonReportText" @click="toggleMenu(msg.messages_groupchat_ID, msg.messages_groupchat_content)"></div>
                     </div>
                 </div>
             </div>
@@ -61,21 +61,21 @@
                             <button id="dropbtn">Type of Offense</button>
                             <div id="dpDMenuCon">
                                 Abuse or Harassment<input type="checkbox" id="myCheckbox" name="myCheckbox"
-                                    value="checkboxValue">
+                                    value="checkboxValue" v-model="AbuseOrHarassmentBool">
                                 <br>
                                 Inappropriate Content<input type="checkbox" id="myCheckbox" name="myCheckbox"
-                                    value="checkboxValue">
+                                    value="checkboxValue" v-model="InappropriateContentBool">
                                 <br>
                                 Threatening Behaviour<input type="checkbox" id="myCheckbox" name="myCheckbox"
-                                    value="checkboxValue">
+                                    value="checkboxValue" v-model="ThreateningBehaviourBool">
                                 <br>
-                                Spam<input type="checkbox" id="myCheckbox" name="myCheckbox" value="checkboxValue">
+                                Spam<input type="checkbox" id="myCheckbox" name="myCheckbox" value="checkboxValue"  v-model="SpamBool">
                                 <br>
                                 Exposing private identifying information<input type="checkbox" id="myCheckbox"
-                                    name="myCheckbox" value="checkboxValue">
+                                    name="myCheckbox" value="checkboxValue" v-model="PrivateIdentifyingInfoBool">
                                 <br>
                                 Harmful Misinformation<input type="checkbox" id="myCheckbox" name="myCheckbox"
-                                    value="checkboxValue">
+                                    value="checkboxValue" v-model="MisinformationBool">
                             </div>
                         </div>
                         <br>
@@ -178,9 +178,16 @@
                         isUser: false,
                         deletePopup: false,
                         ifUser_buttonDeleteText: '<button id="deleteButton">Delete</button>',
-                        ifNOTUser_buttonReportText: '<button @click="toggleMenu">Report</button>',
+                        ifNOTUser_buttonReportText: '<button @click="toggleMenu(msg.messages_groupchat_ID, msg.messages_groupchat_content)">Report</button>',
                         getUserMessageID: '',
                         scroll: 0,
+                        AbuseOrHarassmentBool: false,
+                        InappropriateContentBool: false,
+                        ThreateningBehaviourBool: false,
+                        SpamBool: false,
+                        PrivateIdentifyingInfoBool: false,
+                        MisinformationBool: false,
+                        getUserMessageContent: ''
                     },
                     mounted() {
                         const urlParams = new URLSearchParams(window.location.search);
@@ -221,20 +228,6 @@
 
                         retrieveMessage();
                         setInterval(retrieveMessage, 1000);
-                        
-                        
-                        // fetch(`/getGroupchatChatlog?groupchatID=${groupchatID}`)
-                        //     .then(response => response.json())
-                        //     .then(data => {
-                        //         this.chatMessages = data;
-                        //         var element = this.$el.querySelector("#groupchatText");
-                        //         element.scrollTop = element.scrollHeight;
-                        //         console.log("reloading!");
-                        //     })
-                        //     .catch(error => {
-                        //         console.error('Error fetching groupchat messages:', error);
-                        //     });
-                            //setInterval(reloadSection, 1000);
 
                         fetch(`/getGroupchatChatlog_userOnly?groupchatID=${groupchatID}&memberID=${memberID}`)
                             .then(response => response.json())
@@ -246,15 +239,46 @@
                             });
                     },
                     methods: {
-                        toggleMenu() {
+                        toggleMenu(value1, value2) {
+                            this.getUserMessageID = value1;
+                            this.getUserMessageContent = value2;
                             this.openPopup = true;
                         },
                         cancelPopup() {
                             this.openPopup = false;
                         },
-                        toggleReportConfirm() {
+                        toggleReportConfirm: async function() {
+                            const urlParams = new URLSearchParams(window.location.search);
                             this.openPopup2 = true;
                             this.openPopup = false;
+
+                            const memberID = urlParams.get('memberID');
+
+                            console.log(this.getUserMessageContent);
+                            try {
+                                // Make a POST request to your server
+                                const response = await fetch('/reportGroupchatMessage', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        messages_groupchat_ID: this.getUserMessageID,
+                                        messages_groupchat_content: this.getUserMessageContent,
+                                        memberID: memberID,
+                                        r1: this.AbuseOrHarassmentBool,
+                                        r2: this.InappropriateContentBool,
+                                        r3: this.ThreateningBehaviourBool,
+                                        r4: this.SpamBool,
+                                        r5: this.PrivateIdentifyingInfoBool,
+                                        r6: this.MisinformationBool
+                                    }),
+                                });
+                            } catch (error) {
+                                console.error('Error sending message:', error);
+                            }
+                            window.location.reload();
+
                         },
                         toggleReportConfirmOff() {
                             this.openPopup2 = false;

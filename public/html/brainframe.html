@@ -1,4 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="\stylesheets\brainframe.css">
-<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Posts</title>
+    <link rel="stylesheet" href="\stylesheets\brainframe.css">
+    <script src="https://kit.fontawesome.com/e15d1ee196.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
+</head>
+
+<body>
+    <div id="navBar">
+        <ul id="redirectButton">
+            <img src="\images\dis_icon.png" alt="brainbox logo" height="auto" @click="redirecttohomepage">
+            <p>BrainFrame</p>
+            <li><a style="background-color: #DDC459;" onmouseover="this.style.backgroundColor='#009baf'"
+                    onmouseout="this.style.backgroundColor='#006A78'" href="#our product"></a></li>
+            <li><a a style="background-color: #DDC459;" onmouseover="this.style.backgroundColor='#009baf'"
+                    onmouseout="this.style.backgroundColor='#006A78'" href="#features"></a></li>
+            <li><a style="background-color: #DDC459;" onmouseover="this.style.backgroundColor='#009baf'"
+                    onmouseout="this.style.backgroundColor='#006A78'" href="aboutus.html"></a></li>
+            <img src="\images\brainy_icon.png" alt="brainy" height="auto" @click="redirecttosettings">
+        </ul>
+    </div>
+
+    <div id="code">
+        <h1>My Posts and Files</h1>
+        <!--Want to display posts here-->
+        <div id="PostBoard">
+            <div id="postsDisplay" v-for="post in filesData" :key="post.postID">
+                <div id="post">
+                    <h3>Post Title: {{ post.postTitle }}</h3>
+                    <h3>Classroom: {{ post.classroomID }}</h3>
+                    <h3>Posted: {{post.postTimestamp}} </h3>
+                    <div id="postContentBox">
+                        <p>{{ post.postContent }}</p>
+                        <img v-if="post.postFile" :src="post.postFile" alt="postImage" id="postImage"
+                            style="width: 15vw; display: block;">
+                        <button @click="deletePopup(post.postID)">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="isDeletePopup1" id="deletePopup" style="width: 500px; height: 200px;">
+                <h1>Delete Post?</h1>
+                <button @click="confirmDeletePost">Confirm</button>
+                <button @click="hideDeletePopup">Cancel</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
+    <script>
+        new Vue({
+            el: '#code',
+            data: {
+                memberID: '',
+                filesData: [],
+                isDeletePopup1: false,
+                getUserMessageID: ''
+            },
+            mounted() {
+                const urlParams = new URLSearchParams(window.location.search);
+                this.memberID = urlParams.get('memberID');
+
+                //getPostsBYMEMBERONLY //memberid
+                fetch(`/getPostsBYMEMBERONLY?memberID=${this.memberID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update file data with the fetched data
+                        this.filesData = data;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user data:', error);
+                    });
+            },
+            methods: {
+                //get files
+                confirmDeletePost: async function () {
+                    this.deletePopup1 = false;
+
+                    try {
+                        // Make a POST request to your server
+                        const response = await fetch('/removePost', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                postID: this.getUserMessageID,
+                            }),
+                        });
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+
+                    window.location.reload();
+                },
+                hideDeletePopup() {
+                    this.isDeletePopup1 = false;
+                },
+                deletePopup(post) {
+                    this.isDeletePopup1 = true;
+                    this.getUserMessageID = post;
+                }
+            }
+        });
+    </script>
+    <script>
+        new Vue({
+            el: '#navBar',
+            data: {
+                memberID: '',
+                userData: '',
+            },
+            mounted() {
+                //get userID from params
+                const urlParams = new URLSearchParams(window.location.search);
+                this.memberID = urlParams.get('memberID');
+            },
+            methods: {
+                redirecttohomepage() {
+                    fetch(`/retrieveUserinfoID?memberID=${this.memberID}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.userData = data;
+                            window.location.href = `/success?username=${encodeURIComponent(this.userData[0].email)}`;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching user member id:', error);
+                        });
+                },
+                redirecttosettings() {
+                    window.location.href = `/html/settings.html?userID=${encodeURIComponent(this.memberID)}`;
+                }
+            }
+        });
+    </script>
+</body>

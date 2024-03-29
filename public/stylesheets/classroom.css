@@ -1,3 +1,890 @@
+/*desktop*/
+@media only screen and (min-width: 1025px) {
+    #navBar ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        overflow: hidden;
+        background-color: #eb7b34;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 15vw;
+    }
+    
+    #navBar li {
+        flex: 1;
+    }
+    
+    #navbar {
+        height: 100vh;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+    }
+    
+    #navBar p {
+        color: white;
+        font-size: 18px;
+        padding-bottom: 4vh;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        max-height: fit;
+        display: flex;
+        /* Use flex for centering vertically */
+        align-items: center;
+        /* Center vertically */
+        margin: auto;
+    }
+    
+    #navBar a {
+        color: white;
+        font-size: 16px;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        display: flex;
+        /* Use flex for centering vertically */
+        align-items: center;
+        /* Center vertically */
+        margin: auto;
+        width: 15vw;
+        max-height: fit;
+        padding-left: 1.25vw;
+    }
+    
+    #navBar img {
+        padding-top: 2vh;
+        padding-bottom: 2vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 10vw;
+        margin: auto;
+    
+    }
+    
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        overflow: hidden;
+        color: #eb7b34;
+    }
+    
+    #channelBarTeacher,
+    #channelBarStudent {
+      display: flex;
+      flex-direction: column;
+      width: 13vw;
+      height: 100vh;
+      transform: translateX(15vw) translateY(-100vh);
+      border-right: 6.5px solid #8f8f8f;
+    }
+    
+    #channelBarTeacher #channelList {
+        max-height: 72vh;
+        overflow-y: auto; 
+    }
+    
+    #channelBarStudent #channelList {
+        max-height: 80vh;
+        overflow-y: auto; 
+    }
+    
+    #classroomHeading h1 {
+        transform: translateX(1vw) translateY(-1vh);  
+    }
+    
+    #classroomHeading p {
+        transform: translateX(0.5vw) translateY(-6.2vh);
+        position: absolute;
+    }
+    
+    h1 {
+        font-size: 4vh;
+    }
+    
+    h2{
+        font-size: 3vh;
+    }
+    
+    p {
+        font-size: 2.2vh;
+    }
+    
+    #editBtns {
+        position: absolute;
+        bottom: 2vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    #editBtns button {
+        background-color: #eb7b34;
+        border: none;
+        border-radius: 50%;
+        width: 2.7vw;
+        height: 2.7vw;
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    #editBtns button i {
+        color: white;
+    }
+    
+    
+    #channelSegment {
+        background-color: #eb7b34; 
+        height: 8.3vh;
+        width: 11.7vw;
+        margin-bottom: 2vh;
+        color: white;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center; 
+        align-items: center; 
+        text-align: center;
+    }
+    
+    
+    #channelList {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center horizontally */
+        transform: translateY(4vh);
+    }
+    
+    #mainContent {
+    border-top: 6.5px solid grey;
+      width: 72vw; 
+      display: flex;
+      flex-direction: column;
+      transform: translateX(28vw) translateY(-200.75vh);
+    }
+    
+    #classroomHeading {
+        height: 14vh;
+        width: 100%;
+        border-bottom: 6.5px solid #8f8f8f;
+      }
+    
+    
+    #channelHeader {
+      height: 14vh;
+      width: 100%;
+      border-bottom: 6.5px solid #8f8f8f;
+    }
+    
+    #channelHeader h1{
+        transform: translateX(1vw) translateY(-1vh);
+    }
+    
+    #channelHeader p{
+        position: absolute;
+        transform: translateX(1.1vw) translateY(-2.7vh);
+    }
+    
+    #chatBox {
+        width: 58vw;
+        height: 86vh;
+        transform: translateY(1vh) translateX(0.8vw);
+        overflow: hidden;
+    }
+    
+    #messageBox {
+      width: 54vw;
+      height: 72.5vh;
+      margin-bottom: 2vh;
+      border-radius: 15px;
+      border: 6.5px solid #8f8f8f;
+      overflow-y: scroll;
+      color: black;
+      padding: 6.5px;
+    }
+    
+    #typeyBox {
+    transform: translateY(-1vh);
+      width: 54.5vw;
+      height: 3.5vh;
+      border-radius: 10px;
+      border: 6.5px solid #8f8f8f;
+    }
+    
+    #membersBar {
+        transform: translateX(57vw) translateY(-85.9vh);
+        width: 12vw;
+        height: 78vh;
+        margin-top: 1vh;
+        margin-right: 2vw;
+        border-radius: 15px;
+        border: 6.5px solid #8f8f8f;
+        padding: 10px; /* Padding for inner content */
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    
+    #membersBar h1 {
+        margin-bottom: 10px; 
+        text-decoration: underline;
+        padding-bottom: 1vh;/* Add some space below the heading */
+    }
+    
+    #membersBar p {
+        margin-bottom: 5px;
+        padding-bottom: 1vh; /* Add some space below each member */
+    }
+    
+    ::-webkit-scrollbar {
+        width: 15px;
+        background-color: #eb7b34;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #903903;
+      }
+    
+    #kickMember {
+        background-color: red;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        height: 1.6vw; /* Adjust the height of the button */
+        width: 1.6vw; /* Adjust the width of the button */
+        display: inline; /* Add flex display */
+        text-align: center;
+        justify-content: center; /* Center the icon horizontally */
+        align-items: center; /* Center the icon vertically */
+    }
+    
+    #kickMember i {
+        font-size: 0.7vw;
+        text-align: center;
+    }
+    
+    
+    #kickMember:hover {
+        background-color: darkred;
+    }
+    
+    .delete-button {
+        background-color: red;
+        border: none;
+        color: white;
+        padding: 5px;
+        border-radius: 40%;
+        cursor: pointer;
+        position: absolute;
+        transform: translateX(2.8vw) translateY(-1.2vh);
+    }
+    
+    .delete-button:hover {
+        background-color: darkred;
+    }
+    
+    .delete-button i {
+        font-size: 16px;
+    }
+    
+    .popupMenu {
+      position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border: 4px solid #a3a3a3;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        z-index: 1000;
+        width: 50vw;
+        height: 20vh;
+    }
+    
+    #addMemDiv{
+        position: absolute;
+        bottom: 2vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    #addMemBtn{
+        background-color: #eb7b34;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 2.7vw;
+        height: 2.7vw;
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    #discussionHeader {
+        margin-left: 2.5%;
+    }
+    
+    #post {
+        background-color: #d2d2d2;
+        width: 90%;
+        margin-left: 4%;
+    }
+    
+    #post h2 {
+        background-color: #d2d2d2;
+    }
+    
+    #postContentBox {
+        background-color: #ebebeb;
+        height: 15vw;
+    }
+    
+    #PostBoard {
+        overflow-y: scroll;
+        height: 40vw;
+    }
+    
+    #dpDMenu {
+        position: relative;
+        display: inline-block;
+        width: 20vw;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    #dpDMenuCon {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 20vw;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        padding: 2vh;
+    }
+    
+    #dpDMenuCon a:hover {
+        background-color: #ddd;
+    }
+    
+    #dpDMenu:hover #dpDMenuCon {
+        display: block;
+    }
+    
+    #dpDMenu:hover #dropbtn {
+        background-color: #eb7b34;
+    }
+    
+    #message-container:hover {
+        background-color: #e0e0e0;
+    }
+    
+    #reportPopup2 #menu,
+    #deletePopupStyle #menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2vh;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border: 4px solid #a3a3a3;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        z-index: 1000;
+        width: 50vw;
+        height: 20vh;
+    }
+    
+    #popupMenuReport {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border: 4px solid #a3a3a3;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        z-index: 1000;
+        width: 50vw;
+        height: 20vh;
+    
+    }
+    
+    #popupMenuReport ul {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2vh;
+    }
+    
+}
+
+/*tablet*/
+@media only screen and (min-width: 801px) and (max-width: 1024px) {
+    #navBar ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        overflow: hidden;
+        background-color: #eb7b34;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 15vw;
+    }
+    
+    #navBar li {
+        flex: 1;
+    }
+    
+    #navbar {
+        height: 100vh;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+    }
+    
+    #navBar p {
+        color: white;
+        font-size: 18px;
+        padding-bottom: 4vh;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        max-height: fit;
+        display: flex;
+        /* Use flex for centering vertically */
+        align-items: center;
+        /* Center vertically */
+        margin: auto;
+    }
+    
+    #navBar a {
+        color: white;
+        font-size: 16px;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        display: flex;
+        /* Use flex for centering vertically */
+        align-items: center;
+        /* Center vertically */
+        margin: auto;
+        width: 15vw;
+        max-height: fit;
+        padding-left: 1.25vw;
+    }
+    
+    #navBar img {
+        padding-top: 2vh;
+        padding-bottom: 2vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 10vw;
+        margin: auto;
+    
+    }
+    
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        overflow: hidden;
+        color: #eb7b34;
+    }
+    
+    #channelBarTeacher,
+    #channelBarStudent {
+      display: flex;
+      flex-direction: column;
+      width: 13vw;
+      height: 100vh;
+      transform: translateX(15vw) translateY(-100vh);
+      border-right: 6.5px solid #8f8f8f;
+    }
+    
+    #channelBarTeacher #channelList {
+        max-height: 72vh;
+        overflow-y: auto; 
+    }
+    
+    #channelBarStudent #channelList {
+        max-height: 80vh;
+        overflow-y: auto; 
+    }
+    
+    #classroomHeading h1 {
+        transform: translateX(1vw) translateY(-1vh);  
+    }
+    
+    #classroomHeading p {
+        transform: translateX(0.5vw) translateY(-6.2vh);
+        position: absolute;
+    }
+    
+    h1 {
+        font-size: 4vh;
+    }
+    
+    h2{
+        font-size: 3vh;
+    }
+    
+    p {
+        font-size: 2.2vh;
+    }
+    
+    #editBtns {
+        position: absolute;
+        bottom: 2vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    #editBtns button {
+        background-color: #eb7b34;
+        border: none;
+        border-radius: 50%;
+        width: 2.7vw;
+        height: 2.7vw;
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    #editBtns button i {
+        color: white;
+    }
+    
+    
+    #channelSegment {
+        background-color: #eb7b34; 
+        height: 8.3vh;
+        width: 11.7vw;
+        margin-bottom: 2vh;
+        color: white;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center; 
+        align-items: center; 
+        text-align: center;
+    }
+    
+    
+    #channelList {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center horizontally */
+        transform: translateY(4vh);
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    #channelList h1 {
+        font-size: 3vw;
+    }
+    
+    #mainContent {
+    border-top: 6.5px solid grey;
+      width: 72vw; 
+      display: flex;
+      flex-direction: column;
+      transform: translateX(28vw) translateY(-200.75vh);
+    }
+    
+    #classroomHeading {
+        height: 14vh;
+        width: 100%;
+        border-bottom: 6.5px solid #8f8f8f;
+      }
+
+    #classroomHeading h1 {
+        font-size: 2.5vh;
+    }
+    #classroomHeading p {
+        font-size: 1.3vh;
+        top: 15%;
+    }
+    
+    #channelHeader {
+      height: 14vh;
+      width: 100%;
+      border-bottom: 6.5px solid #8f8f8f;
+    }
+    
+    #channelHeader h1{
+        transform: translateX(1vw) translateY(-1vh);
+    }
+    
+    #channelHeader p{
+        position: absolute;
+        transform: translateX(1.1vw) translateY(-2.7vh);
+    }
+    
+    #chatBox {
+        width: 58vw;
+        height: 86vh;
+        transform: translateY(1vh) translateX(0.8vw);
+        overflow: hidden;
+    }
+    
+    #messageBox {
+      width: 54vw;
+      height: 72.5vh;
+      margin-bottom: 2vh;
+      border-radius: 15px;
+      border: 6.5px solid #8f8f8f;
+      overflow-y: scroll;
+      color: black;
+      padding: 6.5px;
+    }
+    
+    #typeyBox {
+    transform: translateY(-1vh);
+      width: 54.5vw;
+      height: 3.5vh;
+      border-radius: 10px;
+      border: 6.5px solid #8f8f8f;
+    }
+    
+    #membersBar {
+        transform: translateX(57vw) translateY(-85.9vh);
+        width: 12vw;
+        height: 78vh;
+        margin-top: 1vh;
+        margin-right: 2vw;
+        border-radius: 15px;
+        border: 6.5px solid #8f8f8f;
+        padding: 10px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    
+    #membersBar h1 {
+        margin-bottom: 10px; 
+        text-decoration: underline;
+        padding-bottom: 1vh;
+        font-size: 2.5vw;
+    }
+    
+    #membersBar p {
+        margin-bottom: 5px;
+        padding-bottom: 1vh;
+        font-size: 2vw;
+    }
+    
+    ::-webkit-scrollbar {
+        width: 15px;
+        background-color: #eb7b34;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #903903;
+      }
+    
+    #kickMember {
+        background-color: red;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        height: 1.6vw; /* Adjust the height of the button */
+        width: 1.6vw; /* Adjust the width of the button */
+        display: inline; /* Add flex display */
+        text-align: center;
+        justify-content: center; /* Center the icon horizontally */
+        align-items: center; /* Center the icon vertically */
+    }
+    
+    #kickMember i {
+        font-size: 0.7vw;
+        text-align: center;
+    }
+    
+    
+    #kickMember:hover {
+        background-color: darkred;
+    }
+    
+    .delete-button {
+        background-color: red;
+        border: none;
+        color: white;
+        padding: 5px;
+        border-radius: 40%;
+        cursor: pointer;
+        position: absolute;
+        transform: translateX(2.8vw) translateY(-1.2vh);
+    }
+    
+    .delete-button:hover {
+        background-color: darkred;
+    }
+    
+    .delete-button i {
+        font-size: 16px;
+    }
+    
+    .popupMenu {
+      position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border: 4px solid #a3a3a3;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        z-index: 1000;
+        width: 50vw;
+        height: 20vh;
+    }
+    
+    #addMemDiv{
+        position: absolute;
+        bottom: 2vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    #addMemBtn{
+        background-color: #eb7b34;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 2.7vw;
+        height: 2.7vw;
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    #discussionHeader {
+        margin-left: 2.5%;
+    }
+    
+    #post {
+        background-color: #d2d2d2;
+        width: 90%;
+        margin-left: 4%;
+    }
+    
+    #post h2 {
+        background-color: #d2d2d2;
+    }
+    
+    #postContentBox {
+        background-color: #ebebeb;
+        height: 15vw;
+    }
+    
+    #PostBoard {
+        overflow-y: scroll;
+        height: 40vw;
+    }
+    
+    #dpDMenu {
+        position: relative;
+        display: inline-block;
+        width: 20vw;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    #dpDMenuCon {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 20vw;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        padding: 2vh;
+    }
+    
+    #dpDMenuCon a:hover {
+        background-color: #ddd;
+    }
+    
+    #dpDMenu:hover #dpDMenuCon {
+        display: block;
+    }
+    
+    #dpDMenu:hover #dropbtn {
+        background-color: #eb7b34;
+    }
+    
+    #message-container:hover {
+        background-color: #e0e0e0;
+    }
+    
+    #reportPopup2 #menu,
+    #deletePopupStyle #menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2vh;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border: 4px solid #a3a3a3;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        z-index: 1000;
+        width: 50vw;
+        height: 20vh;
+    }
+    
+    #popupMenuReport {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border: 4px solid #a3a3a3;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        z-index: 1000;
+        width: 50vw;
+        height: 20vh;
+    
+    }
+    
+    #popupMenuReport ul {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2vh;
+    }
+    
+}
+
+/*phone*/
+@media only screen and (max-width: 800px) { 
 #navBar ul {
     padding: 0;
     margin: 0;
@@ -156,6 +1043,12 @@ p {
     flex-direction: column;
     align-items: center; /* Center horizontally */
     transform: translateY(4vh);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#channelList h1 {
+    font-size: 3vw;
 }
 
 #mainContent {
@@ -172,6 +1065,13 @@ border-top: 6.5px solid grey;
     border-bottom: 6.5px solid #8f8f8f;
   }
 
+#classroomHeading h1 {
+    font-size: 2.5vh;
+}
+#classroomHeading p {
+    font-size: 1.3vh;
+    top: 15%;
+}
 
 #channelHeader {
   height: 14vh;
@@ -222,7 +1122,7 @@ transform: translateY(-1vh);
     margin-right: 2vw;
     border-radius: 15px;
     border: 6.5px solid #8f8f8f;
-    padding: 10px; /* Padding for inner content */
+    padding: 10px;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -230,12 +1130,14 @@ transform: translateY(-1vh);
 #membersBar h1 {
     margin-bottom: 10px; 
     text-decoration: underline;
-    padding-bottom: 1vh;/* Add some space below the heading */
+    padding-bottom: 1vh;
+    font-size: 2.5vw;
 }
 
 #membersBar p {
     margin-bottom: 5px;
-    padding-bottom: 1vh; /* Add some space below each member */
+    padding-bottom: 1vh;
+    font-size: 2vw;
 }
 
 ::-webkit-scrollbar {
@@ -427,4 +1329,6 @@ transform: translateY(-1vh);
     align-items: center;
     text-align: center;
     padding: 2vh;
+}
+
 }

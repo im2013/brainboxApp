@@ -775,17 +775,18 @@ app.post('/addPost', async (req, res) => {
             const [discussionPostFile] = await connection
           .promise()
           .query('INSERT INTO post (post.classroomID, post.memberID, post.postTitle, post.postContent, post.postFile) VALUES (?, ?, ?, ?, ?)', [classroomID, memberID, postTitle, postContent, inputFile]);
-          connection.end();
           res.json(discussionPostFile);
+          return;
         } 
         else if (!inputFile)
         {
             const [discussionPostInfo] = await connection
           .promise()
           .query('INSERT INTO post (post.classroomID, post.memberID, post.postTitle, post.postContent) VALUES (?, ?, ?, ?)', [classroomID, memberID, postTitle, postContent]);
-          connection.end();
           res.json(discussionPostInfo);
+          return;
         }
+        
         connection.end();
   } 
   catch (error) {

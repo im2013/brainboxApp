@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="\stylesheets\newHomepage.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
 </head>
@@ -31,9 +32,8 @@
                 </div>
 
                 <div id="logoutTutorial" v-if="logout">
-                    <p style="width:50%; position: absolute; left: -90%; bottom: 10%; background-color: #dbdbdb; padding: 1.5%; border-radius:15px; text-align: center;">
-                        Logout by accessing the settings here!</p>
-                    <img src="/images/brainy_pointer.png" style="width:50%; position: absolute; left: -90%; bottom: 10%;">
+                    <p>Logout by accessing the settings here!</p>
+                    <img id="logoutPointer" src="/images/brainy_pointer.png">
                     <button id="logoutButtonTutorial" @click="hideBrainy">Okay!</button>
                 </div>
 
@@ -42,22 +42,22 @@
                 </div>
                 <div id="generalTutorial" v-if="tutorial2"> 
                     <!-- point to groups -->
-                    <img src="/images/brainy_pointer.png" style="width:50%; position: absolute; left: -90%; bottom: 150%;">
+                    <img id="gTut_pointer1" src="/images/brainy_pointer.png">
                     <button id="logoutButtonTutorial" @click="showTutorial3">Next!</button>
                 </div>
                 <div id="generalTutorial" v-if="tutorial3"> 
                     <!-- point to brainlink -->
-                    <img src="/images/brainy_pointer.png" style="width:50%; position: absolute; left: -50%; bottom: 90%;">
+                    <img id="gTut_pointer2" src="/images/brainy_pointer.png">
                     <button id="logoutButtonTutorial" @click="showTutorial4">Next!</button>
                 </div>
                 <div id="generalTutorial" v-if="tutorial4"> 
                     <!-- point to brainframe -->
-                    <img src="/images/brainy_pointer.png" style="width:50%; position: absolute; left: -140%; bottom: 90%;">
+                    <img id="gTut_pointer3" src="/images/brainy_pointer.png">
                     <button id="logoutButtonTutorial" @click="showTutorial5">Next!</button>
                 </div>
                 <div id="generalTutorial" v-if="tutorial5"> 
                     <!-- point to settings -->
-                    <img src="/images/brainy_pointer.png" style="width:50%; position: absolute; left: -90%; bottom: 10%;">
+                    <img id="gTut_pointer4" src="/images/brainy_pointer.png">
                     <button id="logoutButtonTutorial" @click="showTutorial6">Next!</button>
                 </div>
                 <div id="generalTutorial" v-if="tutorial6"> 
@@ -85,7 +85,12 @@
         <area id="brainframe" shape="poly" coords="374,395,188,200,0,394,186,585" @click="redirectobrainframe">
     </map>
 
-    
+    <div class="gdpr-warning">
+        <p>This website follows the guidelines and regulations set forth by the General Data Protection Regulation (GDPR). 
+            We are committed to protecting your privacy and personal data. 
+            For more information on how we collect, process, and protect your data, please refer to the 
+            <a href="https://gdpr-info.eu/">GDPR policy.</a></p>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script>

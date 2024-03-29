@@ -1,23 +1,216 @@
-h1 {
-    color: black;
-    text-decoration: none;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 2vw;
+/*desktop*/
+@media only screen and (min-width: 1025px) { 
+    h1 {
+        color: black;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 2vw;
+    }
+
+
+    #logoIcon {
+        width: 700px;
+        transform: translate(-50%, 50%);
+        left: 50%;
+        bottom: 50%;
+        position: absolute;
+        /*820x1180n - ipad
+        390x844px - iphone 12*/
+    }
+    
+    #brainyIcon {
+        position: absolute;
+        left: 2.5%;
+        bottom: 4%;
+        width: 125px;
+    }
+
+    #generalTutorial {
+
+    }
+
+    #logoutTutorial p {
+        width:50%;
+        position: absolute;
+        left: -90%;
+        bottom: 10%;
+        background-color: #dbdbdb;
+        padding: 1.5%;
+        border-radius:15px;
+        text-align: center;
+    }
+
+    #logoutPointer {
+        width:50%; 
+        position: absolute; 
+        left: -90%; 
+        bottom: 10%;
+    }
+
+    #gTut_pointer1 { /*should point to groups*/
+        width:50%; position: absolute; left: -90%; bottom: 150%;
+    }
+
+    #gTut_pointer2 { /*should point to brainlink*/
+        width:50%; position: absolute; left: -50%; bottom: 90%;
+    }
+
+    #gTut_pointer3 { /*point to brainframe*/
+        width:50%; position: absolute; left: -140%; bottom: 90%;
+    }
+
+    #gTut_pointer4 { /*point to settings*/
+        width:50%; position: absolute; left: -90%; bottom: 10%;
+    }
+
+    .gdpr-warning {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        color: #989898
+    }
 }
 
-#logoIcon {
-    width: 750px;
-    transform: translate(-50%, 50%);
-    left: 50%;
-    bottom: 50%;
-    position: absolute;
-    /*820x1180n - ipad
-    390x844px - iphone 12*/
+/* iPad */
+@media only screen and (min-width: 801px) and (max-width: 1024px){
+    h1 {
+        color: black;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 6vw;
+        margin-left: 5%;
+    }
+
+    #logoIcon {
+        width: 700px;
+        transform: translate(-50%, 50%);
+        left: 50%;
+        bottom: 50%;
+        position: absolute;
+        /*820x1180n - ipad
+        390x844px - iphone 12*/
+    }
+    
+    #brainyIcon {
+        position: absolute;
+        left: 2.5%;
+        bottom: 5%;
+        width: 200px;
+    }
+
+    #logoutTutorial p {
+        width:50%;
+        position: absolute;
+        left: -90%;
+        bottom: 10%;
+        background-color: #dbdbdb;
+        padding: 1.5%;
+        border-radius:15px;
+        text-align: center;
+    }
+
+    #logoutPointer {
+        width:50%; 
+        position: absolute; 
+        left: -90%; 
+        bottom: 10%;
+    }
+
+    #gTut_pointer1 { /*should point to groups*/
+        width:50%; position: absolute; left: -45%; bottom: 180%;
+    }
+
+    #gTut_pointer2 { /*should point to brainlink*/
+        width:50%; position: absolute; left: -4%; bottom: 110%;
+    }
+
+    #gTut_pointer3 { /*point to brainframe*/
+        width:50%; position: absolute; left: -100%; bottom: 120%;
+    }
+
+    #gTut_pointer4 { /*point to settings*/
+        width:50%; position: absolute; left: -60%; bottom: 60%;
+    }
+
+    .gdpr-warning p{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        color: #989898;
+        font-size: 2vw;
+    }
 }
 
-#brainyIcon {
-    position: absolute;
-    left: 2.5%;
-    bottom: 4%;
-    width: 125px;
+/* Mobile */
+@media only screen and (max-width: 800px) {
+    h1 {
+        color: black;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 10vw;
+    }
+
+
+    #logoIcon {
+        width: 350px;
+        transform: translate(-50%, 50%);
+        left: 50%;
+        bottom: 50%;
+        position: absolute;
+    }
+    
+    #brainyIcon {
+        position: absolute;
+        left: 2.5%;
+        bottom: 4%;
+        width: 125px;
+    }
+
+    #generalTutorial {
+
+    }
+
+    #logoutTutorial p {
+        width:50%;
+        position: absolute;
+        left: -59%;
+        bottom: 75%;
+        background-color: #dbdbdb;
+        padding: 1.5%;
+        border-radius:15px;
+        text-align: center;
+        font-size: 15px;
+    }
+
+    #logoutPointer {
+        width:75%; 
+        position: absolute; 
+        left: -67%; 
+        bottom: 90%;
+    }
+
+    #gTut_pointer1 { /*should point to groups*/
+        width:75%; position: absolute; left: -70%; bottom: 150%;
+    }
+
+    #gTut_pointer2 { /*should point to brainlink*/
+        width:75%; position: absolute; left: -28%; bottom: 110%;
+    }
+
+    #gTut_pointer3 { /*point to brainframe*/
+        width:75%; position: absolute; left: -100%; bottom: 115%;
+    }
+
+    #gTut_pointer4 { /*point to settings*/
+        width:75%; position: absolute; left: -75%; bottom: 80%;
+    }
+
+    .gdpr-warning p {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        color: #989898;
+        font-size: 8px;
+
+    }
 }

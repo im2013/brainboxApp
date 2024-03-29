@@ -28,16 +28,12 @@
 
         <div id="contentUser">
             <h1 id="displayUser">Welcome {{ username }}!</h1>
-            <h3 id="carouselHeads">Classrooms</h3>
-            <div id="classroomContainer">
-                <carousel id="classroomCarousel">
-                    <slide v-for="classroom in classrooms" :key="classroom.classroomID">
-                        <div id="classroomBox" @dblclick="redirectToClassroom(classroom.classroomID)">
-                            <h4>{{ classroom.classroomName }}</h4>
-                            <h3>Classroom ID: {{ classroom.classroomID }}</h3>
-                        </div>
-                    </slide>
-                </carousel>
+            <h3 id="carouselHead">Classrooms</h3>
+            <div id="classroomCarousel">
+                    <div id="classroomBox" v-for="classroom in classrooms" :key="classroom.classroomID" @dblclick="redirectToClassroom(classroom.classroomID)">
+                        <h4>{{ classroom.classroomName }}</h4>
+                        <h3>Classroom ID: {{ classroom.classroomID }}</h3>
+                    </div>
             </div>
 
             <div id="joinCreateSection"> <!--needed for vue.js code-->

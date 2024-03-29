@@ -28,16 +28,12 @@
         <div id="contentUser">
             <h1 id="displayUser">Welcome {{ username }}!</h1>
             <h3 id="carouselHeads">Groupchats</h3>
-            <div id="groupchatContainer">
-                <carousel id="groupchatCarousel">
-                    <slide v-for="groupchat in groupchats" :key="groupchat.groupchatID">
-                        <div id="groupchatBox" @dblclick="redirectToGroupchat(groupchat.groupchatID)">
-                            <h4>{{ groupchat.groupchatName }}</h4>
-                            <h3>Groupchat ID: {{ groupchat.groupchatID }}</h3>
-                        </div>
-                    </slide>
-                </carousel>
-            </div>
+                <div id="groupchatCarousel">
+                    <div id="groupchatBox" v-for="groupchat in groupchats" :key="groupchat.groupchatID" @dblclick="redirectToGroupchat(groupchat.groupchatID)">
+                        <h4>{{ groupchat.groupchatName }}</h4>
+                        <h3>Groupchat ID: {{ groupchat.groupchatID }}</h3>
+                    </div>
+                </div>
             <div id="createJoinGroupchat">
                 <div id="createGroupchatBox">
                     <h4 id="createText">Create New Groupchat</h4>

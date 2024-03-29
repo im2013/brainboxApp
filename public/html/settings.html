@@ -25,6 +25,8 @@
                         onmouseout="this.style.backgroundColor='#423076'" href="#features"> </a></li>
                 <li><a style="background-color: #423076;" onmouseover="this.style.backgroundColor='#5a4791'"
                         onmouseout="this.style.backgroundColor='#423076'" href="aboutus.html"> </a></li>
+                <button id="logOutBtn" @click="logoutFunct"><i class="fa-solid fa-right-from-bracket"></i>
+                </button>
             </ul>
         </div>
 
@@ -32,8 +34,6 @@
             <div id="heading">
                 <!-- Heading content -->
                 <h1>Welcome to Brainy!</h1>
-                <button id="logOutBtn" @click="logoutFunct"><i class="fa-solid fa-right-from-bracket"></i>
-                </button>
             </div>
 
             <div id="settingsList">
@@ -236,21 +236,7 @@
                         console.error('Error sending message:', error);
                     }
                 },
-                logoutFunct() {
-                    fetch('/logout', {
-                        method: 'POST'
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                window.location.href = '/html/login.html';
-                            } else {
-                                console.error('Logout failed');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error logging out:', error);
-                        });
-                },
+
                 enterNewPhoneNum() {
                     
                 }
@@ -284,12 +270,21 @@
                         });
 
                 },
-                // redirecttosettings() {
-                //     ///html/settings.html
-                //     const urlParams = new URLSearchParams(window.location.search);
-                //     const userMemberID = urlParams.get('memberID');
-                //     window.location.href = `/html/settings.html?username=${encodeURIComponent(userMemberID)}`;
-                // }
+                logoutFunct() {
+                    fetch('/logout', {
+                        method: 'POST'
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                window.location.href = '/html/login.html';
+                            } else {
+                                console.error('Logout failed');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error logging out:', error);
+                        });
+                },
             }
         });
     </script>

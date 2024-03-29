@@ -1,218 +1,513 @@
 /*STYLING FOR THE SETTINGS PAGE*/
 
-#container {
-    display: flex;
-}
-
-body {
-    margin: 0;
-    overflow-y: hidden;
-    overflow-x: hidden;
-}
-
-#navBar {
-    position: fixed;
-}
-
-#navBar ul {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-    overflow: hidden;
-    background-color: #423076;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    width: 15vw;
-}
-
-#navBar li {
-    flex: 1;
-}
-
-#navBar p {
-    color: white;
-    font-size: 18px;
-    padding-bottom: 4vh;
-    text-decoration: none;
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
-    max-height: fit;
-    display: flex;
-    align-items: center;
-    margin: auto;
-}
-
-#navBar a {
-    color: white;
-    font-size: 16px;
-    text-decoration: none;
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    margin: auto;
-    width: 15vw;
-    max-height: fit;
-    padding-left: 1.25vw;
-}
-
-#navBar img {
-    padding-top: 2vh;
-    padding-bottom: 2vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 10vw;
-    margin: auto;
-
-}
-
-#content {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    transform: translateX(15.01vw) translateY(-0.7vh);
-    width: 90vw;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-#heading {
-    width: 100%;
-    height: 15vh;
-    color: #423076;
-    font-size: 3vh;
-    font-family: Arial, Helvetica, sans-serif;
-    border-bottom: #423076 solid 5px;
-    top: 0;
-}
-
-#heading h1 {
-    transform: translateX(2vw);
-}
-
-#logOutBtn {
-    border: none;
-    background-color: #423076;
-    color: white;
-    border-radius: 20%;
-    height: 11vh;
-    font-size: 4vh;
-    width: 5vw;
-    padding: 10px 20px;
-    cursor: pointer;
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    transform: translateX(160vh) translateY(-13vh);
-}
-
-#logOutBtn i {
-    margin-left: 5px;
-}
-
-#settingsList {
-    position: absolute;
-    width: 10vw;
-    height: 90vh;
-    border-right: #423076 solid 5px;
-    transform: translateX(-1vw) translateY(15.5vh);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#settingsList ul {
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    list-style: none;
-}
-
-#settingsList button {
-    transform: translateX(0.5vw);
-    height: 5vh;
-    margin-top: 2vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #423076;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#settingsList button:hover {
+#SettingOptions button {
     background-color: #5a4791;
+    border: none;
+    color: white;
 }
 
-#SettingsContent {
-    position: absolute;
-    transform: translateX(11vw) translateY(15.65vh);
-    width: 76vw;
-    height: 90vh;
-    overflow-y: auto;
+#SettingOptions button:active {
+    background-color: #1e1349;
 }
 
-#SettingsContent h2 {
-    font-size: 3vh;
-    text-decoration: underline;
-    color: #423076;
-    padding-left: -1vw;
+#SettingOptions button:hover {
+    background-color: #917dd9;
 }
 
-#text {
-    margin-left: 2vw;
-}
-
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-  }
-  
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 34px;
-  }
-  
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
+#SettingOptions input {
     background-color: white;
-    transition: .4s;
-    border-radius: 50%;
-  }
-  
-  input:checked + .slider {
-    background-color: #2196F3;
-  }
-  
-  input:checked + .slider:before {
-    transform: translateX(26px);
-  }
+    border: 1px solid black;
+}
+
+#dpDMenu select {
+    background-color: white;
+    border: 1px solid black;
+}
+
+#dpDMenu option:hover {
+    background-color: #917dd9;
+}
+
+@media screen and (min-width: 844px) {
+    #container {
+        display: flex;
+        overflow: hidden;
+    }
+    
+    body {
+        margin: 0;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        overflow: none;
+    }
+    
+    #navBar {
+        position: fixed;
+        overflow: hidden;
+    }
+    
+    #navBar ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        overflow: hidden;
+        background-color: #423076;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 15vw;
+        min-width:fit-content;
+    }
+    
+    #navBar li {
+        flex: 1;
+    }
+    
+    #navBar p {
+        color: white;
+        font-size: 18px;
+        padding-bottom: 4vh;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        max-height: fit;
+        display: flex;
+        align-items: center;
+        margin: auto;
+    }
+    
+    #navBar a {
+        color: white;
+        font-size: 16px;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        margin: auto;
+        width: 15vw;
+        max-height: fit;
+        padding-left: 1.25vw;
+    }
+    
+    #navBar img {
+        padding-top: 2vh;
+        padding-bottom: 2vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 10vw;
+        margin: auto;
+    
+    }
+    
+    #content {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        transform: translateX(15.01vw) translateY(-0.7vh);
+        width: 90vw;
+        font-family: Arial, Helvetica, sans-serif;
+        overflow: hidden;
+    }
+    
+    #heading {
+        width: 100%;
+        height: 15vh;
+        color: #423076;
+        font-size: 2.5vh;
+        font-family: Arial, Helvetica, sans-serif;
+        border-bottom: #423076 solid 5px;
+        top: 0;
+        overflow: hidden;
+    }
+    
+    #heading h1 {
+        transform: translateX(2vw);
+    }
+    
+    #logOutBtn {
+        background-color: #423076;
+        color: white;
+        border-radius: 20%;
+        height: 10%;
+        font-size: 4vh;
+        width: 75%;
+        /* padding: 20px 20px; */
+        cursor: pointer;
+        /* display: flex; */
+        border-color: white;
+        border-width: 25%;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        margin-left: 10%;
+        margin-bottom: 10%;
+        /* transform: translateX(110vh) translateY(-12vh); */
+    }
+    
+    #logOutBtn i {
+        margin-left: 5px;
+    }
+    
+    #settingsList {
+        position: absolute;
+        width: 10vw;
+        height: 90vh;
+        border-right: #423076 solid 5px;
+        transform: translateX(-1vw) translateY(15.5vh);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width:min-content;
+        overflow: hidden;
+    }
+    
+    #settingsList ul {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+    }
+    
+    #settingsList button {
+        transform: translateX(0.5vw);
+        height: 5vh;
+        margin-top: 2vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #423076;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    #settingsList button:hover {
+        background-color: #5a4791;
+    }
+    
+    #SettingsContent {
+        position: absolute;
+        transform: translateX(11vw) translateY(15.65vh);
+        width: 76vw;
+        height: 90vh;
+        overflow-y: auto;
+        min-width:fit-content;
+        
+    }
+    
+    #SettingsContent h2 {
+        font-size: 3vh;
+        text-decoration: underline;
+        color: #423076;
+        padding-left: -1vw;
+        overflow: hidden;
+    }
+    
+    #text {
+        margin-left: 2vw;
+    }
+    
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+      
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+      }
+      
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+      
+      input:checked + .slider {
+        background-color: #2196F3;
+      }
+      
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
+    
+      #SettingOptions {
+        overflow: hidden;
+      }
+    
+}
+
+  @media screen and (max-width: 844px) {
+    #SettingsContent {
+        position: absolute;
+        transform: translateX(6vw) translateY(30vh);
+        width: 78vw;
+        /* height: 120vh; */
+        overflow-y: auto;
+        /* min-width:fit-content; */
+        min-height: fit-content;
+    }
+
+    #SettingOptions {
+        /* overflow: hidden; */
+        overflow-y: auto;
+        max-height: 60vh;
+
+        scrollbar-width: auto; /* Set the width of the scrollbar */
+        scrollbar-color: #0c051f #423076;
+      }
+
+    #navBar {
+        position: fixed;
+        overflow: hidden;
+    }
+    
+    #navBar ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        overflow: hidden;
+        background-color: #423076;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        min-width:fit-content;
+    }
+
+    #heading h1 {
+        transform: translateX(5vw);
+    }
+
+    #settingsList {
+        /* position: absolute;
+        width: 10vw;
+        height: 90vh; */
+        /* border-right: #423076 solid 5px; */
+        transform: translateX(-1vw);
+        align-content: center;
+        /* display: flex;
+        flex-direction: column;
+        align-items: center; */
+        min-width:min-content;
+        overflow: hidden;
+    }
+
+    #container {
+        display: flex;
+        overflow: hidden;
+    }
+    
+    body {
+        margin: 0;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        overflow: none;
+    }
+    
+    
+    #navBar li {
+        flex: 1;
+    }
+    
+    #navBar p {
+        color: white;
+        font-size: 18px;
+        padding-bottom: 4vh;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        max-height: fit;
+        display: flex;
+        align-items: center;
+        margin: auto;
+    }
+    
+    #navBar a {
+        color: white;
+        font-size: 16px;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        margin: auto;
+        width: 15vw;
+        max-height: fit;
+        padding-left: 1.25vw;
+    }
+    
+    #navBar img {
+        padding-top: 2vh;
+        padding-bottom: 2vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 20vw;
+        margin: auto;
+    
+    }
+    
+    #content {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        transform: translateX(15.01vw) translateY(-0.7vh);
+        width: 90vw;
+        font-family: Arial, Helvetica, sans-serif;
+        overflow: hidden;
+    }
+    
+    #heading {
+        width: 100%;
+        height: 15vh;
+        color: #423076;
+        font-size: 2.5vh;
+        font-family: Arial, Helvetica, sans-serif;
+        border-bottom: #423076 solid 5px;
+        top: 0;
+        overflow: hidden;
+        margin-left: 5%;
+    }
+    
+    
+    #logOutBtn {
+        background-color: #423076;
+        color: white;
+        border-radius: 20%;
+        height: 10%;
+        font-size: 4vh;
+        width: 75%;
+        /* padding: 20px 20px; */
+        cursor: pointer;
+        /* display: flex; */
+        border-color: white;
+        border-width: 25%;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        margin-left: 10%;
+        margin-bottom: 10%;
+        /* transform: translateX(110vh) translateY(-12vh); */
+    }
+    
+    #logOutBtn i {
+        margin-left: 5px;
+    }
+    
+    
+    #settingsList ul {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+    }
+    
+    #settingsList button {
+        transform: translateX(0.5vw);
+        height: 5vh;
+        margin-top: 2vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #423076;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    #settingsList button:hover {
+        background-color: #5a4791;
+    }
+    
+    
+    #SettingsContent h2 {
+        font-size: 3vh;
+        text-decoration: underline;
+        color: #423076;
+        padding-left: -1vw;
+    }
+    
+    #text {
+        margin-left: 2vw;
+    }
+    
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+      
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+      }
+      
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+      
+      input:checked + .slider {
+        background-color: #2196F3;
+      }
+      
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
+
+
+}

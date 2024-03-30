@@ -75,15 +75,59 @@
 
 
     <h1>Welcome to Brainbox</h1>
-    
+
     <img id= "logoIcon" src="\images\brainbox_logo.png" usemap="#workmap" style="display: block">
+    
 
     <map name="workmap" id="links">
-        <area id="settings" shape="poly" coords="374,395,557,588,373,786,189,589" @click="redirecttosettings">
-        <area id="groups" shape="poly" coords="374,395,189,199,374,0,559,198" @click="redirecttogroups">
-        <area id="brainlink" shape="poly" coords="374,395,559,202,743,393,560,590" @click="redirecttobrainlink">
-        <area id="brainframe" shape="poly" coords="374,395,188,200,0,394,186,585" @click="redirectobrainframe">
+        <area id="settings" shape="poly" coords="150,157,222,233,150,314,75,233" @click="redirecttosettings">
+        <area id="groups" shape="poly" coords="150,0,222,78,150,157,75,79" @click="redirecttogroups">
+        <area id="brainlink" shape="poly" coords="222,78,300,157,222,233,150,157" @click="redirecttobrainlink">
+        <area id="brainframe" shape="poly" coords="75,79,150,157,75,233,0,157" @click="redirectobrainframe">
     </map>
+
+    <script>
+        let x = window.innerWidth;
+        let y = window.innerHeight;
+
+        if (x >= 600 & y >= 600) {
+            document.getElementById('settings').coords = "225,236,335,352,225,473,113,352";
+            groups = document.getElementById('groups').coords = "225,0,335,119,225,236,113,119";
+            brainlink = document.getElementById('brainlink').coords = "335,119,450,236,335,352,225,236";
+            brainframe = document.getElementById('brainframe').coords = "113,119,225,236,113,352,0,236";
+        }
+
+        if (x >= 830 & y >= 830) {
+            document.getElementById('settings').coords = "350,368,522,548,350,736,177,547";
+            groups = document.getElementById('groups').coords = "350,0,522,183,350,368,177,183";
+            brainlink = document.getElementById('brainlink').coords = "522,183,700,368,522,548,350,368";
+            brainframe = document.getElementById('brainframe').coords = "177,183,350,368,177,547,0,368";
+        }
+
+        window.addEventListener("resize", function(){
+            let x = window.innerWidth;
+            let y = window.innerHeight;
+
+            if (x >= 600 & y >= 600) {
+                document.getElementById('settings').coords = "225,236,335,352,225,473,113,352";
+                groups = document.getElementById('groups').coords = "225,0,335,119,225,236,113,119";
+                brainlink = document.getElementById('brainlink').coords = "335,119,450,236,335,352,225,236";
+                brainframe = document.getElementById('brainframe').coords = "113,119,225,236,113,352,0,236";
+            } else {
+                document.getElementById('settings').coords = "150,157,222,233,150,314,75,233";
+                groups = document.getElementById('groups').coords = "150,0,222,78,150,157,75,79";
+                brainlink = document.getElementById('brainlink').coords = "222,78,300,157,222,233,150,157";
+                brainframe = document.getElementById('brainframe').coords = "75,79,150,157,75,233,0,157";
+            }
+
+            if (x >= 830 & y >= 830) {
+                document.getElementById('settings').coords = "350,368,522,548,350,736,177,547";
+                groups = document.getElementById('groups').coords = "350,0,522,183,350,368,177,183";
+                brainlink = document.getElementById('brainlink').coords = "522,183,700,368,522,548,350,368";
+                brainframe = document.getElementById('brainframe').coords = "177,183,350,368,177,547,0,368";
+            }
+        });
+    </script>
 
     <div class="gdpr-warning">
         <p>This website follows the guidelines and regulations set forth by the General Data Protection Regulation (GDPR). 

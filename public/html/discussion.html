@@ -52,10 +52,10 @@
                             <img v-if="post.postFile" :src="post.postFile" alt="postImage" id="postImage"
                                 style="width: 15vw; display: block;">
                             <div v-if="checkUserPost(post.postID) || isMan">
-                                <button @click="deletePopup1(post.postID)">Delete</button>
+                                <button id="deleteButton" @click="deletePopup1(post.postID)">Delete</button>
                             </div>
                             <div v-else>
-                                <button @click="reportPopup(post.postID, post.postTitle, post.postContent, post.postFile, post.memberID)">Report</button>
+                                <button id="reportButton" @click="reportPopup(post.postID, post.postTitle, post.postContent, post.postFile, post.memberID)">Report</button>
                                 
                             </div>
                         </div>

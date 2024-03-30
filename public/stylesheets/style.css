@@ -1,4 +1,4 @@
-@media only screen and (min-width: 725px) {
+@media only screen and (min-width: 1025px) {
   body {
     padding: 20px;
     font-family: Arial, Helvetica, sans-serif;
@@ -95,7 +95,122 @@
   }
 } /*desktop*/
 
-@media screen and (max-width: 844px) {
+@media screen and (min-width: 801px) and (max-width: 1024px) {
+  body {
+    /* padding: 20px; */
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    display: flex;
+    /* justify-content: flex-end;
+    align-items: center; */
+  }
+
+  #desktopImage {
+    display: none;
+  }
+
+  #mobileImage {
+    flex-grow: 1;
+    margin: 0;
+    transform:translate(0%, -6%);
+  }
+  
+  #homepageBox {
+    position: absolute;
+    width: 50vw;
+    left: 25%;
+    margin: 0;
+    align-items: center;
+    text-align: center;
+    top: 71%;
+  }
+
+  #homepageBox h2 {
+    position: absolute;
+    top: 217%;
+    left: 18%;
+  }
+
+  #homepageBox h3 {
+    position: absolute;
+    top: 220%;
+    left: 55%;
+  }
+
+  #orBar {
+    position: absolute;
+    left: 12%;
+    margin-top: 180.5px;
+  }
+  
+  #homepageBox h1 {
+    color: #7854b0;
+    font-weight: 900;
+  }
+  
+  #app {
+    color: gray;
+    font: 12px "Lucida Grande", Helvetica, Arial, sans-serif;
+    text-align: left;
+    position: absolute;
+    width: 30%;
+    margin-left: -14%;
+    top: 40%;
+  }
+  
+  
+  #app input {
+    color: gray;
+    border: gray;
+    border-width: 2px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 8px;
+    margin: 4px;
+    border-style: solid;
+    border-radius: 10px;
+    width: 400%;
+  }
+
+  #app a {
+    color:gray;
+    float: right;
+    position: relative;
+    right: -172%;
+  }
+  
+  #buttonInput {
+    text-align: center;
+  }
+  
+  #buttonInput button {
+    margin-top: 15px;
+    background-color: #7854b0;
+    border: none;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 20px;
+    border: 2px solid #e6e6e6;
+    transition-duration: 0.4s;
+    margin-left:145.5%;
+  }
+  
+  #buttonInput button:hover {
+    background-color: #e6e6e6;
+    color: #6e6e6e;
+  }
+  
+  #buttonInput button:active {
+    background-color: gray;
+    color: white;
+  }
+} /*tablet*/
+
+
+@media screen and (max-width: 800px) {
   body {
     /* padding: 20px; */
     font-family: Arial, Helvetica, sans-serif;

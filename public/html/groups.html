@@ -164,13 +164,6 @@
                         user_memberID: '',
                         userinfor: []
                     },
-
-                    methods: {
-                        redirectToClassroom(classroomID) {
-                            window.location.href = '/html/classroom.html?classroomID=' + classroomID + "&memberID=" + this.user_memberID;
-                            //'/html/chatroom.html?groupchatID=' + groupchatID + "&memberID=" + this.memberID
-                        }
-                    },
                     mounted() {
                         fetch('/classrooms')
                             .then(response => response.json())
@@ -194,6 +187,11 @@
                             .catch(error => {
                                 console.error('Error fetching user data:', error);
                             });
+                    }, methods: {
+                        redirectToClassroom(classroomID) {
+                            window.location.href = '/html/classroom.html?classroomID=' + classroomID + "&memberID=" + this.user_memberID;
+                            //'/html/chatroom.html?groupchatID=' + groupchatID + "&memberID=" + this.memberID
+                        }
                     }
                 });
             </script>

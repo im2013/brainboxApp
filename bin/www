@@ -1073,6 +1073,61 @@ app.post('/changeForename', async (req, res) =>
   }
 });
 
+app.post('/changePhoneNum', async (req, res) => 
+{
+  try 
+  {
+    const { memberID, newPhoneNum } = req.body;
+    const connection = mysql.createConnection(config);
+  
+    const [checkUseGroupchatExistence] = await connection
+        .promise()
+        .query('UPDATE members SET phoneNumber = ? WHERE memberID = ?;', [newPhoneNum,memberID,])
+
+    connection.end();
+    res.json(checkUseGroupchatExistence);
+  } 
+  catch (error) 
+  {
+      console.error('Error changing user`s phone number:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+app.post('/changeGender', async (req, res) => 
+{
+  try 
+  {
+    const { memberID, gender } = req.body;
+    const connection = mysql.createConnection(config);
+  
+    const [checkUseGroupchatExistence] = await connection
+        .promise()
+        .query('UPDATE members SET gender = ? WHERE memberID = ?;', [gender,memberID,])
+
+    connection.end();
+    res.json(checkUseGroupchatExistence);
+  } 
+  catch (error) 
+  {
+      console.error('Error changing user`s phone number:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+//change a post
+
+//change a channel message
+
+//change a groupchat message
+
+
+app.use(function (req, res, next) 
+{
+  next(createError(404));
+});
+
+
 app.use(function (req, res, next) 
 {
   next(createError(404));

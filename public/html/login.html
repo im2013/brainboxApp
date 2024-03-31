@@ -45,6 +45,12 @@
             <div id="buttonInput">
             <button @click="submitForm" style="width: 150%">LOGIN</button>
           </div>
+
+
+          <div id="errorMessage" v-if="errorMessage">
+            <p>Login credentials are incorrect. Please try again.</p>
+          </div>
+
         </div>
 
         <img id="orBar" src="/images/OR.png">
@@ -61,6 +67,7 @@
               setup() {
                 const usernameBoxValue = ref('');
                 const passwordBoxValue = ref('');
+                const errorMessage = ref(false);
           
                 const submitForm = async () => {
                   const enteredUsername = usernameBoxValue.value;
@@ -81,16 +88,25 @@
           
                     // Check if the request was successful
                     if (response.ok) {
-                      // Do something on success
-                      console.log('Form submitted successfully');
-                    //   window.location.href = '/success';
-                      window.location.href = `/success?username=${encodeURIComponent(enteredUsername)}`;
+                      const responseData = await response.json();
+                      if(responseData.success) {
+                        window.location.href = `/success?username=${responseData.username}`;
+                      }
+                      else {
+                        console.error('Invalid credentials');
+                        errorMessage.value = true;
+                        console.log(errorMessage.value);
+                      }
                     } else {
                       // Handle errors
                       console.error('Form submission failed');
+                      errorMessage.value = true;
+                        console.log(errorMessage.value);
                     }
                   } catch (error) {
                     console.error('Error sending form data:', error);
+                    errorMessage.value = true;
+                        console.log(errorMessage.value);
                   }
                 };
           
@@ -98,6 +114,7 @@
                   usernameBoxValue,
                   passwordBoxValue,
                   submitForm,
+                  errorMessage,
                 };
               },
             });

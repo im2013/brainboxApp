@@ -61,23 +61,24 @@ app.post('/submit', async (req, res) => {
     
     const [existingUsers] = await connection
       .promise()
-      .query('SELECT * FROM members WHERE email = ? AND password = ?', [userName, passWord]);
+      .query('SELECT * FROM members WHERE members.email = ? AND members.password = ?', [userName, passWord]);
 
       if (existingUsers.length > 0) {
         const memberID = existingUsers[0].memberID;
         req.session.userID = memberID;
         req.session.userName = userName;
-        res.redirect('/success');
+        const encodedUserName = encodeURIComponent(userName);
+        res.status(200).json({ success: true, username: encodedUserName });
       } 
       else {
         console.error('Invalid credentials.');
-        res.redirect('/');
+        res.status(401).json({ success: false, message: 'Invalid credentials' });
       }
     connection.end();
   } 
   catch (error) {
     console.error('Error handling login:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 });
 

@@ -146,6 +146,7 @@
   #homepageBox h1 {
     color: #7854b0;
     font-weight: 900;
+    margin-top: 20%;
   }
   
   #app {
@@ -155,7 +156,7 @@
     position: absolute;
     width: 30%;
     margin-left: -14%;
-    top: 40%;
+    top: 85%;
   }
   
   

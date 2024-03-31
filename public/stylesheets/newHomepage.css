@@ -1,3 +1,19 @@
+#settingsTab {
+    display: none;
+}
+
+#groupsTab {
+    display: none;
+}
+
+#brainlinkTab {
+    display: none;
+}
+
+#brainframeTab {
+    display: none;
+}
+
 h1 {
     color: black;
     text-decoration: none;
@@ -41,22 +57,6 @@ h1 {
     position: absolute; 
     left: -67%; 
     bottom: 90%;
-}
-
-#gTut_pointer1 { /*should point to groups*/
-    width:75%; position: absolute; left: -70%; bottom: 150%;
-}
-
-#gTut_pointer2 { /*should point to brainlink*/
-    width:75%; position: absolute; left: -28%; bottom: 110%;
-}
-
-#gTut_pointer3 { /*point to brainframe*/
-    width:75%; position: absolute; left: -100%; bottom: 115%;
-}
-
-#gTut_pointer4 { /*point to settings*/
-    width:75%; position: absolute; left: -75%; bottom: 80%;
 }
 
 .gdpr-warning p {

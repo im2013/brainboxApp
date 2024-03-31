@@ -51,22 +51,24 @@
                     <h3>Account Information</h3>
                     <p>Reset Password</p> <input type="text" v-model="newPassword" placeholder="Enter new password...">
                     <button @click="enterNewPassword">Confirm Change Password</button>
-
+                    <div v-if="ifNewPassword">Password changed. Redirecting...</div>
                     <h4>Contact Details</h4>
-                    <p>Change forename</p> <input type="text" v-model="newForename" placeholder="Enter new forename...">
+                    <p>Change forename</p> <input @click="ifNewForename_setFalse" type="text" v-model="newForename" placeholder="Enter new forename...">
                     <button @click="enterNewForename">Confirm Change Forename</button>
-                    <p>Change surname name</p> <input type="text" v-model="newSurname"
+                    <div v-if="ifNewForename">Forename changed to {{newForename}}.</div>
+                    <p>Change surname name</p> <input @click="ifNewSurname_setFalse" type="text" v-model="newSurname"
                         placeholder="Enter new surname...">
                     <button @click="enterNewSurname">Confirm Change Surname</button>
+                    <div v-if="ifNewSurname">Forename changed to {{newSurname}}.</div>
                     <p>Change phone Number</p> <input type="text" v-model="newPhoneNum"
-                        placeholder="Enter new phonenumber..."> <!--editEmailConfirm-->
+                        placeholder="Enter new phonenumber...">
                     <button @click="enterNewPhoneNum">Confirm Change Phonenumber</button>
+                    <div v-if="ifNewPhoneNum">Forename changed to {{newPhoneNum}}.</div>
                     <p>Change email</p> <input type="text" v-model="newEmail" placeholder="Enter new email...">
                     <button @click="editEmailConfirm">Confirm Change Email</button>
-                    <p>Change pronouns </p> <input type="text" v-model="newPronouns"
-                        placeholder="Enter new pronouns...">
+                    <div v-if="ifNewEmail">Email changed to {{ newEmail }}. Redirecting... </div>
                     <p>Change gender</p>
-                    <div id="dpDMenu">
+                    <div id="dpDMenu" @click="ifNewGender_setFalse">
                         <select v-model="gender">
                             <option>Male</option>
                             <option>Female</option>
@@ -74,8 +76,9 @@
                             <option>Prefer Not To Say</option>
                         </select>
                     </div>
-
-                    <p><button @click="">Confirm Changes</button></p>
+                    <br>
+                    <button @click="enterNewGender">Confirm Change Gender</button>
+                    <div v-if="ifNewGender">Gender changed to {{ gender }}. </div>
 
                     <h3>Account</h3>
                     <button @click="deleteAccount">Delete Account</button>
@@ -106,10 +109,16 @@
                 newSurname: '',
                 newPhoneNum: '',
                 newPronouns: '',
-                newGender: '',
                 gender: '',
                 newEmail: '',
-                newPassword: ''
+                newPassword: '',
+                ifNewGender: false,
+                genderConfirm: '',
+                ifNewEmail: false,
+                ifNewPassword: false,
+                ifNewForename: false,
+                ifNewSurname: false,
+                ifNewPhoneNum: false,
             },
             methods: {
                 showAccountSettings() {
@@ -119,6 +128,65 @@
                 showPrivacySettings() {
                     this.displayAccountSettings = false;
                     this.displayPrivacySettings = true;
+                },
+                ifNewGender_setFalse() {
+                    this.ifNewGender = false;
+                },
+                ifNewEmail_setFalse() {
+                    this.ifNewEmail = false;
+                },
+                ifNewForename_setFalse() {
+                    this.ifNewForename = false;
+                },
+                ifNewSurname_setFalse() {
+                    this.ifNewSurname = false;
+                },
+                ifNewPhoneNum_setFalse() {
+                    this.ifNewPhoneNum = false;
+                },
+                enterNewGender: async function() {
+                    //new password
+                    //newPassword
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const userID = urlParams.get('userID');
+                    try {
+                        const response = await fetch('/changeGender', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                memberID: userID,
+                                gender: this.gender
+                            }),
+                        }
+                        );
+                    } catch (error) {
+                        console.error('Error changing pronouns:', error);
+                    }
+                    this.ifNewGender = true;
+                },
+                enterNewPhoneNum: async function() {
+                    //new password
+                    //newPassword
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const userID = urlParams.get('userID');
+                    try {
+                        const response = await fetch('/changePhoneNum', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                memberID: userID,
+                                newPhoneNum: this.newPhoneNum
+                            }),
+                        });
+                        this.ifNewPhoneNum = true;
+                    } catch (error) {
+                        console.error('Error changing phone number:', error);
+                    }
+
                 },
                 enterNewPassword: async function() {
                     //new password
@@ -136,8 +204,10 @@
                                 newPassword: this.newPassword
                             }),
                         });
-
-                        window.location.href = '/html/login.html';
+                        this.ifNewPassword = true;
+                        setTimeout(() => {
+                            window.location.href = '/html/login.html';
+                        }, 3000);
                     } catch (error) {
                         console.error('Error sending message:', error);
                     }
@@ -159,8 +229,7 @@
                                 newSurname: this.newSurname
                             }),
                         });
-
-                        window.location.href = '/html/login.html';
+                        this.ifNewSurname = true;
                     } catch (error) {
                         console.error('Error sending message:', error);
                     }
@@ -182,8 +251,7 @@
                                 newForename: this.newForename
                             }),
                         });
-
-                        window.location.href = '/html/login.html';
+                        this.ifNewForename = true;
                     } catch (error) {
                         console.error('Error sending message:', error);
                     }
@@ -230,16 +298,14 @@
                                 newEmail: this.newEmail
                             }),
                         });
-
-                        window.location.href = '/html/login.html';
+                        this.ifNewEmail = true;
+                        setTimeout(() => {
+                            window.location.href = '/html/login.html';
+                        }, 3000);
                     } catch (error) {
                         console.error('Error sending message:', error);
                     }
                 },
-
-                enterNewPhoneNum() {
-                    
-                }
             }
         });
     </script>

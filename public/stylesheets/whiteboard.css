@@ -1,0 +1,707 @@
+#whiteboardBox {
+    margin-left: 11vh;
+    width: 50vw;
+    height: 70vh;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.toolbar {
+    background-color: #ffffff;
+    width: 50vw;
+    height: 7vh;
+    display: flex;
+    justify-content: space-between;
+}
+  
+.colorPicker {
+    background-color: #ffffff;
+    text-align: center;
+    width: 30vw;
+    height: 7vh;
+}
+
+.rightBlock {
+    width: 20vw;
+    height: 7vh;
+}
+
+.brush-slider {
+    width: 20vw;
+    -webkit-appearance: none; 
+    appearance: none; 
+    height: 20px;
+    margin-top: calc((3.5vh - 20px)/2);
+    margin-bottom: calc((3.5vh - 20px)/2);
+    border-radius: 10px;
+    background: #eeeeee; 
+    outline: none;
+    transition: opacity 0.2s;
+    --sliderSize: 10px;
+    --SliderColor: #000000;
+}
+
+.buttons {
+    width: 20vw;
+    height: 3.5vh;
+    display: flex;
+}
+
+
+.buttons button {
+    width: calc(50% - 4px);
+    height: 3vh;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin: 2px;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.buttons button:hover {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+.tool {
+    display: inline-block;
+    border: 1px;
+    border-color: transparent;
+    border-radius: 0;
+    outline: none;
+    cursor: pointer;
+    width: calc((100% - 56px) / 14);
+    height: calc(50% - 4px);
+    vertical-align: top;
+    background-size: calc(3.5vh - 4px);
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.colorPicker button {
+    display: inline-block;
+    border: 1px solid #00000026;
+    border-radius: 0;
+    outline: none;
+    width: calc((100% - 56px) / 14);
+    height: calc(50% - 4px);
+    cursor: pointer;
+}
+
+.brush-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: var(--sliderSize); 
+    height: var(--sliderSize);
+    border-radius: 50%; 
+    background-color: var(--SliderColor);
+    cursor: pointer; 
+}
+
+.brush-slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px; 
+    border-radius: 50%; 
+    background: #4CAF50;
+    cursor: pointer; 
+}
+
+input[type="color"] {
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    opacity: 0;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+    border: none;
+}
+
+::-webkit-color-swatch,
+::-moz-color-swatch {
+    border-color: transparent;
+}
+
+#picker{
+    background-image: url('palette.png');
+}
+
+#rubber{
+    background-image: url('rubber.png');
+}
+  
+canvas {
+    width: 50vw;
+    width: 50vw;
+    background-color: #ffffff;
+}
+  
+#whiteboard {
+    cursor:crosshair;
+}
+
+/*desktop*/
+@media only screen and (min-width: 1025px) {
+    #navBar ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        overflow: hidden;
+        background-color: #eb7b34;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 15vw;
+    }
+
+    #deleteButton {
+        background-color: #db0000;
+        border: none;
+        color: white;
+        float: right;
+        width: 5vw;
+        height: 2.5vw;
+    }
+
+    #deleteButton:active {
+        background-color: #640000;
+    }
+
+    #deleteButton:hover {
+        background-color: #ff2121;
+    }
+
+    #reportButton {
+        background-color: #005fdb;
+        border: none;
+        color: white;
+        float: right;
+        width: 5vw;
+        height: 2.5vw;
+    }
+
+    #reportButton:active {
+        background-color: #003377;
+    }
+
+    #reportButton:hover {
+        background-color: #398fff;
+    }
+    
+    #navBar li {
+        flex: 1;
+    }
+    
+    #navbar {
+        height: 100vh;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+    }
+    
+    #navBar p {
+        color: white;
+        font-size: 18px;
+        padding-bottom: 4vh;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        max-height: fit;
+        display: flex;
+        /* Use flex for centering vertically */
+        align-items: center;
+        /* Center vertically */
+        margin: auto;
+    }
+    
+    #navBar a {
+        color: white;
+        font-size: 16px;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        display: flex;
+        /* Use flex for centering vertically */
+        align-items: center;
+        /* Center vertically */
+        margin: auto;
+        width: 15vw;
+        max-height: fit;
+        padding-left: 1.25vw;
+    }
+    
+    #navBar img {
+        padding-top: 2vh;
+        padding-bottom: 2vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 10vw;
+        margin: auto;
+    
+    }
+    
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        overflow: hidden;
+        color: #eb7b34;
+    }
+    
+    h1 {
+        font-size: 4vh;
+    }
+    
+    h2 {
+        font-size: 3vh;
+    }
+    
+    p {
+        font-size: 2.2vh;
+    }
+    
+    #editBtns {
+        position: absolute;
+        bottom: 2vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    #mainContent {
+        width: 85vw;
+        display: flex;
+        flex-direction: column;
+        transform: translateX(15vw) translateY(-100vh);
+    }
+    
+    #classroomHeading {
+        height: 12vh;
+        width: 100%;
+        padding: 2vh 0 2vh 2vw;
+        transform: translateY(-2vh);
+    }
+    
+    #discussionHeader {
+        margin-left: 2.5%;
+    }
+    
+    #composeBoxDiscussion {
+        margin: 1vh 3vw;
+    }
+    
+    ::-webkit-scrollbar {
+        width: 15px;
+        background-color: #eb7b34;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #903903;
+      }
+    
+      #dropbtn {
+        background-color: #006A78;
+        border-radius: 3px;
+        color: white;
+        font-size: 16px;
+        border: none;
+        width: 10vw;
+    }
+    
+    #dpDMenu {
+        position: relative;
+        display: inline-block;
+        width: 20vw;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    #dpDMenuCon {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 20vw;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        padding: 2vh;
+    }
+    
+    #dpDMenuCon a:hover {
+        background-color: #ddd;
+    }
+    
+    #dpDMenu:hover #dpDMenuCon {
+        display: block;
+    }
+    
+    #dpDMenu:hover #dropbtn {
+        background-color: #004b55;
+    }
+}
+
+/*tablet*/
+@media only screen and (min-width: 801px) and (max-width: 1024px) {
+    #navBar ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        overflow: hidden;
+        background-color: #eb7b34;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 15vw;
+    }
+    
+    #navBar li {
+        flex: 1;
+    }
+    
+    #navbar {
+        height: 100vh;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+    }
+    
+    #navBar p {
+        color: white;
+        font-size: 18px;
+        padding-bottom: 4vh;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        max-height: fit;
+        display: flex;
+        /* Use flex for centering vertically */
+        align-items: center;
+        /* Center vertically */
+        margin: auto;
+    }
+    
+    #navBar a {
+        color: white;
+        font-size: 16px;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        display: flex;
+        /* Use flex for centering vertically */
+        align-items: center;
+        /* Center vertically */
+        margin: auto;
+        width: 15vw;
+        max-height: fit;
+        padding-left: 1.25vw;
+    }
+    
+    #navBar img {
+        padding-top: 2vh;
+        padding-bottom: 2vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 10vw;
+        margin: auto;
+    
+    }
+    
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        overflow: hidden;
+        color: #eb7b34;
+    }
+    
+    h1 {
+        font-size: 4vh;
+    }
+    
+    h2 {
+        font-size: 3vh;
+    }
+    
+    p {
+        font-size: 2.2vh;
+    }
+    
+    #editBtns {
+        position: absolute;
+        bottom: 2vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    #mainContent {
+        width: 85vw;
+        display: flex;
+        flex-direction: column;
+        transform: translateX(15vw) translateY(-100vh);
+    }
+    
+    #classroomHeading {
+        height: 12vh;
+        width: 100%;
+        padding: 2vh 0 2vh 2vw;
+        transform: translateY(-2vh);
+    }
+    
+    #discussionHeader {
+        margin-left: 2.5%;
+    }
+
+    #composeBoxDiscussion {
+        margin: 3vh 3vw;
+    }
+
+    ::-webkit-scrollbar {
+        width: 15px;
+        background-color: #eb7b34;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #903903;
+      }
+    
+      #dropbtn {
+        background-color: #006A78;
+        border-radius: 3px;
+        color: white;
+        font-size: 16px;
+        border: none;
+        width: 10vw;
+    }
+    
+    #dpDMenu {
+        position: relative;
+        display: inline-block;
+        width: 20vw;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    #dpDMenuCon {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 20vw;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        padding: 2vh;
+    }
+    
+    #dpDMenuCon a:hover {
+        background-color: #ddd;
+    }
+    
+    #dpDMenu:hover #dpDMenuCon {
+        display: block;
+    }
+    
+    #dpDMenu:hover #dropbtn {
+        background-color: #004b55;
+    }
+}
+
+/*phone*/
+@media only screen and (max-width: 800px) {
+    body {
+        margin: 0;
+        overflow: hidden;
+    }
+
+    #navBar ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        overflow: hidden;
+        background-color: #eb7b34;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 22vw;
+    }
+    
+    #navBar li {
+        flex: 1;
+        width: max-content;
+    }
+    
+    #navbar {
+        height: 100vh;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+    }
+    
+    #navBar p {
+        color: white;
+        font-size: 18px;
+        padding-bottom: 4vh;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        max-height: fit;
+        display: flex;
+        /* Use flex for centering vertically */
+        align-items: center;
+        /* Center vertically */
+        margin: auto;
+    }
+    
+    #navBar a {
+        color: white;
+        font-size: 16px;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        display: flex;
+        /* Use flex for centering vertically */
+        align-items: center;
+        /* Center vertically */
+        margin: auto;
+        width: 15vw;
+        max-height: fit;
+        padding-left: 1.25vw;
+    }
+    
+    #navBar img {
+        padding-top: 2vh;
+        padding-bottom: 2vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 10vw;
+        margin: auto;
+    
+    }
+    
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        overflow: hidden;
+        color: #eb7b34;
+    }
+    
+    h1 {
+        font-size: 4vh;
+    }
+    
+    h2 {
+        font-size: 3vh;
+    }
+    
+    p {
+        font-size: 2.2vh;
+    }
+    
+    #editBtns {
+        position: absolute;
+        bottom: 2vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    #mainContent {
+        width: 85vw;
+        display: flex;
+        flex-direction: column;
+        transform: translateX(15vw) translateY(-100vh);
+    }
+    
+    #classroomHeading {
+        height: 12vh;
+        width: 100%;
+        padding: 2vh 0 2vh 8vw;
+        transform: translateY(-2vh);
+        overflow: hidden;
+    }
+    
+    #discussionHeader {
+        margin-left: 2.5%;
+    }
+    
+    #composeBoxDiscussion {
+        margin: 1vh 3vw;
+        margin-left: 9vw;
+    }
+    
+    #deletePopup {
+        position:absolute;
+        background-color: white;
+        left: 30%;
+        top: 30%;
+    }
+    
+    #reportPopup {
+        position:absolute;
+        background-color: white;
+        left: 30%;
+        top: 30%;
+    }
+    
+    ::-webkit-scrollbar {
+        width: 15px;
+        background-color: #eb7b34;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #903903;
+      }
+    
+      #dropbtn {
+        background-color: #006A78;
+        border-radius: 3px;
+        color: white;
+        font-size: 16px;
+        border: none;
+        width: 10vw;
+    }
+    
+    #dpDMenu {
+        position: relative;
+        display: inline-block;
+        width: 20vw;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    #dpDMenuCon {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 20vw;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        padding: 2vh;
+    }
+    
+    #dpDMenuCon a:hover {
+        background-color: #ddd;
+    }
+    
+    #dpDMenu:hover #dpDMenuCon {
+        display: block;
+    }
+    
+    #dpDMenu:hover #dropbtn {
+        background-color: #004b55;
+    }
+}

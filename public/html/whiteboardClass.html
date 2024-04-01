@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom</title>
+    <link rel="stylesheet" href="\stylesheets\whiteboard.css">
+    <script src="https://kit.fontawesome.com/e15d1ee196.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
+</head>
+
+<body>
+    <div id="content">
+        <div id="navBar">
+            <ul>
+                <img src="\images\groupSys_icon.png" alt="brainbox logo" height="auto" id="redirectButton"
+                    @click="redirecttohomepage">
+                <p>BrainBox</p>
+                <li><a style="background-value: #eb7b34;" onmouseover="this.style.backgroundvalue='#da7434'"
+                        onmouseout="this.style.backgroundvalue='#eb7b34'" @click="navigateToChannels">Channels</a></li>
+                <li><a a style="background-value: #eb7b34;" onmouseover="this.style.backgroundvalue='#da7434'"
+                        onmouseout="this.style.backgroundvalue='#eb7b34'" @click="navigateToDiscussion">Discussion</a>
+                </li>
+                <li><a style="background-value: #eb7b34;" onmouseover="this.style.backgroundvalue='#da7434'"
+                        onmouseout="this.style.backgroundvalue='#eb7b34'" @click="navigateToWhiteboard">Whiteboard</a>
+                </li>
+                <img src="\images\brainy_icon.png" alt="brainy" height="auto" id="redirectButton"
+                    @click="redirecttosettings">
+            </ul>
+        </div>
+    </div>
+
+    <div id="code">
+        <!-- <div id="classroomData">
+        </div> -->
+
+        <div id="mainContent">
+            <div id="classroomHeading" v-for="classroom in classroomInfo" :key="classroom.classroomID">
+                <h1>{{ classroom.classroomName }}</h1>
+                <p>{{ classroom.classroomDescription }}</p>
+            </div>
+
+            <!--Want to display posts here-->
+            <div id="whiteboardBox">
+                <div class="toolbar">
+                    <div class="colorPicker">
+                        <div class="tool" id="picker"><input type="color" id="palette" value="#000000"></div>
+                        <div class="tool" id="rubber" value="#ffffff"></div>
+                        <button type="button" value="#ff0000"></button>
+                        <button type="button" value="#ff3300"></button>
+                        <button type="button" value="#ff6600"></button>
+                        <button type="button" value="#ff9900"></button>
+                        <button type="button" value="#ffcc00"></button>
+                        <button type="button" value="#ffff00"></button>
+                        <button type="button" value="#bfff00"></button>
+                        <button type="button" value="#80ff00"></button>
+                        <button type="button" value="#33ff00"></button>
+                        <button type="button" value="#00ff33"></button>
+                        <button type="button" value="#00ff80"></button>
+                        <button type="button" value="#00ffbf"></button>
+                        <button type="button" value="#00ffff"></button>
+                        <button type="button" value="#00bfff"></button>
+                        <button type="button" value="#0080ff"></button>
+                        <button type="button" value="#0033ff"></button>
+                        <button type="button" value="#0000ff"></button>
+                        <button type="button" value="#3300ff"></button>
+                        <button type="button" value="#6600ff"></button>
+                        <button type="button" value="#9900ff"></button>
+                        <button type="button" value="#cc00ff"></button>
+                        <button type="button" value="#ff00ff"></button>
+                        <button type="button" value="#ff00cc"></button>
+                        <button type="button" value="#ff0099"></button>
+                    </div>
+                    <div class="rightBlock">
+                        <input type="range" min="50" max="200" step="1" value="50" class="brush-slider" id="slider">
+                        <div class ="buttons">
+                            <button id="wipe" type="button">Wipe Drawing</button>
+                            <button id="save" type="button">Save Drawing</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="map-block">
+                        <canvas id="whiteboard" width="640" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://unpkg.com/vue-carousel@0.18.0"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const buttons = document.querySelectorAll('.colorPicker button');
+            buttons.forEach(button => {
+                const color = button.value;
+                button.style.backgroundColor = color;
+            });
+            var whiteboard = document.getElementById("whiteboard");
+            whiteboard.addEventListener('mousedown', pendown);
+            whiteboard.addEventListener('mouseup', penup);
+            whiteboard.addEventListener('mousemove', penmove);
+            whiteboard.width = window.innerWidth/2;
+            whiteboard.height = window.innerHeight*0.63;
+            whiteboard.style.width = window.innerWidth/2;
+            whiteboard.style.height = window.innerHeight*0.63;
+            var brush = whiteboard.getContext("2d");
+            brush.fillStyle = '#ffffff';
+            brush.fillRect(0, 0, whiteboard.width, whiteboard.height);
+            brush.strokeStyle = 'black'; 
+            brush.lineWidth = 5;
+            var brushSlider = document.getElementById('slider');
+            var colors = document.getElementsByClassName('colorPicker')[0];
+
+            colors.addEventListener('click', function(event) {
+                var color = event.target.value;
+                brush.strokeStyle = color;
+                brushSlider.style.setProperty('--SliderColor', color);
+            });
+            var colorPicker = document.getElementById('palette');
+            var rubber = document.getElementById('rubber');
+
+            colorPicker.addEventListener('change', function(event) {
+                var color = event.target.value;
+                brush.strokeStyle = color;
+                brushSlider.style.setProperty('--SliderColor', color);
+            });
+
+            rubber.addEventListener('click', function(event) {
+                brush.strokeStyle = rubber.value;
+                brushSlider.style.setProperty('--SliderColor', rubber.value);
+            });
+            brushSlider.oninput = function() {
+            var brushSize = brushSlider.value / 10;
+            brush.lineWidth = brushSize;
+            brushSlider.style.setProperty('--sliderSize', brushSize + 5 + 'px');
+            }
+            const MAIN_MOUSE_BUTTON = 0;
+            function pendown(event) {
+            if (event.button === MAIN_MOUSE_BUTTON) {
+                shouldDraw = true;
+                brush.beginPath();
+                let elementRect = event.target.getBoundingClientRect();
+                brush.moveTo(event.clientX - elementRect.left, event.clientY - elementRect.top);
+            }
+            }
+            function penup(event) {
+            if (event.button === MAIN_MOUSE_BUTTON) {
+                shouldDraw = false;
+            }
+            }
+            function penmove(event) {
+            if (shouldDraw) {
+                let elementRect = event.target.getBoundingClientRect();
+                brush.lineTo(event.clientX - elementRect.left, event.clientY - elementRect.top);
+                brush.stroke();
+            }
+            }
+            var wipeButton = document.getElementById('wipe');
+            wipeButton.addEventListener('click', function() {
+                brush.fillStyle = '#ffffff';
+                brush.fillRect(0, 0, whiteboard.width, whiteboard.height);
+            });
+            var saveButton = document.getElementById('save');
+            saveButton.addEventListener('click', function() {
+                var imageName = prompt('Save untitled as... ');
+                var whiteboardDataURL = whiteboard.toDataURL();
+                var anchor = document.createElement('a');
+                anchor.href = whiteboardDataURL;
+                anchor.download = imageName || 'untitled';
+                anchor.click();
+            });
+        });
+        new Vue({
+            el: '#code',
+            data: {
+                classroomInfo: [],
+                user_memberID: '',
+                isMan: false,
+                junctionData: [],
+                classroomChannels: [],
+                junctionManagersData: [],
+                openChannelChatActive: false,
+                classroomMembers: [],
+                isUserPost: [],
+                showChannelCreator: false,
+                isDeletePopup1: false,
+                addChannelDesc: '',
+                DeleteChannelPopupIf: false,
+                getUserMessageID: '',
+                openPopup: false,
+                openPopup2: false,
+                deletePopup: false,
+                ifUser_buttonDeleteText: '<button @click="toggleDeleteConfirmOn(channelMsg.messages_channel_ID)">Delete</button>',
+                ifNOTUser_buttonReportText: '<button @click="toggleMenu">Report</button>',
+                AddMemberPopupIf: false,
+                inputText_title: '',
+                inputText_body: '',
+                deleteClassPopup: false,
+                RemoveMemberPopupIf: false,
+                deleteMember: '',
+                addMemberName: '',
+                classroomPosts: [],
+                classroomID: '',
+                inputFile: null,
+                scroll: 0,
+                reportMsgID: '',
+                isReportPopup: false,
+                reportPostID: '',
+                reportPostTitle: '',
+                reportPostContent: '',
+                reportPostFile: '',
+                reportPostMemberID: '',
+                AbuseOrHarassmentBool: false,
+                        InappropriateContentBool: false,
+                        ThreateningBehaviourBool: false,
+                        SpamBool: false,
+                        PrivateIdentifyingInfoBool: false,
+                        MisinformationBool: false,
+            },
+            mounted() {
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const classroomID = urlParams.get('classroomID');
+                this.classroomID = urlParams.get('classroomID');
+                this.user_memberID = urlParams.get('memberID');
+
+                // Fetch classroom info
+                fetch(`/getClassroomFromID?classroomID=${classroomID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.classroomInfo = data;
+                        //console.log(this.classroomInfo);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching classroom info:', error);
+                    });
+
+                // Fetch classroom members
+                fetch(`/getClassroomMembersFromID?classroomID=${classroomID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.classroomMembers = data;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching classroom members:', error);
+                    });
+
+                // Fetch managers of the classroom
+                fetch(`/getManagersFromID?classroomID=${classroomID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.junctionManagersData = data;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching classroom managers:', error);
+                    });
+
+                // Check if the user is a manager
+                fetch(`/getIsManagerFromIDs?classroomID=${classroomID}&memberID=${this.user_memberID}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.junctionData = data;
+                        if (this.junctionData.length > 0 && this.junctionData[0].isManager === 1) {
+                            this.isMan = true;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching junction info:', error);
+                    });
+
+                    const reloadSection = document.querySelector("#PostBoard").innerHTML;
+                console.log(this.isUserPost);
+            },
+            methods: {
+                handleFileChange(event) {
+                    this.inputFile = event.target.files[0];
+                },
+                postPost: async function () {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const memberID = urlParams.get('memberID');
+
+                    const reader = new FileReader();
+
+                    // Define a promise to handle the asynchronous file reading
+                    const readFile = new Promise((resolve, reject) => {
+                        reader.onload = () => {
+                            // Resolve the promise with the result of readAsDataURL
+                            resolve(reader.result);
+                        };
+                        reader.onerror = () => {
+                            // Reject the promise if there's an error reading the file
+                            reject(reader.error);
+                        };
+                    });
+
+                    if (this.inputFile) {
+                        // Start reading the file only if inputFile is available
+                        reader.readAsDataURL(this.inputFile);
+                    }
+
+                    // Wait for the file to be read and then make the POST request
+                    try {
+                        let inputFileData = null;
+                        if (this.inputFile) {
+                            inputFileData = await readFile;
+                        }
+
+                        const response = await fetch('/addPost', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                memberID: memberID,
+                                classroomID: this.classroomID,
+                                postTitle: this.inputText_title,
+                                postContent: this.inputText_body,
+                                inputFile: inputFileData,
+                            }),
+                        });
+
+                        window.location.reload();
+                        // Handle the response as needed
+                    } catch (error) {
+                        console.error('Error making post:', error);
+                    }
+                },
+                deletePopup1(value) {
+                    this.isDeletePopup1 = true;
+                    this.getUserMessageID = value;
+                },
+                checkUserPost(msg) {
+                    //msg is post.postID
+                    for (var i = 0; i < this.isUserPost.length; i++) {
+                        if (msg == this.isUserPost[i].postID) {
+                            return true;
+                        }
+                    }
+                    return false;
+                },
+                hideDeletePopup() {
+                    this.isDeletePopup1 = false;
+                },
+                confirmDeletePost: async function() {
+                    this.deletePopup1 = false;
+
+                    try {
+                        // Make a POST request to your server
+                        const response = await fetch('/removePost', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                postID: this.getUserMessageID,
+                            }),
+                        });
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+
+                    window.location.reload();
+                },
+                reportPopup(value1, value2, value3, value4, value5) {
+                    this.reportPostID = value1
+                    this.reportPostTitle = value2;
+                    this.reportPostContent = value3;
+                    this.reportPostFile = value4;
+                    this.reportPostMemberID = value5;
+
+                    this.isReportPopup = true;
+
+                    //show new report popup
+                },
+                confirmReportPost: async function() {
+                    //put stuff in here
+                            this.openPopup2 = true;
+                            this.openPopup = false;
+
+                //             reportPostID: '',
+                // reportPostTitle: '',
+                // reportPostContent: '',
+                // reportPostFile: '',
+                // reportPostMemberID: ''
+                            try {
+                                // Make a POST request to your server
+                                const response = await fetch('/reportPost', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        //post_ID, memberID, postTitle, postContent, postFile
+                                        post_ID: this.reportPostID,
+                                        postTitle: this.reportPostTitle,
+                                        postContent: this.reportPostContent,
+                                        postFile: this.reportPostFile,
+                                        memberID: this.reportPostMemberID,
+                                        r1: this.AbuseOrHarassmentBool,
+                                        r2: this.InappropriateContentBool,
+                                        r3: this.ThreateningBehaviourBool,
+                                        r4: this.SpamBool,
+                                        r5: this.PrivateIdentifyingInfoBool,
+                                        r6: this.MisinformationBool
+                                    }),
+                                });
+                            } catch (error) {
+                                console.error('Error sending message:', error);
+                            }
+                            window.location.reload();
+                },
+                hideReportPopup() {
+                    this.isReportPopup = false;
+                }
+            }
+        });
+    </script>
+
+    <script>
+        new Vue({
+            el: '#navBar',
+            data: {
+                userMemberID: '',
+                memberID: '',
+                classroomID: ''
+            },
+            mounted() {
+                const urlParams = new URLSearchParams(window.location.search);
+                this.memberID = urlParams.get('memberID');
+                this.classroomID = urlParams.get('classroomID');
+            },
+            methods:
+            {
+                redirecttohomepage() {
+                    //username=bob%40gmail.com
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const userMemberID = urlParams.get('memberID');
+                    //get the username from the database
+                    ///retrieveUserinfoID
+                    fetch(`/retrieveUserinfoID?memberID=${userMemberID}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.userData = data;
+                            window.location.href = `/success?username=${encodeURIComponent(this.userData[0].email)}`;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching user member id:', error);
+                        });
+                },
+                redirecttosettings() {
+                    window.location.href = `/html/settings.html?username=${encodeURIComponent(this.memberID)}`;
+                },
+                navigateToChannels() {
+                    window.location.href = `/html/classroom.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
+                },
+                navigateToDiscussion() {
+                    window.location.href = `/html/discussion.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
+                },
+                navigateToWhiteboard() {
+                    window.location.href = `/html/whiteboardClass.html?memberID=${encodeURIComponent(this.memberID)}&classroomID=${encodeURIComponent(this.classroomID)}`;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

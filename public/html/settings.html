@@ -59,11 +59,11 @@
                     <p>Change surname name</p> <input @click="ifNewSurname_setFalse" type="text" v-model="newSurname"
                         placeholder="Enter new surname...">
                     <button @click="enterNewSurname">Confirm Change Surname</button>
-                    <div v-if="ifNewSurname">Forename changed to {{newSurname}}.</div>
+                    <div v-if="ifNewSurname">Surname changed to {{newSurname}}.</div>
                     <p>Change phone Number</p> <input type="text" v-model="newPhoneNum"
                         placeholder="Enter new phonenumber...">
                     <button @click="enterNewPhoneNum">Confirm Change Phonenumber</button>
-                    <div v-if="ifNewPhoneNum">Forename changed to {{newPhoneNum}}.</div>
+                    <div v-if="ifNewPhoneNum">Phonenumber changed to {{newPhoneNum}}.</div>
                     <p>Change email</p> <input type="text" v-model="newEmail" placeholder="Enter new email...">
                     <button @click="editEmailConfirm">Confirm Change Email</button>
                     <div v-if="ifNewEmail">Email changed to {{ newEmail }}. Redirecting... </div>

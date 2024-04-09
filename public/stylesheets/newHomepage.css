@@ -38,25 +38,16 @@ h1 {
     bottom: 4%;
     width: 125px;
     margin-bottom: 20px;
-}
-
-#logoutTutorial p {
-    width:50%;
-    position: absolute;
-    left: -59%;
-    bottom: 75%;
-    background-color: #dbdbdb;
-    padding: 1.5%;
-    border-radius:15px;
-    text-align: center;
-    font-size: 15px;
+    z-index: 100;
 }
 
 #logoutPointer {
-    width:75%; 
+    width:60%; 
+    max-width: 200px;
+    transform: translate(-50%, 50%);
     position: absolute; 
-    left: -67%; 
-    bottom: 90%;
+    left: -12%; 
+    bottom: 120%;
 }
 
 .gdpr-warning p {
@@ -74,10 +65,26 @@ map {
 /* For tablets: */
 @media only screen and (min-width: 600px) and (min-height: 600px) {
     #logoIcon { width: 450px; }
+
+    #logoutPointer { /*point to settings*/
+        max-width: 300px;
+        left: 0%; 
+        bottom: 110%;
+    }
 }
 
 @media only screen and (min-width: 830px) and (min-height: 830px) {
     h1 { font-size: 4vw; }
     #logoIcon { width: 700px; }
     .gdpr-warning p { font-size: 10px; }
+
+    #logoutPointer { /*point to settings*/
+        max-width: 350px;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+    #logoutPointer { /*point to settings*/
+        left: 10%; 
+    }
 }

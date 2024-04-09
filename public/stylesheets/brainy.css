@@ -1,287 +1,228 @@
-@media only screen and (min-width: 1025px) { 
-    #brainy_container { 
-        width: 60%;
-        background-color: #a363a9;
-        height: 30%;
-        position: absolute;
-        transform: translate(-50%, 50%);
-        left: 67%;
-        bottom: 20%;
-        z-index: 100; /*learned z-index can be used to make elements appear ontop of others*/
-        border-radius: 15px;
+#gTut_pointer1 { /*should point to groups*/
+    width:60%; 
+    max-width: 200px;
+    transform: translate(-50%, 50%);
+    position: absolute; 
+    left: -10%; 
+    bottom: 55vh;
+}
+
+#gTut_pointer2 { /*should point to brainlink*/
+    width:60%; 
+    max-width: 200px;
+    transform: translate(-50%, 50%);
+    position: absolute; 
+    left: 20%; 
+    bottom: 147%;
+}
+
+#gTut_pointer3 { /*point to brainframe*/
+    width:60%; 
+    max-width: 200px;
+    transform: translate(-50%, 50%);
+    position: absolute; 
+    left: -30%; 
+    bottom: 147%;
+}
+
+#gTut_pointer4 { /*point to settings*/
+    width:60%; 
+    max-width: 200px;
+    transform: translate(-50%, 50%);
+    position: absolute; 
+    left: -12%; 
+    bottom: 120%;
+}
+
+#brainy_container { 
+    width: 60%;
+    background-color: #a363a9;
+    height: 30%;
+    position: absolute;
+    transform: translate(-50%, 50%);
+    left: 67%;
+    bottom: 20%;
+    z-index: 100; /*learned z-index can be used to make elements appear ontop of others*/
+    border-radius: 15px;
+}
+
+#speech {
+    padding: 5px;
+    position: absolute;
+    left: 10%;
+    background-color: white;
+    top: 10%;
+    right: 10%;
+    border-radius: 15px;
+}
+
+#speech p {
+    font-size: 10px;
+}
+
+#exitButton {
+    font-size: 10px;
+    position: absolute;
+    background-color: #fbc9ff;
+    left: 45%;
+    bottom: 5%;
+    border: 0;
+    padding: 5px;
+}
+
+#logoutButtonTutorial {
+    font-size: 10px;
+    position: absolute;
+    background-color: #fbc9ff;
+    left: 70%;
+    bottom: 5%;
+    border: 0;
+    padding: 5px;
+}
+
+#options {
+    position: absolute;
+    left: 45%;
+    bottom: 19.5%;
+    border: 0;
+    padding: 2.5%;
+    width: 45%;
+    background-color: white;
+    /*center the buttons*/
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#options button {
+    font-size: 10px;
+    border: 0;
+    background-color: #dadada;
+    margin-top: 7%;
+}
+@media only screen and (min-width: 658px) {
+    #options { 
+        bottom: 22.5%; 
+        padding: 3%; 
+        left: 40%;
     }
-    
+    #options button { margin-top: 0%; }
+}
+p {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.brainyImage {
+    width: 50%;
+    max-width: 17vh;
+    position: absolute;
+    bottom: 2.5%;
+}
+
+@media only screen and (min-width: 600px) and (min-height: 600px) {
     #speech {
-        padding: 3%;
-        position: absolute;
-        left: 55%;
-        background-color: white;
-        top: 10%;
-        right: 10%;
-        border-radius: 15px;
+        padding: 10px;
     }
     
     #speech p {
-        font-size: 16px;
+        font-size: 12px;
     }
-    
-    #exitButton {
-        font-size: 10px;
-        position: absolute;
-        background-color: #fbc9ff;
-        left: 45%;
-        bottom: 5%;
-        border: 0;
-        padding: 2.5%;
-        width: 15%;
-    }
-    
-    #options {
-        position: absolute;
-        left: 47.5%;
-        bottom: 24.5%;
-        border: 0;
-        padding: 2.5%;
-        width: 45%;
-        background-color: white;
-        /*center the buttons*/
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-    
-    #options button {
-        font-size: 16px;
-        border: 0;
-        background-color: #dadada;
-        margin-top: 7%;
-    }
-    
-    p {
-        font-family: Arial, Helvetica, sans-serif;
-    }
-    
-    .brainyImage {
-        width: 30%;
-        position: absolute;
-        bottom: 2.5%;
-    }
-    
-    #logoutButtonTutorial {
-        position: absolute;
-        background-color: #fbc9ff;
-        left: 70%;
-        bottom: 5%;
-        border: 0;
-        padding: 2.5%;
-        width: 15%;
-    }
+
     #gTut_pointer1 { /*should point to groups*/
-        width:60%; position: absolute; left: -40%; bottom: 150%;
+        max-width: 300px;
     }
-    
-    #gTut_pointer2 { /*should point to brainlink*/
-        width:60%; position: absolute; left: -20%; bottom: 75%;
+
+    #gTut_pointer2 { /*point to brainframe*/
+        max-width: 300px;
     }
-    
+
     #gTut_pointer3 { /*point to brainframe*/
-        width:60%; position: absolute; left: -60%; bottom: 75%;
+        max-width: 300px;
     }
     
     #gTut_pointer4 { /*point to settings*/
-        width:60%; position: absolute; left: -40%; bottom: 40%;
+        max-width: 300px;
+        left: -10%; 
+        bottom: 110%;
+    }
+
+    #exitButton {
+        padding: 7px;
+    }
+    
+    #logoutButtonTutorial {
+        padding: 7px;
     }
 }
 
-@media only screen and (min-width: 801px) and (max-width: 1024px) { 
+@media only screen and (min-width: 830px) and (min-height: 830px) {
+    #speech {
+        padding: 20px;
+    }
+
+    #speech p {
+        font-size: 15px;
+    }
+
     #gTut_pointer1 { /*should point to groups*/
-        width:60%; position: absolute; left: -45%; bottom: 150%;
+        max-width: 350px;
+        left: 0%; 
+        bottom: 60vh;
     }
-    
-    #gTut_pointer2 { /*should point to brainlink*/
-        width:60%; position: absolute; left: -28%; bottom: 110%;
+
+    #gTut_pointer2 { /*point to brainframe*/
+        max-width: 350px;
     }
-    
+
     #gTut_pointer3 { /*point to brainframe*/
-        width:60%; position: absolute; left: -70%; bottom: 115%;
+        max-width: 350px;
+        left: -25%; 
     }
     
     #gTut_pointer4 { /*point to settings*/
-        width:60%; position: absolute; left: -45%; bottom: 80%;
+        max-width: 350px;
+        left: 0%; 
     }
-    #brainy_container { 
-        width: 60%;
-        background-color: #a363a9;
-        height: 30%;
-        position: absolute;
-        transform: translate(-50%, 50%);
-        left: 67%;
-        bottom: 20%;
-        z-index: 100; /*learned z-index can be used to make elements appear ontop of others*/
-        border-radius: 15px;
-    }
-    
-    #speech {
-        padding: 3%;
-        position: absolute;
-        left: 10%;
-        background-color: white;
-        top: 10%;
-        right: 10%;
-        border-radius: 15px;
-    }
-    
-    #speech p {
-        font-size: 18px;
-    }
-    
+
     #exitButton {
-        font-size: 10px;
-        position: absolute;
-        background-color: #fbc9ff;
-        left: 45%;
-        bottom: 5%;
-        border: 0;
-        padding: 2.5%;
-        width: 15%;
-    }
-    
-    #options {
-        position: absolute;
-        left: 47.5%;
-        bottom: 19.5%;
-        border: 0;
-        padding: 2.5%;
-        width: 45%;
-        background-color: white;
-        /*center the buttons*/
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-    
-    #options button {
-        font-size: 18px;
-        border: 0;
-        background-color: #dadada;
-        margin-top: 7%;
-    }
-    
-    p {
-        font-family: Arial, Helvetica, sans-serif;
-    }
-    
-    .brainyImage {
-        width: 45%;
-        position: absolute;
-        bottom: 2.5%;
+        font-size: 15px;
+        padding: 10px;
     }
     
     #logoutButtonTutorial {
-        position: absolute;
-        background-color: #fbc9ff;
-        left: 70%;
-        bottom: 5%;
-        border: 0;
-        padding: 2.5%;
-        width: 15%;
+        font-size: 15px;
+        padding: 10px;
+    }
+
+    #options button {
+        font-size: 12px;
     }
 }
 
-@media only screen and (max-width: 800px) { 
+@media only screen and (min-width: 1400px) and (min-height: 1140px) {
+    #speech p {
+        font-size: 20px;
+    }
+
     #gTut_pointer1 { /*should point to groups*/
-        width:60%; position: absolute; left: -40%; bottom: 150%;
+        left: 10%; 
+        bottom: 55vh;
     }
-    
-    #gTut_pointer2 { /*should point to brainlink*/
-        width:60%; position: absolute; left: -8%; bottom: 117%;
-    }
-    
+
     #gTut_pointer3 { /*point to brainframe*/
-        width:60%; position: absolute; left: -75%; bottom: 117%;
+        left: -5%; 
     }
     
     #gTut_pointer4 { /*point to settings*/
-        width:60%; position: absolute; left: -45%; bottom: 80%;
+        left: 10%; 
     }
-    #brainy_container { 
-        width: 60%;
-        background-color: #a363a9;
-        height: 30%;
-        position: absolute;
-        transform: translate(-50%, 50%);
-        left: 67%;
-        bottom: 20%;
-        z-index: 100; /*learned z-index can be used to make elements appear ontop of others*/
-        border-radius: 15px;
-    }
-    
-    #speech {
-        padding: 5%;
-        position: absolute;
-        left: 10%;
-        background-color: white;
-        top: 10%;
-        right: 10%;
-        border-radius: 15px;
-    }
-    
-    #speech p {
-        font-size: 10px;
-    }
-    
-    #exitButton {
-        font-size: 10px;
-        position: absolute;
-        background-color: #fbc9ff;
-        left: 45%;
-        bottom: 5%;
-        border: 0;
-        padding: 2.5%;
-        width: 15%;
-    }
-    
+
     #options {
-        position: absolute;
-        left: 47.5%;
-        bottom: 19.5%;
-        border: 0;
-        padding: 2.5%;
-        width: 45%;
-        background-color: white;
-        /*center the buttons*/
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
+        padding: 4%;
     }
     
     #options button {
-        font-size: 10px;
-        border: 0;
-        background-color: #dadada;
-        margin-top: 7%;
-    }
-    
-    p {
-        font-family: Arial, Helvetica, sans-serif;
-    }
-    
-    .brainyImage {
-        width: 50%;
-        position: absolute;
-        bottom: 2.5%;
-    }
-    
-    #logoutButtonTutorial {
-        position: absolute;
-        background-color: #fbc9ff;
-        left: 70%;
-        bottom: 5%;
-        border: 0;
-        padding: 2.5%;
-        width: 15%;
+        font-size: 20px;
     }
 }

@@ -16,12 +16,13 @@
                 <img v-if="happyBrainy" class="brainyImage" src="\images\brainy_smilePose.png">
                 <div id="speech">
                     <p v-if="defaultText">Hi! I'm Brainy and I'm here to help!</p>
-                    <p v-if="tutorial1" style="font-size: 75%;">I'll give you a quick overview of what these buttons do!</p>
-                    <p v-if="tutorial2" style="font-size: 75%;">This is 'Groups' where you can find your classrooms!</p>
-                    <p v-if="tutorial3" style="font-size: 75%;">This is 'Brainlink' where you can find your groupchats!</p>
-                    <p v-if="tutorial4" style="font-size: 75%;">This is 'Brainframe' where you can find your posted and edited files!</p>
-                    <p v-if="tutorial5" style="font-size: 75%;">This is 'Settings' where you can access your settings!</p>
-                    <p v-if="tutorial6" style="font-size: 75%;">I hope that quick tour helps!</p>
+                    <p v-if="logout">Logout by accessing the settings here!</p>
+                    <p v-if="tutorial1" >I'll give you a quick overview of what these buttons do!</p>
+                    <p v-if="tutorial2" >This is 'Groups' where you can find your classrooms!</p>
+                    <p v-if="tutorial3" >This is 'Brainlink' where you can find your groupchats!</p>
+                    <p v-if="tutorial4" >This is 'Brainframe' where you can find your posted and edited files!</p>
+                    <p v-if="tutorial5" >This is 'Settings' where you can access your settings!</p>
+                    <p v-if="tutorial6" >I hope that quick tour helps!</p>
 
                     <p v-if="stuck1">Don't Fret! Select the 'Tutorial' on this page!</p>
                 </div>
@@ -32,7 +33,6 @@
                 </div>
 
                 <div id="logoutTutorial" v-if="logout">
-                    <p>Logout by accessing the settings here!</p>
                     <img id="logoutPointer" src="/images/brainy_pointer.png">
                     <button id="logoutButtonTutorial" @click="hideBrainy">Okay!</button>
                 </div>
@@ -228,6 +228,8 @@
                 },
                 showLogout() {
                     this.logout = true;
+                    this.defaultText = false;
+                    this.happyBrainy = true;
                 },
                 showTutorial1() {
                     this.tutorial1 = true;

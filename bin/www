@@ -638,9 +638,10 @@ app.post('/createGroupchat', async (req, res) => {
 
       const [addgroupchat] = await connection
           .promise().query('INSERT INTO groupchat (groupchat.groupchatName) VALUES (?);', [groupchatName])
-      const [getgcid] = await connection.promise().query(
-        'SELECT LAST_INSERT_ID() AS groupchatID'
-      )
+
+          const [getgcid] = await connection.promise().query(
+            'SELECT LAST_INSERT_ID() AS groupchatID'
+          )
       const addusertoGC = await connection.promise().query('INSERT INTO junction_groupchatmembers (junction_groupchatmembers.groupchatID, junction_groupchatmembers.memberID) VALUES (?, ?)', [getgcid[0].groupchatID, memberID])
 
       res.json(getgcid[0].groupchatID);
@@ -771,8 +772,9 @@ app.post('/addPost', async (req, res) => {
       const { memberID, classroomID, postTitle, postContent, inputFile } = req.body;
       
       const connection = mysql.createConnection(config);
-
+      console.log(inputFile);
         if(inputFile) {
+            console.log("file post being made...");
             const [discussionPostFile] = await connection
           .promise()
           .query('INSERT INTO post (post.classroomID, post.memberID, post.postTitle, post.postContent, post.postFile) VALUES (?, ?, ?, ?, ?)', [classroomID, memberID, postTitle, postContent, inputFile]);
